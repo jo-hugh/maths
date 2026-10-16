@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>第 3.1 節｜折扣 (Discount) — 互動教學</title>
+<style>
+  :root{--main:#0f766e;--main-dark:#115e59;--accent:#f97316;--ok:#16a34a;--bad:#dc2626;--bg:#f0fdfa;--card:#fff;}
+  *{box-sizing:border-box;margin:0;padding:0;font-family:"Noto Sans TC","Microsoft JhengHei","PingFang TC",sans-serif;}
+  body{background:var(--bg);color:#1e293b;}
+  header{background:linear-gradient(135deg,var(--main-dark),var(--main));color:#fff;padding:18px 24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;position:sticky;top:0;z-index:10;box-shadow:0 2px 8px rgba(0,0,0,.2);}
+  header h1{font-size:1.35rem;}
+  header small{opacity:.85;display:block;font-size:.85rem;}
+  .timer{background:rgba(255,255,255,.15);padding:8px 14px;border-radius:10px;display:flex;align-items:center;gap:10px;}
+  .timer span{font-size:1.5rem;font-weight:700;font-variant-numeric:tabular-nums;}
+  .timer button{background:#fff;color:var(--main-dark);border:none;padding:6px 12px;border-radius:6px;cursor:pointer;font-weight:600;}
+  nav{display:flex;flex-wrap:wrap;gap:6px;padding:12px 24px;background:#fff;border-bottom:1px solid #e2e8f0;position:sticky;top:72px;z-index:9;}
+  nav button{border:2px solid var(--main);background:#fff;color:var(--main);padding:8px 14px;border-radius:999px;cursor:pointer;font-weight:600;transition:.2s;}
+  nav button.active,nav button:hover{background:var(--main);color:#fff;}
+  main{max-width:1000px;margin:0 auto;padding:24px;}
+  section{display:none;animation:fade .3s;}
+  section.active{display:block;}
+  @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  .card{background:var(--card);border-radius:14px;padding:22px;margin-bottom:20px;box-shadow:0 2px 10px rgba(0,0,0,.05);}
+  .card h2{color:var(--main-dark);margin-bottom:14px;font-size:1.3rem;border-left:5px solid var(--accent);padding-left:10px;}
+  .card h3{margin:14px 0 8px;font-size:1.05rem;color:#334155;}
+  .badge{display:inline-block;background:#ffedd5;color:#9a3412;padding:3px 10px;border-radius:6px;font-size:.85rem;font-weight:600;margin-right:6px;}
+  .btn{background:var(--main);color:#fff;border:none;padding:10px 18px;border-radius:8px;cursor:pointer;font-weight:600;font-size:.95rem;margin:4px 4px 4px 0;}
+  .btn.secondary{background:#64748b;}
+  .btn.warn{background:var(--accent);}
+  .btn:hover{filter:brightness(1.1);}
+  .flow{display:grid;gap:10px;}
+  .step{display:grid;grid-template-columns:90px 1fr;gap:14px;background:#f8fafc;border-radius:10px;padding:14px;border-left:5px solid var(--main);}
+  .step .t{font-weight:700;color:var(--main-dark);}
+  .step .mode{color:#64748b;font-size:.9rem;margin-top:4px;}
+  .formula{background:#ecfeff;border:2px solid var(--main);border-radius:10px;padding:14px 18px;font-size:1.15rem;margin:10px 0;text-align:center;font-weight:600;}
+  .formula .frac{display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;margin:0 6px;}
+  .formula .frac span:first-child{border-bottom:2px solid #1e293b;padding:0 6px;}
+  .hint{background:#fff7ed;border:1px dashed var(--accent);padding:10px 14px;border-radius:8px;margin:10px 0;}
+  .answer{background:#f0fdf4;border:1px solid var(--ok);padding:12px;border-radius:8px;margin-top:10px;display:none;}
+  .answer.show{display:block;}
+  .msg{font-weight:700;margin-left:8px;}
+  input.ans{width:90px;padding:6px;text-align:center;border:2px solid #cbd5e1;border-radius:6px;font-size:1rem;}
+  input.ans.ok{border-color:var(--ok);background:#f0fdf4;}
+  input.ans.bad{border-color:var(--bad);background:#fef2f2;}
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  @media(max-width:700px){.two{grid-template-columns:1fr}.step{grid-template-columns:1fr}}
+  table{width:100%;border-collapse:collapse;margin:12px 0;}
+  th,td{border:1px solid #cbd5e1;padding:10px;text-align:center;}
+  th{background:#e2e8f0;}
+  /* 價錢牌 */
+  .tag{background:#fff;border:3px solid #1e293b;border-radius:14px;padding:18px 24px;width:260px;margin:12px auto;position:relative;box-shadow:4px 4px 0 #1e293b;}
+  .tag::before{content:"";position:absolute;top:-14px;left:50%;width:22px;height:22px;background:var(--bg);border:3px solid #1e293b;border-radius:50%;transform:translateX(-50%);}
+  .tag .mp{text-decoration:line-through;color:#94a3b8;font-size:1.2rem;}
+  .tag .sp{font-size:2.2rem;font-weight:800;color:var(--bad);}
+  .tag .off{background:var(--bad);color:#fff;display:inline-block;padding:4px 12px;border-radius:6px;font-weight:700;margin-top:6px;}
+  input[type=range]{width:100%;accent-color:var(--main);}
+  /* 快問快答 */
+  .quiz{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;}
+  .qcard{background:linear-gradient(135deg,#f97316,#ef4444);color:#fff;font-size:1.6rem;font-weight:800;padding:26px 20px;border-radius:14px;min-width:150px;text-align:center;cursor:pointer;transition:.3s;user-select:none;}
+  .qcard.flip{background:linear-gradient(135deg,#0f766e,#14b8a6);}
+  .qcard small{display:block;font-size:.8rem;font-weight:400;opacity:.9;margin-top:4px;}
+  /* 例題逐步 */
+  .sol{display:none;background:#fef2f2;border-left:4px solid var(--bad);padding:12px 16px;border-radius:8px;margin-top:10px;color:#991b1b;line-height:1.9;}
+  .sol.show{display:block;}
+  .choice{display:flex;gap:10px;flex-wrap:wrap;margin:8px 0;}
+  .choice label{background:#f1f5f9;padding:8px 14px;border-radius:8px;cursor:pointer;border:2px solid transparent;}
+  .choice input{margin-right:6px;}
+  textarea{width:100%;min-height:70px;padding:10px;border:2px solid #cbd5e1;border-radius:8px;font-size:1rem;}
+  .err-table td{text-align:left;}
+  footer{text-align:center;color:#94a3b8;padding:20px;font-size:.85rem;}
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>🏷️ 第 3.1 節：折扣 (Discount)</h1>
+    <small>標價、售價、折扣、折扣百分率｜日常生活中的百分數｜20 分鐘</small>
+  </div>
+  <div class="timer">
+    ⏱ <span id="clock">20:00</span>
+    <button onclick="toggleTimer()" id="tbtn">開始</button>
+    <button onclick="resetTimer()">重設</button>
+  </div>
+</header>
+
+<nav>
+  <button class="active" onclick="go('flow',this)">📋 教學流程</button>
+  <button onclick="go('intro',this)">⚡ 引入：幾折？</button>
+  <button onclick="go('concept',this)">📖 概念與價錢牌</button>
+  <button onclick="go('examples',this)">✏️ 例題 3.01–3.04</button>
+  <button onclick="go('ex3a',this)">📝 練習 3A</button>
+  <button onclick="go('exit',this)">🎫 出口票</button>
+  <button onclick="go('teacher',this)">👩‍🏫 教師區</button>
+</nav>
+
+<main>
+
+<!-- ===== 教學流程 ===== -->
+<section id="flow" class="active">
+  <div class="card">
+    <h2>學習成果</h2>
+    <p>✅ 理解標價 (Marked Price)、售價 (Selling Price)、折扣 (Discount) 的關係</p>
+    <p>✅ 計算折扣百分率 (Discount Percent)，並能把「幾折」與「折扣百分率」互換</p>
+    <p>✅ 運用公式由折扣百分率求售價或標價，解決購物情境問題</p>
+  </div>
+  <div class="card">
+    <h2>20 分鐘教學流程</h2>
+    <div class="flow">
+      <div class="step"><div class="t">0–3 分</div><div><b>引入：「九折即是減幾多 %？」快問快答</b><br>翻卡遊戲：八折、八五折、九五折……學生搶答對應的折扣百分率，釐清「折」與「折扣 %」的分別。<div class="mode">💬 全班搶答</div></div></div>
+      <div class="step"><div class="t">3–7 分</div><div><b>概念講解：玩具車價錢牌</b><br>用互動價錢牌拉動滑桿，觀察標價、折扣、售價如何變化；歸納四條公式。<div class="mode">📺 教師示範、學生口答</div></div></div>
+      <div class="step"><div class="t">7–11 分</div><div><b>例題 3.01–3.02（求折扣 % / 求折扣）</b><br>教師逐步揭示解法，學生先在小白板寫答案再核對。<div class="mode">📝 小白板舉答</div></div></div>
+      <div class="step"><div class="t">11–15 分</div><div><b>例題 3.03–3.04（反求標價）+ 練習 3A 第 1–4 題</b><br>配對：A 做單數題、B 做雙數題，互相批改。<div class="mode">👥 配對合作</div></div></div>
+      <div class="step"><div class="t">15–18 分</div><div><b>練習 3A 第 5–6 題：哪間商店更划算？</b><br>分組討論，組長匯報並解釋原因。<div class="mode">🗣 分組討論、匯報</div></div></div>
+      <div class="step"><div class="t">18–20 分</div><div><b>總結與出口票</b><br>四條公式口訣 + 出口票兩題。<div class="mode">🎫 個人完成</div></div></div>
+    </div>
+  </div>
+  <div class="card">
+    <h2>所需物資</h2>
+    <p>小白板及白板筆、計算機、A/B 配對卡、本網站（投影或學生平板）</p>
+  </div>
+</section>
+
+<!-- ===== 引入 ===== -->
+<section id="intro">
+  <div class="card">
+    <h2>⚡ 快問快答：「幾折」即是減幾多 %？</h2>
+    <p>點擊卡片翻開答案。先讓學生搶答，再翻卡核對！</p>
+    <div class="quiz" style="margin-top:14px">
+      <div class="qcard" onclick="flip(this,'折扣 20%')">八折<small>點擊翻開</small></div>
+      <div class="qcard" onclick="flip(this,'折扣 10%')">九折<small>點擊翻開</small></div>
+      <div class="qcard" onclick="flip(this,'折扣 15%')">八五折<small>點擊翻開</small></div>
+      <div class="qcard" onclick="flip(this,'折扣 5%')">九五折<small>點擊翻開</small></div>
+      <div class="qcard" onclick="flip(this,'折扣 40%')">六折<small>點擊翻開</small></div>
+      <div class="qcard" onclick="flip(this,'折扣 50%')">半價<small>點擊翻開</small></div>
+      <div class="qcard" onclick="flip(this,'即 七折')">折扣 30%<small>點擊翻開</small></div>
+      <div class="qcard" onclick="flip(this,'即 八八折')">折扣 12%<small>點擊翻開</small></div>
+    </div>
+    <div class="hint" style="margin-top:16px">
+      <b>提問鏈：</b>「九折」的「九」是甚麼意思？→ 付 90% → 省了多少 %？→ 100% − 90% = 10%<br>
+      <b>關鍵：</b><span class="badge">幾折 = 付多少</span><span class="badge">折扣 % = 省多少</span> 兩者相加 = 100%
+    </div>
+  </div>
+</section>
+
+<!-- ===== 概念 ===== -->
+<section id="concept">
+  <div class="card">
+    <h2>📖 核心詞彙</h2>
+    <table>
+      <tr><th>詞彙</th><th>英文</th><th>意思</th></tr>
+      <tr><td>標價</td><td>Marked Price</td><td>貨品原來的價錢</td></tr>
+      <tr><td>售價</td><td>Selling Price</td><td>最終售賣的價錢</td></tr>
+      <tr><td>折扣</td><td>Discount</td><td>標價 − 售價（省了多少錢）</td></tr>
+      <tr><td>折扣百分率</td><td>Discount Percent</td><td>折扣相對於<b>標價</b>的百分數</td></tr>
+    </table>
+    <h3>四條公式</h3>
+    <div class="formula">① 折扣 = 標價 − 售價</div>
+    <div class="formula">② 折扣百分率 = <span class="frac"><span>折扣</span><span>標價</span></span> × 100%</div>
+    <div class="formula">③ 折扣 = 標價 × 折扣 %</div>
+    <div class="formula">④ 售價 = 標價 × (1 − 折扣 %)</div>
+    <div class="hint">⚠️ <b>常見陷阱：</b>折扣百分率的分母是<b>標價</b>，不是售價！</div>
+  </div>
+
+  <div class="card">
+    <h2>🚗 互動價錢牌：玩具車</h2>
+    <div class="two">
+      <div>
+        <p>標價：$<input class="ans" id="tagMP" type="number" value="150" oninput="updTag()"></p>
+        <p style="margin-top:12px">折扣百分率：<b id="tagPctLbl">40</b>%</p>
+        <input type="range" id="tagPct" min="0" max="100" step="5" value="40" oninput="updTag()">
+        <div id="tagCalc" style="margin-top:12px;line-height:2;background:#f8fafc;padding:10px;border-radius:8px"></div>
+      </div>
+      <div class="tag">
+        <div style="font-size:3rem;text-align:center">🚗</div>
+        <div class="mp">標價 $<span id="tMP">150</span></div>
+        <div class="sp">$<span id="tSP">90</span></div>
+        <div class="off">減 <span id="tOff">40</span>%｜<span id="tZhe">6 折</span></div>
+      </div>
+    </div>
+    <div class="hint">🤔 把滑桿拉到 <b>20%</b>、<b>5%</b>，售價各是多少？「幾折」怎樣讀？（8 折、9.5 折）</div>
+  </div>
+</section>
+
+<!-- ===== 例題 ===== -->
+<section id="examples">
+  <div class="card">
+    <h2>例 3.01　求折扣百分率</h2>
+    <p>一個 2 磅芝士蛋糕的標價是 $340，現以 $272 售出。計算折扣百分率。</p>
+    <p style="margin-top:8px">你的答案：<input class="ans" id="e301" placeholder="%"> % <button class="btn" onclick="chk1('e301',20,'m301')">檢查</button><span class="msg" id="m301"></span></p>
+    <button class="btn secondary" onclick="tog('s301')">👁 顯示／隱藏題解</button>
+    <div class="sol" id="s301">
+      折扣 = $340 − $272 = <b>$68</b><br>
+      折扣百分率 = 68 ÷ 340 × 100% = <b>20%</b>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>例 3.02　求折扣</h2>
+    <p>跳跳豹公仔的標價是 $220，現以 10% 的折扣百分率售出。計算折扣。</p>
+    <p style="margin-top:8px">你的答案：$<input class="ans" id="e302"> <button class="btn" onclick="chk1('e302',22,'m302')">檢查</button><span class="msg" id="m302"></span></p>
+    <button class="btn secondary" onclick="tog('s302')">👁 顯示／隱藏題解</button>
+    <div class="sol" id="s302">折扣 = $220 × 10% = $220 × 0.1 = <b>$22</b></div>
+    <div class="hint">💡 我們通常說「九折」，即是 10% 的折扣百分率。</div>
+  </div>
+
+  <div class="card">
+    <h2>例 3.03　反求標價</h2>
+    <p>美婷以 5% 的折扣百分率買入一個書櫃，並節省了 $200。求書櫃的標價。</p>
+    <p style="margin-top:8px">你的答案：$<input class="ans" id="e303"> <button class="btn" onclick="chk1('e303',4000,'m303')">檢查</button><span class="msg" id="m303"></span></p>
+    <button class="btn secondary" onclick="tog('s303')">👁 顯示／隱藏題解</button>
+    <div class="sol" id="s303">
+      設標價為 $y。<br>
+      y × 5% = 200<br>
+      y × 0.05 = 200<br>
+      y = 200 ÷ 0.05 = <b>4,000</b><br>
+      ∴ 書櫃的標價是 <b>$4,000</b>。
+    </div>
+    <div class="hint">🔑 <b>思路：</b>「節省了」= 折扣。已知折扣和折扣 %，用公式 ③ 倒推標價。</div>
+  </div>
+
+  <div class="card">
+    <h2>例 3.04　綜合題</h2>
+    <p>在澤澤電器店裏，淑芬以 30% 的折扣百分率購買一部平板電腦，且節省了 $630。然後她再以九折購買一個標價為 $2,000 的手提電話。她共須付款多少？</p>
+    <p style="margin-top:8px">平板標價 $<input class="ans" id="e304a">　平板售價 $<input class="ans" id="e304b">　手機售價 $<input class="ans" id="e304c">　總額 $<input class="ans" id="e304d"></p>
+    <button class="btn" onclick="chkMany([['e304a',2100],['e304b',1470],['e304c',1800],['e304d',3270]],'m304')">檢查</button><span class="msg" id="m304"></span>
+    <br><button class="btn secondary" onclick="tog('s304')">👁 顯示／隱藏題解</button>
+    <div class="sol" id="s304">
+      設平板電腦的標價為 $y。 y × 30% = 630 → y = 630 ÷ 0.3 = <b>2,100</b><br>
+      平板電腦的售價 = $2,100 − $630 = <b>$1,470</b><br>
+      手提電話的售價 = $2,000 × 90% = <b>$1,800</b><br>
+      她共須付的金額 = $1,470 + $1,800 = <b>$3,270</b>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 練習 3A ===== -->
+<section id="ex3a">
+  <div class="card">
+    <h2>📝 練習 3A（第 1–4 題）</h2>
+    <div class="two">
+      <div style="background:#ecfeff;padding:12px;border-radius:10px"><b>🅰 A 同學</b>：第 1、3 題</div>
+      <div style="background:#fff7ed;padding:12px;border-radius:10px"><b>🅱 B 同學</b>：第 2、4 題　→ 完成後互相批改</div>
+    </div>
+    <p style="margin-top:14px"><b>1.</b> 一把雨傘的標價是 $190，現以 $114 售出。計算折扣百分率。<br>答：<input class="ans" id="p1"> %</p>
+    <p style="margin-top:14px"><b>2.</b> 一個筆盒的標價是 $60，現以八折出售。計算折扣。<br>答：$<input class="ans" id="p2"></p>
+    <p style="margin-top:14px"><b>3.</b> 一件外套的標價是 $400，現以 55% 的折扣百分率售出。求售價。<br>答：$<input class="ans" id="p3"></p>
+    <p style="margin-top:14px"><b>4.</b> 一部洗衣機以 40% 的折扣百分率售出。若售價是 $1,800，求標價。<br>答：$<input class="ans" id="p4"></p>
+    <button class="btn" onclick="chkMany([['p1',40],['p2',12],['p3',180],['p4',3000]],'mp')">✔ 檢查第 1–4 題</button><span class="msg" id="mp"></span>
+  </div>
+
+  <div class="card">
+    <h2>🛒 第 5 題：哪間商店更划算？</h2>
+    <p>在百美電器店，某款微波爐的標價是 $1,440，並以八五折出售。在快樂電器店，該款微波爐的標價是 $1,400，並以 12% 的折扣百分率出售。若美薇想以較低金額購買，她應惠顧哪一間商店？</p>
+    <div class="two" style="margin-top:10px">
+      <div style="background:#ecfeff;padding:12px;border-radius:10px">百美售價 $<input class="ans" id="p5a"></div>
+      <div style="background:#fff7ed;padding:12px;border-radius:10px">快樂售價 $<input class="ans" id="p5b"></div>
+    </div>
+    <div class="choice">
+      <label><input type="radio" name="q5" value="A">百美電器店</label>
+      <label><input type="radio" name="q5" value="B">快樂電器店</label>
+    </div>
+    <button class="btn" onclick="chk5()">✔ 檢查</button><span class="msg" id="m5"></span>
+    <div class="hint">🗣 <b>討論：</b>標價較低的商店一定較便宜嗎？為甚麼？</div>
+  </div>
+
+  <div class="card">
+    <h2>🍎 第 6 題：哪個品牌折扣百分率較大？</h2>
+    <p>在惠惠超級市場裏，品牌 A 的蘋果每個標價是 $8，現減價至 $6 出售。品牌 B 的蘋果以一袋 4 個出售，標價是 $48，且每袋有 $18 的折扣。若美欣想買 4 個蘋果，哪個品牌的蘋果有較大的折扣百分率？</p>
+    <div class="two" style="margin-top:10px">
+      <div style="background:#ecfeff;padding:12px;border-radius:10px">品牌 A 折扣 % <input class="ans" id="p6a"> %</div>
+      <div style="background:#fff7ed;padding:12px;border-radius:10px">品牌 B 折扣 % <input class="ans" id="p6b"> %</div>
+    </div>
+    <div class="choice">
+      <label><input type="radio" name="q6" value="A">品牌 A</label>
+      <label><input type="radio" name="q6" value="B">品牌 B</label>
+    </div>
+    <button class="btn" onclick="chk6()">✔ 檢查</button><span class="msg" id="m6"></span>
+    <div class="hint">🤔 品牌 A 買 4 個 = $32 vs 品牌 B 一袋 $30 —— 折扣 % 大的，是否一定付得少？</div>
+  </div>
+</section>
+
+<!-- ===== 出口票 ===== -->
+<section id="exit">
+  <div class="card">
+    <h2>🎫 出口票（Exit Ticket）</h2>
+    <p><b>(1)</b> 一件衣服標價 $250，以八折出售。售價是 $<input class="ans" id="x1"></p>
+    <p style="margin-top:10px"><b>(2)</b> 一本書標價 $120，現以 $90 售出。折扣百分率是 <input class="ans" id="x2"> %</p>
+    <p style="margin-top:10px"><b>(3)</b> 我今天最不明白的地方是：</p>
+    <textarea id="x3" placeholder="請寫下你的疑問……"></textarea>
+    <br><button class="btn" onclick="chkMany([['x1',200],['x2',25]],'mx')">✔ 提交</button><span class="msg" id="mx"></span>
+  </div>
+  <div class="card">
+    <h2>📌 口訣總結</h2>
+    <p>1️⃣ <b>折扣 = 標價 − 售價</b>（省了多少錢）</p>
+    <p>2️⃣ <b>折扣 % 的分母永遠是標價</b></p>
+    <p>3️⃣ <b>幾折 + 折扣 % = 100%</b>（九折 ↔ 10%，八五折 ↔ 15%）</p>
+    <p>4️⃣ 已知折扣 % 求售價：<b>標價 × (1 − 折扣 %)</b></p>
+  </div>
+</section>
+
+<!-- ===== 教師區 ===== -->
+<section id="teacher">
+  <div class="card">
+    <h2>👩‍🏫 答案參考</h2>
+    <button class="btn warn" onclick="document.getElementById('ans').classList.toggle('show')">👁 顯示／隱藏答案</button>
+    <div class="answer" id="ans">
+      <p><b>例 3.01：</b>20%　<b>例 3.02：</b>$22　<b>例 3.03：</b>$4,000　<b>例 3.04：</b>$2,100 / $1,470 / $1,800 / 總額 $3,270</p>
+      <p style="margin-top:8px"><b>練習 3A：</b>1. 40%　2. $12　3. $180　4. $3,000</p>
+      <p>5. 百美 $1,440 × 0.85 = $1,224；快樂 $1,400 × 0.88 = $1,232 → 惠顧<b>百美</b></p>
+      <p>6. A：2/8 = 25%；B：18/48 = 37.5% → <b>品牌 B</b> 折扣百分率較大</p>
+      <p style="margin-top:8px"><b>出口票：</b>(1) $200　(2) 25%</p>
+    </div>
+  </div>
+  <div class="card">
+    <h2>常見錯誤及應對</h2>
+    <table class="err-table">
+      <tr><th>常見錯誤</th><th>教師回應策略</th></tr>
+      <tr><td>把「八折」當成折扣 20%… 卻乘 0.2 求售價</td><td>強調「八折 = 付 80%」，售價 = 標價 × 0.8；折扣才是 × 0.2</td></tr>
+      <tr><td>折扣 % 用售價作分母（如 68 ÷ 272）</td><td>回到定義：折扣是「相對於標價」；用玩具車 $150 例子驗算</td></tr>
+      <tr><td>第 4 題：$1,800 × 40% 當標價</td><td>問：「$1,800 是付了幾多 %？」→ 60% → 標價 = 1800 ÷ 0.6</td></tr>
+      <tr><td>第 5 題：只比標價，以為快樂較便宜</td><td>要求先算兩間售價再比較；討論「標價低 ≠ 售價低」</td></tr>
+      <tr><td>第 6 題：混淆「折扣 % 大」與「付得少」</td><td>兩者分開計算：A 付 $32、B 付 $30；折扣 % 比較的是比例</td></tr>
+    </table>
+  </div>
+  <div class="card">
+    <h2>分層支援</h2>
+    <p><span class="badge">基礎組</span>提供公式卡；練習 3A 第 1–3 題先做，第 4 題給提示「售價佔標價 60%」</p>
+    <p style="margin-top:8px"><span class="badge">進階組</span>第 6 題追問：若美欣只想付最少錢，應選哪個品牌？再設計一個「折扣 % 較大但付款較多」的例子</p>
+  </div>
+</section>
+
+</main>
+<footer>第 3.1 節 折扣｜互動教學網站｜可直接投影使用</footer>
+
+<script>
+function go(id,btn){
+  document.querySelectorAll('section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');btn.classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+/* 計時器 */
+let secs=1200,tm=null;
+function render(){document.getElementById('clock').textContent=String(Math.floor(secs/60)).padStart(2,'0')+':'+String(secs%60).padStart(2,'0');}
+function toggleTimer(){const b=document.getElementById('tbtn');if(tm){clearInterval(tm);tm=null;b.textContent='繼續';return;}b.textContent='暫停';
+  tm=setInterval(()=>{if(secs>0){secs--;render();}else{clearInterval(tm);tm=null;alert('⏰ 20 分鐘已結束！');}},1000);}
+function resetTimer(){clearInterval(tm);tm=null;secs=1200;render();document.getElementById('tbtn').textContent='開始';}
+/* 翻卡 */
+function flip(el,ans){
+  if(el.classList.contains('flip')){el.innerHTML=el.dataset.front;el.classList.remove('flip');return;}
+  el.dataset.front=el.innerHTML;el.innerHTML=ans+'<small>再點返回</small>';el.classList.add('flip');
+}
+/* 價錢牌 */
+function updTag(){
+  const mp=Number(document.getElementById('tagMP').value)||0,p=Number(document.getElementById('tagPct').value);
+  const disc=mp*p/100,sp=mp-disc;
+  document.getElementById('tagPctLbl').textContent=p;
+  document.getElementById('tMP').textContent=mp;document.getElementById('tSP').textContent=+sp.toFixed(2);
+  document.getElementById('tOff').textContent=p;
+  const zhe=(100-p)/10;document.getElementById('tZhe').textContent=p===0?'無折扣':p===100?'免費':(zhe+' 折');
+  document.getElementById('tagCalc').innerHTML=
+    `折扣 = $${mp} × ${p}% = <b>$${+disc.toFixed(2)}</b><br>售價 = $${mp} − $${+disc.toFixed(2)} = <b>$${+sp.toFixed(2)}</b><br>折扣百分率 = ${+disc.toFixed(2)} ÷ ${mp} × 100% = <b>${p}%</b>`;
+}
+updTag();
+/* 檢查 */
+function mark(i,ok){i.classList.remove('ok','bad');i.classList.add(ok?'ok':'bad');}
+function chk1(id,ans,mid){const i=document.getElementById(id),ok=i.value.trim()!==''&&Math.abs(Number(i.value)-ans)<0.01;mark(i,ok);
+  const m=document.getElementById(mid);m.textContent=ok?'✅ 正確！':'❌ 再試一次';m.style.color=ok?'var(--ok)':'var(--bad)';}
+function chkMany(list,mid){let all=true;list.forEach(([id,a])=>{const i=document.getElementById(id);const ok=i.value.trim()!==''&&Math.abs(Number(i.value)-a)<0.01;mark(i,ok);if(!ok)all=false;});
+  const m=document.getElementById(mid);m.textContent=all?'🎉 全部正確！':'❌ 有錯，紅色格請再試';m.style.color=all?'var(--ok)':'var(--bad)';}
+function chk5(){const a=document.getElementById('p5a'),b=document.getElementById('p5b');
+  const oa=Number(a.value)===1224,ob=Number(b.value)===1232;mark(a,oa);mark(b,ob);
+  const r=document.querySelector('input[name=q5]:checked');const oc=r&&r.value==='A';
+  const m=document.getElementById('m5');m.textContent=(oa&&ob&&oc)?'🎉 正確！百美 $1,224 < 快樂 $1,232':`售價 ${oa&&ob?'✅':'❌'}　選擇 ${oc?'✅':'❌'}`;m.style.color=(oa&&ob&&oc)?'var(--ok)':'var(--bad)';}
+function chk6(){const a=document.getElementById('p6a'),b=document.getElementById('p6b');
+  const oa=Number(a.value)===25,ob=Number(b.value)===37.5;mark(a,oa);mark(b,ob);
+  const r=document.querySelector('input[name=q6]:checked');const oc=r&&r.value==='B';
+  const m=document.getElementById('m6');m.textContent=(oa&&ob&&oc)?'🎉 正確！B 的 37.5% > A 的 25%':`折扣 % ${oa&&ob?'✅':'❌'}　選擇 ${oc?'✅':'❌'}`;m.style.color=(oa&&ob&&oc)?'var(--ok)':'var(--bad)';}
+function tog(id){document.getElementById(id).classList.toggle('show');}
+render();
+</script>
+</body>
+</html>

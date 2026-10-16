@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>練習 14B｜一次函數的圖像 — 互動教學</title>
+<style>
+  :root{--main:#2563eb;--main-dark:#1e40af;--accent:#f59e0b;--ok:#16a34a;--bad:#dc2626;--bg:#f1f5f9;--card:#fff;}
+  *{box-sizing:border-box;margin:0;padding:0;font-family:"Noto Sans TC","Microsoft JhengHei","PingFang TC",sans-serif;}
+  body{background:var(--bg);color:#1e293b;}
+  header{background:linear-gradient(135deg,var(--main-dark),var(--main));color:#fff;padding:18px 24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;position:sticky;top:0;z-index:10;box-shadow:0 2px 8px rgba(0,0,0,.2);}
+  header h1{font-size:1.35rem;}
+  header small{opacity:.85;display:block;font-size:.85rem;}
+  .timer{background:rgba(255,255,255,.15);padding:8px 14px;border-radius:10px;display:flex;align-items:center;gap:10px;}
+  .timer span{font-size:1.5rem;font-weight:700;font-variant-numeric:tabular-nums;}
+  .timer button{background:#fff;color:var(--main-dark);border:none;padding:6px 12px;border-radius:6px;cursor:pointer;font-weight:600;}
+  nav{display:flex;flex-wrap:wrap;gap:6px;padding:12px 24px;background:#fff;border-bottom:1px solid #e2e8f0;position:sticky;top:72px;z-index:9;}
+  nav button{border:2px solid var(--main);background:#fff;color:var(--main);padding:8px 14px;border-radius:999px;cursor:pointer;font-weight:600;transition:.2s;}
+  nav button.active,nav button:hover{background:var(--main);color:#fff;}
+  main{max-width:1000px;margin:0 auto;padding:24px;}
+  section{display:none;animation:fade .3s;}
+  section.active{display:block;}
+  @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  .card{background:var(--card);border-radius:14px;padding:22px;margin-bottom:20px;box-shadow:0 2px 10px rgba(0,0,0,.05);}
+  .card h2{color:var(--main-dark);margin-bottom:14px;font-size:1.3rem;border-left:5px solid var(--accent);padding-left:10px;}
+  .card h3{margin:14px 0 8px;font-size:1.05rem;color:#334155;}
+  .badge{display:inline-block;background:#fef3c7;color:#92400e;padding:3px 10px;border-radius:6px;font-size:.85rem;font-weight:600;margin-right:6px;}
+  table{width:100%;border-collapse:collapse;margin:12px 0;}
+  th,td{border:1px solid #cbd5e1;padding:10px;text-align:center;}
+  th{background:#e2e8f0;}
+  td input{width:70px;padding:6px;text-align:center;border:2px solid #cbd5e1;border-radius:6px;font-size:1rem;}
+  td input.ok{border-color:var(--ok);background:#f0fdf4;}
+  td input.bad{border-color:var(--bad);background:#fef2f2;}
+  .btn{background:var(--main);color:#fff;border:none;padding:10px 18px;border-radius:8px;cursor:pointer;font-weight:600;font-size:.95rem;margin:4px 4px 4px 0;}
+  .btn.secondary{background:#64748b;}
+  .btn.warn{background:var(--accent);}
+  .btn:hover{filter:brightness(1.1);}
+  .flow{display:grid;gap:10px;}
+  .step{display:grid;grid-template-columns:90px 1fr;gap:14px;background:#f8fafc;border-radius:10px;padding:14px;border-left:5px solid var(--main);}
+  .step .t{font-weight:700;color:var(--main-dark);}
+  .step .mode{color:#64748b;font-size:.9rem;margin-top:4px;}
+  .machine{display:flex;align-items:center;gap:16px;flex-wrap:wrap;justify-content:center;padding:20px;}
+  .machine input{width:90px;font-size:1.6rem;text-align:center;padding:8px;border:3px solid var(--main);border-radius:10px;}
+  .box{background:linear-gradient(135deg,#7c3aed,#db2777);color:#fff;padding:20px 28px;border-radius:14px;font-size:1.3rem;font-weight:700;box-shadow:0 4px 14px rgba(0,0,0,.2);}
+  .out{font-size:2rem;font-weight:800;color:var(--main-dark);min-width:80px;text-align:center;}
+  .log{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;}
+  .log span{background:#e0e7ff;padding:4px 10px;border-radius:6px;font-weight:600;}
+  canvas{background:#fff;border:1px solid #cbd5e1;border-radius:10px;display:block;margin:12px auto;max-width:100%;}
+  .hint{background:#fffbeb;border:1px dashed var(--accent);padding:10px 14px;border-radius:8px;margin:10px 0;}
+  .answer{background:#f0fdf4;border:1px solid var(--ok);padding:12px;border-radius:8px;margin-top:10px;display:none;}
+  .answer.show{display:block;}
+  .msg{font-weight:700;margin-left:8px;}
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  @media(max-width:700px){.two{grid-template-columns:1fr}.step{grid-template-columns:1fr}}
+  .pair{background:#eff6ff;border-radius:10px;padding:14px;}
+  .pair.b{background:#fdf2f8;}
+  textarea{width:100%;min-height:70px;padding:10px;border:2px solid #cbd5e1;border-radius:8px;font-size:1rem;}
+  .err-table td{text-align:left;}
+  footer{text-align:center;color:#94a3b8;padding:20px;font-size:.85rem;}
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>📈 練習 14B：一次函數的圖像</h1>
+    <small>把方程寫成 y 為主項 → 完成數值表 → 繪畫圖像｜DAE｜20 分鐘</small>
+  </div>
+  <div class="timer">
+    ⏱ <span id="clock">20:00</span>
+    <button onclick="toggleTimer()" id="tbtn">開始</button>
+    <button onclick="resetTimer()">重設</button>
+  </div>
+</header>
+
+<nav>
+  <button class="active" onclick="go('flow',this)">📋 教學流程</button>
+  <button onclick="go('machine',this)">🤖 引入：函數機器</button>
+  <button onclick="go('q1',this)">1️⃣ 第 1 題</button>
+  <button onclick="go('q2',this)">2️⃣ 第 2 題</button>
+  <button onclick="go('q3',this)">🎂 第 3 題</button>
+  <button onclick="go('exit',this)">🎫 出口票</button>
+  <button onclick="go('teacher',this)">👩‍🏫 教師區</button>
+</nav>
+
+<main>
+
+<!-- ===== 教學流程 ===== -->
+<section id="flow" class="active">
+  <div class="card">
+    <h2>學習目標</h2>
+    <p>✅ 把二元一次方程（如 x + 2y = 4）改寫成以 y 為主項</p>
+    <p>✅ 代入 x 值完成數值表，並在坐標平面上描點、連線</p>
+    <p>✅ 由實際情境建立函數關係，並以圖像表示</p>
+  </div>
+  <div class="card">
+    <h2>20 分鐘教學流程</h2>
+    <div class="flow">
+      <div class="step"><div class="t">0–3 分</div><div><b>引入：猜數字機器</b><br>教師扮演「函數機器」，學生說 x，教師即時說出 3x+2，學生猜規律。<div class="mode">💬 全班搶答</div></div></div>
+      <div class="step"><div class="t">3–7 分</div><div><b>示範：第 1 題</b><br>共同把 x+2y=4 改寫成 y 為主項。教師示範 x=−2，學生完成 x=0、2。<div class="mode">📝 小白板舉答</div></div></div>
+      <div class="step"><div class="t">7–12 分</div><div><b>配對活動：第 2 題</b><br>A 負責 x=−4、−2、0；B 負責 x=1、3。互相核對後共同繪圖。<div class="mode">👥 配對合作、互相批改</div></div></div>
+      <div class="step"><div class="t">12–17 分</div><div><b>情境應用：第 3 題</b><br>蛋糕師傅情境：「1 個 3 小時，x 個呢？」引導寫出 y=3x，分組完成。<div class="mode">🗣 分組討論、組長匯報</div></div></div>
+      <div class="step"><div class="t">17–20 分</div><div><b>總結與快測</b><br>三句總結 + 出口票一題。<div class="mode">🎫 個人完成，離場前交回</div></div></div>
+    </div>
+  </div>
+  <div class="card">
+    <h2>所需物資</h2>
+    <p>方格紙、直尺、小白板及白板筆、A/B 配對卡、情境卡、出口票（或直接使用本網站）</p>
+  </div>
+</section>
+
+<!-- ===== 函數機器 ===== -->
+<section id="machine">
+  <div class="card">
+    <h2>🤖 神秘函數機器</h2>
+    <p>輸入一個數字，看看機器會輸出甚麼。<b>猜一猜機器的規則是甚麼？</b></p>
+    <div class="machine">
+      <input type="number" id="mIn" placeholder="x" value="1">
+      <span style="font-size:2rem">→</span>
+      <div class="box">神秘機器 ❓</div>
+      <span style="font-size:2rem">→</span>
+      <div class="out" id="mOut">?</div>
+    </div>
+    <div style="text-align:center">
+      <button class="btn" onclick="runMachine()">▶ 放入機器</button>
+      <button class="btn warn" onclick="revealRule()">🔍 揭示規則</button>
+    </div>
+    <div class="log" id="mLog"></div>
+    <div class="hint">
+      <b>提問鏈：</b>「輸入每加 1，輸出加多少？」→「輸入 0 時輸出甚麼？」→ 得出規則
+    </div>
+    <div class="answer" id="rule">🎉 規則是：<b>f(x) = 3x + 2</b>　（每加 1 輸出加 3；輸入 0 輸出 2）</div>
+  </div>
+</section>
+
+<!-- ===== 第 1 題 ===== -->
+<section id="q1">
+  <div class="card">
+    <h2>第 1 題：x + 2y = 4</h2>
+    <h3>步驟一：把方程改寫成 y 為主項</h3>
+    <p style="font-size:1.1rem">x + 2y = 4　→　2y = 4 − <input id="q1a" style="width:50px;padding:4px;text-align:center;border:2px solid #cbd5e1;border-radius:6px"> 　→　y = (4 − x) ÷ <input id="q1b" style="width:50px;padding:4px;text-align:center;border:2px solid #cbd5e1;border-radius:6px"></p>
+    <div class="hint">💡 為甚麼要先改寫成 y 為主項？—— 方便直接代入 x 計算 y。</div>
+    <h3>步驟二：完成數值表</h3>
+    <table>
+      <tr><th>x</th><th>−2</th><th>0</th><th>2</th></tr>
+      <tr><th>y</th><td><input data-ans="3" class="t1"></td><td><input data-ans="2" class="t1"></td><td><input data-ans="1" class="t1"></td></tr>
+    </table>
+    <button class="btn" onclick="check('.t1','m1');checkQ1()">✔ 檢查答案</button>
+    <button class="btn secondary" onclick="plot('c1','.t1',[-2,0,2],x=>(4-x)/2,-4,4,-2,5)">📈 繪畫圖像</button>
+    <span class="msg" id="m1"></span>
+    <canvas id="c1" width="520" height="360"></canvas>
+    <div class="hint">🤔 <b>思考題：</b>三點是否在同一直線上？如果不是，可能哪裡出錯？</div>
+  </div>
+</section>
+
+<!-- ===== 第 2 題 ===== -->
+<section id="q2">
+  <div class="card">
+    <h2>第 2 題：f(x) = 3x + 2</h2>
+    <div class="two">
+      <div class="pair"><b>🅰 A 同學</b><br>負責計算 f(−4)、f(−2)、f(0)</div>
+      <div class="pair b"><b>🅱 B 同學</b><br>負責計算 f(1)、f(3)<br><small>並檢查 A 的負數運算！</small></div>
+    </div>
+    <table>
+      <tr><th>x</th><th>−4</th><th>−2</th><th>0</th><th>1</th><th>3</th></tr>
+      <tr><th>f(x)</th>
+        <td><input data-ans="-10" class="t2"></td><td><input data-ans="-4" class="t2"></td><td><input data-ans="2" class="t2"></td>
+        <td><input data-ans="5" class="t2"></td><td><input data-ans="11" class="t2"></td></tr>
+    </table>
+    <button class="btn" onclick="check('.t2','m2')">✔ 檢查答案</button>
+    <button class="btn secondary" onclick="plot('c2','.t2',[-4,-2,0,1,3],x=>3*x+2,-5,4,-12,13)">📈 繪畫圖像（x = −4 至 3）</button>
+    <span class="msg" id="m2"></span>
+    <canvas id="c2" width="520" height="360"></canvas>
+    <div class="hint">⭐ <b>挑戰題：</b>圖像與 y 軸交於哪一點？這與 f(x)=3x+2 的哪個數字有關？</div>
+  </div>
+</section>
+
+<!-- ===== 第 3 題 ===== -->
+<section id="q3">
+  <div class="card">
+    <h2>🎂 第 3 題：蛋糕師傅</h2>
+    <p style="font-size:1.05rem;background:#fdf2f8;padding:12px;border-radius:8px">一位蛋糕師傅需要 <b>3 小時</b>製作一個生日蛋糕。設蛋糕師傅需要 <b>y</b> 小時製作 <b>x</b> 個生日蛋糕。</p>
+    <h3>(a) 寫出 x 和 y 的關係</h3>
+    <p style="font-size:1.1rem">1 個 → 3 小時；2 個 → ___ 小時；x 個 → ___ 小時</p>
+    <p style="font-size:1.1rem">y = <input id="q3eq" style="width:90px;padding:6px;text-align:center;border:2px solid #cbd5e1;border-radius:6px" placeholder="例：3x"> <button class="btn" onclick="checkEq()">檢查</button><span class="msg" id="m3eq"></span></p>
+    <h3>(b) 完成數值表</h3>
+    <table>
+      <tr><th>x</th><th>0</th><th>1</th><th>2</th><th>4</th><th>6</th></tr>
+      <tr><th>y</th>
+        <td><input data-ans="0" class="t3"></td><td><input data-ans="3" class="t3"></td><td><input data-ans="6" class="t3"></td>
+        <td><input data-ans="12" class="t3"></td><td><input data-ans="18" class="t3"></td></tr>
+    </table>
+    <button class="btn" onclick="check('.t3','m3')">✔ 檢查答案</button>
+    <button class="btn secondary" onclick="plot('c3','.t3',[0,1,2,4,6],x=>3*x,-1,7,-2,20)">📈 繪畫圖像（x = 0 至 6）</button>
+    <span class="msg" id="m3"></span>
+    <canvas id="c3" width="520" height="360"></canvas>
+    <div class="hint">🗣 <b>討論：</b>為甚麼 x 不能是負數？圖像為甚麼經過原點？</div>
+  </div>
+</section>
+
+<!-- ===== 出口票 ===== -->
+<section id="exit">
+  <div class="card">
+    <h2>🎫 出口票（Exit Ticket）</h2>
+    <p>已知 <b>2x + y = 6</b>。</p>
+    <p style="margin:10px 0">(1) 以 y 為主項：y = <input id="e1" style="width:120px;padding:6px;text-align:center;border:2px solid #cbd5e1;border-radius:6px" placeholder="例：6-2x"></p>
+    <p style="margin:10px 0">(2) 當 x = 1，y = <input id="e2" style="width:70px;padding:6px;text-align:center;border:2px solid #cbd5e1;border-radius:6px"></p>
+    <p style="margin:10px 0">(3) 我今天最不明白的地方是：</p>
+    <textarea id="e3" placeholder="請寫下你的疑問……"></textarea>
+    <br><button class="btn" onclick="checkExit()">✔ 提交</button><span class="msg" id="me"></span>
+  </div>
+  <div class="card">
+    <h2>📌 三句總結</h2>
+    <p>1️⃣ 先把方程改寫成 <b>y = ……</b>，計算才方便。</p>
+    <p>2️⃣ 代入幾個 x 值 → 得到幾個點 → 描點。</p>
+    <p>3️⃣ 一次函數的圖像一定是<b>直線</b>；三點不共線即有錯！</p>
+  </div>
+</section>
+
+<!-- ===== 教師區 ===== -->
+<section id="teacher">
+  <div class="card">
+    <h2>👩‍🏫 教師答案參考</h2>
+    <button class="btn warn" onclick="document.getElementById('ans').classList.toggle('show')">👁 顯示／隱藏答案</button>
+    <div class="answer" id="ans">
+      <p><b>第 1 題：</b>y = (4 − x)/2 = 2 − x/2；y 值：3, 2, 1</p>
+      <p><b>第 2 題：</b>f(x) 值：−10, −4, 2, 5, 11；與 y 軸交於 (0, 2)</p>
+      <p><b>第 3 題：</b>y = 3x；y 值：0, 3, 6, 12, 18</p>
+      <p><b>出口票：</b>y = 6 − 2x；x = 1 時 y = 4</p>
+    </div>
+  </div>
+  <div class="card">
+    <h2>常見錯誤及應對</h2>
+    <table class="err-table">
+      <tr><th>常見錯誤</th><th>教師回應策略</th></tr>
+      <tr><td>改寫主項時符號錯（如 y = x − 2）</td><td>讓學生把 x = 0 代回原式驗算</td></tr>
+      <tr><td>3 × (−4) 算成 12</td><td>配對互查，B 同學負責檢查 A 的負數運算</td></tr>
+      <tr><td>描點後用曲線連接</td><td>強調一次函數圖像必為直線，三點不共線即有錯</td></tr>
+      <tr><td>第 3 題圖像畫到負 x 區域</td><td>討論情境意義：蛋糕數量不能為負</td></tr>
+    </table>
+  </div>
+  <div class="card">
+    <h2>分層支援</h2>
+    <p><span class="badge">基礎組</span>第 1 題提供半完成的改寫步驟；第 3 題先給 y = 3x，只需填表繪圖</p>
+    <p style="margin-top:8px"><span class="badge">進階組</span>找出各圖像與 y 軸的交點，並預測 y = 3x + 5 的圖像會如何變化</p>
+  </div>
+</section>
+
+</main>
+<footer>練習 14B 互動教學網站｜可直接投影使用</footer>
+
+<script>
+/* ---------- 導航 ---------- */
+function go(id,btn){
+  document.querySelectorAll('section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* ---------- 計時器 ---------- */
+let secs=1200,tm=null;
+function render(){const m=String(Math.floor(secs/60)).padStart(2,'0'),s=String(secs%60).padStart(2,'0');document.getElementById('clock').textContent=m+':'+s;}
+function toggleTimer(){
+  const b=document.getElementById('tbtn');
+  if(tm){clearInterval(tm);tm=null;b.textContent='繼續';return;}
+  b.textContent='暫停';
+  tm=setInterval(()=>{if(secs>0){secs--;render();}else{clearInterval(tm);tm=null;alert('⏰ 20 分鐘已結束！');}},1000);
+}
+function resetTimer(){clearInterval(tm);tm=null;secs=1200;render();document.getElementById('tbtn').textContent='開始';}
+
+/* ---------- 函數機器 ---------- */
+function runMachine(){
+  const x=Number(document.getElementById('mIn').value);
+  const y=3*x+2;
+  document.getElementById('mOut').textContent=y;
+  const s=document.createElement('span');s.textContent=`${x} → ${y}`;
+  document.getElementById('mLog').appendChild(s);
+}
+function revealRule(){document.getElementById('rule').classList.add('show');}
+
+/* ---------- 檢查表格 ---------- */
+function check(sel,msgId){
+  let all=true;
+  document.querySelectorAll(sel).forEach(i=>{
+    const ok=i.value.trim()!==''&&Number(i.value)===Number(i.dataset.ans);
+    i.className=i.className.replace(/ ?(ok|bad)/g,'')+(ok?' ok':' bad');
+    if(!ok)all=false;
+  });
+  const m=document.getElementById(msgId);
+  m.textContent=all?'🎉 全部正確！':'❌ 有錯，請再試';
+  m.style.color=all?'var(--ok)':'var(--bad)';
+}
+function checkQ1(){
+  const a=document.getElementById('q1a'),b=document.getElementById('q1b');
+  a.style.borderColor=(a.value.trim()==='x')?'var(--ok)':'var(--bad)';
+  b.style.borderColor=(b.value.trim()==='2')?'var(--ok)':'var(--bad)';
+}
+function checkEq(){
+  const v=document.getElementById('q3eq').value.replace(/\s/g,'').toLowerCase();
+  const ok=['3x','x*3','3*x','x×3','3×x'].includes(v);
+  const m=document.getElementById('m3eq');
+  m.textContent=ok?'✅ 正確！y = 3x':'❌ 想一想：1 個 3 小時，x 個呢？';
+  m.style.color=ok?'var(--ok)':'var(--bad)';
+}
+function checkExit(){
+  const e1=document.getElementById('e1').value.replace(/\s/g,'').toLowerCase();
+  const ok1=['6-2x','-2x+6'].includes(e1);
+  const ok2=Number(document.getElementById('e2').value)===4;
+  const m=document.getElementById('me');
+  m.textContent=(ok1&&ok2)?'🎉 已提交，答案全對！':`已提交。(1) ${ok1?'✅':'❌'}　(2) ${ok2?'✅':'❌'}`;
+  m.style.color=(ok1&&ok2)?'var(--ok)':'var(--accent)';
+}
+
+/* ---------- 繪圖 ---------- */
+function plot(cid,sel,xs,fn,xmin,xmax,ymin,ymax){
+  const c=document.getElementById(cid),ctx=c.getContext('2d');
+  const W=c.width,H=c.height,pad=40;
+  const sx=x=>pad+(x-xmin)/(xmax-xmin)*(W-2*pad);
+  const sy=y=>H-pad-(y-ymin)/(ymax-ymin)*(H-2*pad);
+  ctx.clearRect(0,0,W,H);
+  // 格線
+  ctx.strokeStyle='#e2e8f0';ctx.lineWidth=1;
+  for(let x=Math.ceil(xmin);x<=xmax;x++){ctx.beginPath();ctx.moveTo(sx(x),pad);ctx.lineTo(sx(x),H-pad);ctx.stroke();}
+  const stepY=(ymax-ymin)>15?2:1;
+  for(let y=Math.ceil(ymin);y<=ymax;y+=stepY){ctx.beginPath();ctx.moveTo(pad,sy(y));ctx.lineTo(W-pad,sy(y));ctx.stroke();}
+  // 軸
+  ctx.strokeStyle='#334155';ctx.lineWidth=2;
+  ctx.beginPath();ctx.moveTo(pad,sy(0));ctx.lineTo(W-pad,sy(0));ctx.stroke();
+  ctx.beginPath();ctx.moveTo(sx(0),pad);ctx.lineTo(sx(0),H-pad);ctx.stroke();
+  ctx.fillStyle='#334155';ctx.font='12px sans-serif';ctx.textAlign='center';
+  for(let x=Math.ceil(xmin);x<=xmax;x++)if(x!==0)ctx.fillText(x,sx(x),sy(0)+14);
+  ctx.textAlign='right';
+  for(let y=Math.ceil(ymin);y<=ymax;y+=stepY)if(y!==0)ctx.fillText(y,sx(0)-5,sy(y)+4);
+  ctx.fillText('x',W-pad+15,sy(0)+4);ctx.fillText('y',sx(0)+12,pad-8);
+  // 正確直線
+  ctx.strokeStyle='#2563eb';ctx.lineWidth=2.5;ctx.beginPath();
+  ctx.moveTo(sx(xs[0]),sy(fn(xs[0])));ctx.lineTo(sx(xs[xs.length-1]),sy(fn(xs[xs.length-1])));ctx.stroke();
+  // 學生輸入的點
+  const inputs=document.querySelectorAll(sel);
+  xs.forEach((x,i)=>{
+    const v=inputs[i].value.trim();if(v==='')return;
+    const y=Number(v),correct=y===fn(x);
+    ctx.fillStyle=correct?'#16a34a':'#dc2626';
+    ctx.beginPath();ctx.arc(sx(x),sy(Math.max(ymin,Math.min(ymax,y))),6,0,Math.PI*2);ctx.fill();
+    ctx.fillStyle='#1e293b';ctx.textAlign='left';ctx.fillText(`(${x}, ${y})`,sx(x)+8,sy(y)-8);
+  });
+  // 圖例
+  ctx.textAlign='left';ctx.fillStyle='#16a34a';ctx.fillText('● 正確的點',pad,16);
+  ctx.fillStyle='#dc2626';ctx.fillText('● 錯誤的點（不在直線上）',pad+90,16);
+}
+render();
+</script>
+</body>
+</html>

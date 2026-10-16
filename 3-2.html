@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>第 3.2–3.3 節｜以固定的率增加／減少的應用題 — 互動教學</title>
+<style>
+  :root{--main:#1d4ed8;--main-dark:#1e3a8a;--up:#16a34a;--down:#dc2626;--accent:#f59e0b;--bg:#eff6ff;--card:#fff;}
+  *{box-sizing:border-box;margin:0;padding:0;font-family:"Noto Sans TC","Microsoft JhengHei","PingFang TC",sans-serif;}
+  body{background:var(--bg);color:#1e293b;}
+  header{background:linear-gradient(135deg,var(--main-dark),var(--main));color:#fff;padding:14px 24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;position:sticky;top:0;z-index:10;box-shadow:0 2px 8px rgba(0,0,0,.2);}
+  header h1{font-size:1.2rem;} header small{opacity:.85;display:block;font-size:.85rem;}
+  .timer{background:rgba(255,255,255,.15);padding:8px 14px;border-radius:10px;display:flex;align-items:center;gap:10px;}
+  .timer span{font-size:1.5rem;font-weight:700;font-variant-numeric:tabular-nums;}
+  .timer button{background:#fff;color:var(--main-dark);border:none;padding:6px 12px;border-radius:6px;cursor:pointer;font-weight:600;}
+  nav{display:flex;flex-wrap:wrap;gap:6px;padding:10px 24px;background:#fff;border-bottom:1px solid #e2e8f0;position:sticky;top:66px;z-index:9;}
+  nav button{border:2px solid var(--main);background:#fff;color:var(--main);padding:6px 12px;border-radius:999px;cursor:pointer;font-weight:600;transition:.2s;font-size:.88rem;}
+  nav button.active,nav button:hover{background:var(--main);color:#fff;}
+  nav button.g{border-color:var(--up);color:var(--up);} nav button.g.active,nav button.g:hover{background:var(--up);color:#fff;}
+  nav button.d{border-color:var(--down);color:var(--down);} nav button.d.active,nav button.d:hover{background:var(--down);color:#fff;}
+  main{max-width:1000px;margin:0 auto;padding:24px;}
+  section{display:none;animation:fade .3s;} section.active{display:block;}
+  @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  .card{background:var(--card);border-radius:14px;padding:22px;margin-bottom:20px;box-shadow:0 2px 10px rgba(0,0,0,.05);line-height:1.8;}
+  .card h2{color:var(--main-dark);margin-bottom:12px;font-size:1.25rem;border-left:5px solid var(--accent);padding-left:10px;line-height:1.4;}
+  .card.up h2{border-color:var(--up);} .card.down h2{border-color:var(--down);}
+  .card h3{margin:14px 0 8px;font-size:1.05rem;color:#334155;}
+  .badge{display:inline-block;background:#fef3c7;color:#92400e;padding:2px 10px;border-radius:6px;font-size:.85rem;font-weight:600;margin-right:6px;}
+  .badge.up{background:#dcfce7;color:#166534;} .badge.down{background:#fee2e2;color:#991b1b;}
+  .btn{background:var(--main);color:#fff;border:none;padding:9px 16px;border-radius:8px;cursor:pointer;font-weight:600;font-size:.92rem;margin:6px 4px 4px 0;}
+  .btn.secondary{background:#64748b;} .btn.warn{background:var(--accent);} .btn:hover{filter:brightness(1.1);}
+  .flow{display:grid;gap:10px;}
+  .step{display:grid;grid-template-columns:72px 1fr;gap:12px;background:#f8fafc;border-radius:10px;padding:12px;border-left:5px solid var(--main);line-height:1.6;}
+  .step .t{font-weight:700;color:var(--main-dark);} .step .mode{color:#64748b;font-size:.86rem;margin-top:4px;}
+  .formula{background:#eff6ff;border:2px solid var(--main);border-radius:10px;padding:12px 18px;font-size:1.15rem;margin:10px 0;text-align:center;font-weight:600;}
+  .formula.up{background:#f0fdf4;border-color:var(--up);} .formula.down{background:#fef2f2;border-color:var(--down);}
+  .hint{background:#fffbeb;border:1px dashed var(--accent);padding:10px 14px;border-radius:8px;margin:10px 0;}
+  .answer{background:#f0fdf4;border:1px solid var(--up);padding:12px;border-radius:8px;margin-top:10px;display:none;} .answer.show{display:block;}
+  .msg{font-weight:700;margin-left:8px;}
+  input.ans{width:110px;padding:5px;text-align:center;border:2px solid #cbd5e1;border-radius:6px;font-size:1rem;}
+  input.ans.ok{border-color:var(--up);background:#f0fdf4;} input.ans.bad{border-color:var(--down);background:#fef2f2;}
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  @media(max-width:700px){.two{grid-template-columns:1fr}.step{grid-template-columns:1fr}}
+  table{width:100%;border-collapse:collapse;margin:12px 0;} th,td{border:1px solid #cbd5e1;padding:8px;text-align:center;} th{background:#e2e8f0;}
+  input[type=range]{width:100%;accent-color:var(--main);}
+  .quiz{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;}
+  .qcard{background:linear-gradient(135deg,#f59e0b,#ef4444);color:#fff;font-size:1.3rem;font-weight:800;padding:22px 16px;border-radius:14px;min-width:150px;text-align:center;cursor:pointer;transition:.3s;user-select:none;line-height:1.4;}
+  .qcard.flip{background:linear-gradient(135deg,#1d4ed8,#3b82f6);}
+  .qcard small{display:block;font-size:.78rem;font-weight:400;opacity:.9;margin-top:4px;}
+  .sol{display:none;background:#fef2f2;border-left:4px solid var(--down);padding:12px 16px;border-radius:8px;margin-top:10px;color:#991b1b;line-height:2;} .sol.show{display:block;}
+  .sol .ind{padding-left:1.5em;}
+  .choice{display:inline-flex;gap:10px;flex-wrap:wrap;margin:6px 0;} .choice label{background:#f1f5f9;padding:6px 14px;border-radius:8px;cursor:pointer;}
+  textarea{width:100%;min-height:70px;padding:10px;border:2px solid #cbd5e1;border-radius:8px;font-size:1rem;}
+  .err-table td{text-align:left;}
+  .chart{display:flex;align-items:flex-end;gap:8px;height:200px;padding:10px;background:#f8fafc;border-radius:10px;margin-top:10px;overflow-x:auto;}
+  .bar{flex:1;min-width:52px;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;}
+  .bar div{width:100%;border-radius:6px 6px 0 0;transition:.4s;}
+  .bar span{font-size:.7rem;margin-top:4px;color:#475569;text-align:center;line-height:1.3;}
+  .seg{display:inline-flex;border:2px solid var(--main);border-radius:8px;overflow:hidden;vertical-align:middle;}
+  .seg button{border:none;background:#fff;padding:5px 12px;cursor:pointer;font-weight:600;color:var(--main);}
+  .seg button.on{background:var(--main);color:#fff;}
+  .q{margin-top:14px;padding-top:10px;border-top:1px dashed #e2e8f0;}
+  .frac{display:inline-flex;flex-direction:column;vertical-align:middle;margin:0 4px;text-align:center;line-height:1.3;}
+  .frac span:first-child{border-bottom:1.5px solid currentColor;padding:0 4px;}
+  footer{text-align:center;color:#94a3b8;padding:20px;font-size:.85rem;}
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>📈 3.2 以固定的率增加的應用題　📉 3.3 以固定的率減少的應用題</h1>
+    <small>增長因子 (Growth factor)・衰變因子 (Decay factor)｜單元二 數學｜每節 20 分鐘</small>
+  </div>
+  <div class="timer">⏱ <span id="clock">20:00</span><button onclick="toggleTimer()" id="tbtn">開始</button><button onclick="resetTimer()">重設</button></div>
+</header>
+
+<nav>
+  <button class="active" onclick="go('flow',this)">📋 流程</button>
+  <button onclick="go('intro',this)">⚡ 翻卡引入</button>
+  <button class="g" onclick="go('gconcept',this)">📈 3.2 概念</button>
+  <button class="g" onclick="go('gex1',this)">✏️ 例 3.05–3.07</button>
+  <button class="g" onclick="go('gex2',this)">✏️ 例 3.08–3.11</button>
+  <button onclick="go('sim',this)">🧪 模擬器</button>
+  <button class="g" onclick="go('ex3b',this)">📝 練習 3B</button>
+  <button class="d" onclick="go('dconcept',this)">📉 3.3 概念</button>
+  <button class="d" onclick="go('dex',this)">✏️ 例 3.12–3.15</button>
+  <button class="d" onclick="go('ex3c',this)">📝 練習 3C</button>
+  <button onclick="go('rev',this)">🏁 總複習 3</button>
+  <button onclick="go('exit',this)">🎫 出口票</button>
+  <button onclick="go('teacher',this)">👩‍🏫 教師區</button>
+</nav>
+
+<main>
+
+<!-- ===== 流程 ===== -->
+<section id="flow" class="active">
+  <div class="card">
+    <h2>學習成果</h2>
+    <p>✅ 理解百分數改變：<b>值的變化 = 新值 − 原值</b>；<b>百分數改變 = 值的變化 ÷ 原值 × 100%</b></p>
+    <p>✅ 運用 <b>A = P(1 + R%)ⁿ</b>（增長因子）及 <b>A = P(1 − R%)ⁿ</b>（衰變因子）求 n 期後的新值</p>
+    <p>✅ 以代數方法由新值<b>反求 n 期前的原值</b>（P = A ÷ 因子ⁿ）</p>
+    <p>✅ 用計算機的 ∛ 及 xʸ 鍵求「每年平均升幅／下調」</p>
+  </div>
+  <div class="two">
+    <div class="card up">
+      <h2>📈 3.2 增長因子（20 分鐘）</h2>
+      <div class="flow">
+        <div class="step"><div class="t">0–3 分</div><div><b>翻卡：「增加 30% 乘幾多？」</b><br>重溫 50 → 50 × (1+30%) = 65。<div class="mode">💬 全班搶答</div></div></div>
+        <div class="step"><div class="t">3–7 分</div><div><b>概念：政府債券每年增 4%</b><br>模擬器逐年揭示，歸納 A = P(1+R%)ⁿ。<div class="mode">📺 示範 + 口答</div></div></div>
+        <div class="step"><div class="t">7–14 分</div><div><b>例 3.05（金幣 8 年）、3.06（茶樹 2 年前）、3.07（平均升幅 ∛）</b><br>學生先做再揭示題解。<div class="mode">📝 小白板</div></div></div>
+        <div class="step"><div class="t">14–18 分</div><div><b>練習 3B 第 1、2、4、5 題</b><br>A/B 配對互批；第 3、6–8 題課後完成。<div class="mode">👥 配對</div></div></div>
+        <div class="step"><div class="t">18–20 分</div><div><b>出口票 (1)(3)</b>；例 3.08–3.11 作延伸閱讀。<div class="mode">🎫 個人</div></div></div>
+      </div>
+    </div>
+    <div class="card down">
+      <h2>📉 3.3 衰變因子（20 分鐘）</h2>
+      <div class="flow">
+        <div class="step"><div class="t">0–3 分</div><div><b>翻卡：「減少 10% 乘幾多？」</b><br>$400 → $400 × (1−10%) = $360。<div class="mode">💬 全班搶答</div></div></div>
+        <div class="step"><div class="t">3–7 分</div><div><b>概念：手提電話每年減 10%</b><br>模擬器切換「減少」，歸納 A = P(1−R%)ⁿ。<div class="mode">📺 示範 + 口答</div></div></div>
+        <div class="step"><div class="t">7–14 分</div><div><b>例 3.12（老虎）、3.13（魚塘每半年）、3.14（兩段不同率）</b><div class="mode">📝 小白板</div></div></div>
+        <div class="step"><div class="t">14–18 分</div><div><b>練習 3C 第 1、2、4、5 題</b><br>配對互批；第 3、6 題課後完成。<div class="mode">👥 配對</div></div></div>
+        <div class="step"><div class="t">18–20 分</div><div><b>例 3.15 挑戰（樓價 ∛0.5）+ 出口票 (2)(4)</b><div class="mode">🎫 個人</div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 引入 ===== -->
+<section id="intro">
+  <div class="card">
+    <h2>⚡ 快問快答：原值要乘以甚麼？</h2>
+    <div class="quiz" style="margin-top:14px">
+      <div class="qcard" onclick="flip(this,'× 1.3<br><small>50 → 65</small>')">50 增加 30%<small>點擊翻開</small></div>
+      <div class="qcard" onclick="flip(this,'× 1.4<br><small>$200 → $280</small>')">$200 增加 40%<small>點擊翻開</small></div>
+      <div class="qcard" onclick="flip(this,'× 1.04')">增加 4%<small>點擊翻開</small></div>
+      <div class="qcard" onclick="flip(this,'× 2')">增加 100%<small>點擊翻開</small></div>
+      <div class="qcard" onclick="flip(this,'× 0.9<br><small>$400 → $360</small>')">$400 減少 10%<small>點擊翻開</small></div>
+      <div class="qcard" onclick="flip(this,'× 0.96')">減少 4%<small>點擊翻開</small></div>
+      <div class="qcard" onclick="flip(this,'增加 1.5%')">因子 1.015<small>點擊翻開</small></div>
+      <div class="qcard" onclick="flip(this,'減少 3.2%')">因子 0.968<small>點擊翻開</small></div>
+    </div>
+    <div class="hint" style="margin-top:16px">
+      <b>課本回顧：</b>50 增加 30% → 增加數值 = 50 × 30% = 15；新值 = 50 × (1 + 30%) = 65。<br>
+      <b>百分數改變 (Percentage change)：</b>值的變化 = 新值 − 原值；百分數改變 = <span class="frac"><span>新值 − 原值</span><span>原值</span></span> × 100%；值的變化 = 原值 × 百分數增減<br>
+      <span class="badge up">因子 &gt; 1 → 增長</span><span class="badge down">因子 &lt; 1 → 衰變</span>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 3.2 概念 ===== -->
+<section id="gconcept">
+  <div class="card up">
+    <h2>📈 3.2 以固定的率增加的應用題</h2>
+    <p>若政府債券每年穩定增長 4%，現在價值是 $10,000：</p>
+    <table>
+      <tr><th>時間</th><th>計算</th><th>價值</th></tr>
+      <tr><td>現在</td><td>—</td><td>$10,000</td></tr>
+      <tr><td>1 年後</td><td>$10,000 × (1+4%)</td><td>$10,400</td></tr>
+      <tr><td>2 年後</td><td>$10,000 × (1+4%) × (1+4%) = $10,000 × (1+4%)²</td><td>$10,816</td></tr>
+      <tr><td>3 年後</td><td>$10,000 × (1+4%)³</td><td>$11,248.64</td></tr>
+      <tr><td>n 年後</td><td>$10,000 × (1+4%)ⁿ</td><td>餘此類推</td></tr>
+    </table>
+    <p>若一個數值 P 以每期 R% 的率穩定地增加，則在 n 期後它的新值 A 可由以下的公式表示：</p>
+    <div class="formula up">A = P(1 + R%)ⁿ　　其中 (1 + R%) 稱為<b>增長因子 (Growth factor)</b></div>
+    <div class="hint">⚠️ 第 2 年的 4% 是以<b>第 1 年後的價值</b>計算，所以 2 年共增長 (1.04)² − 1 = 8.16%，不是 8%。</div>
+  </div>
+  <div class="card up">
+    <h2>反求原值與平均升幅</h2>
+    <div class="formula up">已知 n 期後的新值 A → 原值 P = A ÷ (1 + R%)ⁿ</div>
+    <div class="formula up">已知 n 期內由 P 變成 A → (1 + x%)ⁿ = A ÷ P → 1 + x% = ⁿ√(A ÷ P)</div>
+    <p>計算機：<b>Shift ∛</b>（立方根）或 <b>xʸ / x³</b> 鍵。<span class="badge">注意</span>每年的平均升幅<b>並不等於</b>各次升幅的平均值（見例 3.07）。</p>
+  </div>
+</section>
+
+<!-- ===== 例 3.05–3.07 ===== -->
+<section id="gex1">
+  <div class="card up">
+    <h2>例 3.05　金幣</h2>
+    <p>焙基用 $40,000 買了一枚金幣。若該金幣的價值以每年 4% 的率穩定地增加，8 年後它的價值是多少？（答案須準確至最接近的十元。）</p>
+    <p>答：$<input class="ans" id="e305"> <button class="btn" onclick="chk1('e305',54740,'m305',5)">檢查</button><span class="msg" id="m305"></span></p>
+    <button class="btn secondary" onclick="tog('s305')">👁 題解</button>
+    <div class="sol" id="s305">8 年後它的價值 = $40,000 × (1 + 4%)⁸ = <b>$54,740</b>（準確至最接近的十元）</div>
+  </div>
+  <div class="card up">
+    <h2>例 3.06　茶樹（反求原值）</h2>
+    <p>一棵茶樹的高度以每年 10% 率穩定地增加。若該棵茶樹現在的高度是 7.26 米，求它 2 年前的高度。（答案須準確至最接近的 0.01 米。）</p>
+    <p>答：<input class="ans" id="e306"> 米 <button class="btn" onclick="chk1('e306',6,'m306',0.01)">檢查</button><span class="msg" id="m306"></span></p>
+    <button class="btn secondary" onclick="tog('s306')">👁 題解</button>
+    <div class="sol" id="s306">設它 2 年前的高度是 P m。<div class="ind">7.26 = P × (1 + 10%)²<br>P = 7.26 ÷ 1.1² = 6（準確至最接近的 0.01）</div>∴ 該棵茶樹 2 年前的高度是 <b>6 米</b>。</div>
+  </div>
+  <div class="card up">
+    <h2>例 3.07　考試費平均升幅</h2>
+    <p>科創大學連續四年考試費為 1,000、2,000、3,000 及 4,000 元。求：<br>(a) 考試費於第二至第三年的升幅；　(b) 考試費的每年平均升幅。</p>
+    <p>(a) <input class="ans" id="e307a"> %　　(b) <input class="ans" id="e307b"> % <button class="btn" onclick="chkMany([['e307a',50],['e307b',58.74,0.02]],'m307')">檢查</button><span class="msg" id="m307"></span></p>
+    <button class="btn secondary" onclick="tog('s307')">👁 題解</button>
+    <div class="sol" id="s307">(a) 學費於第二至第三年的升幅 = <span class="frac"><span>$3,000 − $2,000</span><span>$2,000</span></span> × 100% = <b>50%</b><br>
+    (b) 設學費每年的平均升幅為 x%，則<div class="ind">1,000(1 + x%)³ = 4,000<br>(1 + x%)³ = 4<br>1 + x% = ∛4　（計算機按 Shift ∛ (4) EXE）<br>1 + x% = 1.5874<br>x% = 58.74%</div>∴ 學費的每年平均升幅約為 <b>58.74%</b>。</div>
+    <div class="hint">🤔 三次升幅分別是 100%、50%、33.3%，平均值 61.1%。為甚麼「每年平均升幅」卻是 58.74%？→ <b>每年的平均升幅並不等於三次升幅的平均值。</b></div>
+  </div>
+</section>
+
+<!-- ===== 例 3.08–3.11 ===== -->
+<section id="gex2">
+  <div class="card up">
+    <h2>例 3.08　佣金</h2>
+    <p>美美華酒店市場營業員李麟的每月底薪為 8,000 元，另加營業金額的 5% 作為佣金。若他上月份的收入是 24,000 元，求他的營業金額是多少？</p>
+    <p>答：$<input class="ans" id="e308"> <button class="btn" onclick="chk1('e308',320000,'m308')">檢查</button><span class="msg" id="m308"></span></p>
+    <button class="btn secondary" onclick="tog('s308')">👁 題解</button>
+    <div class="sol" id="s308">佣金收入 = $24,000 − $8,000 = $16,000<br>營業金額 = $16,000 ÷ 5% = <b>$320,000</b></div>
+  </div>
+  <div class="card up">
+    <h2>例 3.09　回報率</h2>
+    <p>美滿公司今年投資了 $200,000，取得回報 $48,000；而成功公司今年投資了 $180,000，取得回報 $46,800。利用回報率，計算哪一間公司的回報率較高。</p>
+    <p>美滿 <input class="ans" id="e309a"> %　成功 <input class="ans" id="e309b"> %　較高：<span class="choice"><label><input type="radio" name="q309" value="A">美滿</label><label><input type="radio" name="q309" value="B">成功</label></span></p>
+    <button class="btn" onclick="chk309()">檢查</button><span class="msg" id="m309"></span>
+    <br><button class="btn secondary" onclick="tog('s309')">👁 題解</button>
+    <div class="sol" id="s309">美滿公司回報率 = <span class="frac"><span>回報</span><span>成本</span></span> × 100% = <span class="frac"><span>$48,000</span><span>$200,000</span></span> × 100% = 24%<br>成功公司回報率 = <span class="frac"><span>$46,800</span><span>$180,000</span></span> × 100% = 26%<br>∴ <b>成功公司</b>回報率較高。</div>
+  </div>
+  <div class="card up">
+    <h2>例 3.10　渡海小輪（反求原值）</h2>
+    <p>設天天渡海小輪費用每年脹價的幅度為 3%。若現時的渡海小輪費用為 6 元，那麼三年前的費用是多少？（答案取一位小數）</p>
+    <p>答：<input class="ans" id="e310"> 元 <button class="btn" onclick="chk1('e310',5.5,'m310',0.05)">檢查</button><span class="msg" id="m310"></span></p>
+    <button class="btn secondary" onclick="tog('s310')">👁 題解</button>
+    <div class="sol" id="s310">（提示：求原來費用會用代數方法計算）<br>設三年前的費用為 x 元，則<div class="ind">x (1 + 3%)³ = 6<br>x = 6 ÷ 1.03³ = 5.5　（計算機按 6 ÷ 1.03 x³ EXE）</div>∴ 三年前的渡海小輪費用為 <b>5.5 元</b>。</div>
+  </div>
+  <div class="card up">
+    <h2>例 3.11　課本總支出</h2>
+    <p>假如中文和英文科課本分別比去年脹價 20% 和 15%，而數學科課本則降價 5%。若去年三科課本的售價相同，則今年購書的總支出增加百分之幾？</p>
+    <p>答：<input class="ans" id="e311"> % <button class="btn" onclick="chk1('e311',10,'m311')">檢查</button><span class="msg" id="m311"></span></p>
+    <button class="btn secondary" onclick="tog('s311')">👁 題解</button>
+    <div class="sol" id="s311">設去年三科課本的售價每本為 $x<br>今年購書的總支出增加百分比 = <span class="frac"><span>$(1.2x + 1.15x + 0.95x) − $3x</span><span>$3x</span></span> × 100% = <span class="frac"><span>$3.3x − $3x</span><span>$3x</span></span> × 100% = <b>10%</b></div>
+  </div>
+</section>
+
+<!-- ===== 模擬器 ===== -->
+<section id="sim">
+  <div class="card">
+    <h2>🧪 增長／衰變模擬器　A = P(1 ± R%)ⁿ</h2>
+    <div class="two">
+      <div>
+        <p>P（已知值）：<input class="ans" id="sV" type="number" value="10000" oninput="sim()"></p>
+        <p style="margin-top:8px">模式：<span class="seg"><button id="segUp" class="on" onclick="setMode(1)">📈 增加</button><button id="segDn" onclick="setMode(-1)">📉 減少</button></span></p>
+        <p style="margin-top:8px">方向：<span class="seg"><button id="dirF" class="on" onclick="setDir(1)">求 n 期後</button><button id="dirB" onclick="setDir(-1)">求 n 期前</button></span></p>
+        <p style="margin-top:8px">每期率 R = <b id="sRl">4</b>%</p>
+        <input type="range" id="sR" min="0.5" max="100" step="0.5" value="4" oninput="sim()">
+        <p style="margin-top:8px">期數 n = <b id="sNl">3</b></p>
+        <input type="range" id="sN" min="1" max="10" value="3" oninput="sim()">
+        <label style="display:block;margin-top:8px"><input type="checkbox" id="sCmp" onchange="sim()"> 顯示「簡單加／減 R%×n」對比</label>
+      </div>
+      <div id="sOut" style="background:#f8fafc;padding:12px;border-radius:10px;line-height:2"></div>
+    </div>
+    <div class="chart" id="sChart"></div>
+    <div class="hint">🎯 <b>試試：</b>① P = 40,000、增 4%、n = 8 → 例 3.05 的 $54,740？　② 切到「求 n 期前」，P = 7.26、增 10%、n = 2 → 例 3.06 的 6 米？　③ P = 200、增 100%、n = 8 → 練習 3B 第 5 題細菌。　④ 減少 4%、P = 2,400、n = 8 → 例 3.12。</div>
+  </div>
+</section>
+
+<!-- ===== 練習 3B ===== -->
+<section id="ex3b">
+  <div class="card up">
+    <h2>📝 練習 3B</h2>
+    <div class="two">
+      <div style="background:#f0fdf4;padding:10px;border-radius:10px"><b>🅰 A 同學</b>：第 1、4 題</div>
+      <div style="background:#fef2f2;padding:10px;border-radius:10px"><b>🅱 B 同學</b>：第 2、5 題　→ 互相批改；第 3、6–8 題課後完成</div>
+    </div>
+    <div class="q"><b>1.</b> 阿魯阿圖在 2018 年有 800 間酒店。若酒店數目以每年 1.5% 的率穩定地增加，求在 2024 年的酒店數目，準確至最接近的整數。<br>答：<input class="ans" id="b1"> 間</div>
+    <div class="q"><b>2.</b> 在廣告宣傳後，香城的捐血人數以每天 3% 的率穩定地增加。(a) 求增長因子。(b) 若今天有 2,000 人捐血，一星期前的捐血人數是多少？（答案須準確至最接近的整數。）<br>(a) <input class="ans" id="b2a">　(b) <input class="ans" id="b2b"> 人</div>
+    <div class="q"><b>3.</b> 美麗小城今年的人口是 80,000，若它的人口以每年 2.5% 穩定地增加，8 年後美麗小城的人口會否超過 100,000？試解釋你的答案。<br>8 年後人口 = <input class="ans" id="b3">　<span class="choice"><label><input type="radio" name="q3" value="Y">會超過</label><label><input type="radio" name="q3" value="N">不會超過</label></span></div>
+    <div class="q"><b>4.</b> 朗朗農場的小麥產量以每 3 年 8% 穩定地增長。假設今年的小麥產量是 80 公噸，求 12 年前朗朗農場的小麥產量，準確至最接近的 0.1 公噸。<br>答：<input class="ans" id="b4"> 公噸</div>
+    <div class="q"><b>5.</b> 某種細菌的數目每五分鐘便增加 100%。若最初有 200 個細菌，40 分鐘後細菌的數目是多少？<br>答：<input class="ans" id="b5"> 個</div>
+    <div class="q"><b>6.</b> 香江故宮一個花瓶的價值每兩年上升 30%。已知該花瓶在 2022 年的價值是 $468,000。(a) 求該花瓶在 2020 年的價值。(b) 求在 2020 年至 2024 年期間該花瓶的價值上升了多少。<br>(a) $<input class="ans" id="b6a">　(b) $<input class="ans" id="b6b"></div>
+    <div class="q"><b>7.</b> 一款新型號芒果手機於本星期售出 9,000 部。過去四星期，銷量每星期上升 6%。求四星期前該手機的銷量。（答案須準確至三位有效數字。）<br>答：<input class="ans" id="b7"> 部</div>
+    <div class="q"><b>8.</b> 開心公司本月的營運成本是 $200,000。營運成本下月將會增加 10%，並在之後的每個月增加 8%。(a) 求一個月後該公司的每月營運成本。(b) 求四個月後該公司的每月營運成本。<br>(a) $<input class="ans" id="b8a">　(b) $<input class="ans" id="b8b"></div>
+    <button class="btn" onclick="chk3b()">✔ 檢查練習 3B</button><span class="msg" id="mb"></span>
+    <div class="hint">💡 第 4 題：12 年 = <b>4 期</b>（每 3 年一期）。第 5 題：40 分鐘 = <b>8 期</b>，因子 = 1 + 100% = 2。第 8 題：兩段不同的率 → 200,000 × 1.1 × 1.08³。</div>
+  </div>
+</section>
+
+<!-- ===== 3.3 概念 ===== -->
+<section id="dconcept">
+  <div class="card down">
+    <h2>📉 3.3 以固定的率減少的應用題</h2>
+    <p>若 $400 減少 10%：減少 = $400 × 10% = $40；新值 = $400 × (1 − 10%) = $360。</p>
+    <p>例如一部手提電話價格每年穩定減少 10%，若現在價值是 $12,000：</p>
+    <table>
+      <tr><th>時間</th><th>計算</th><th>價值</th></tr>
+      <tr><td>現在</td><td>—</td><td>$12,000</td></tr>
+      <tr><td>1 年後</td><td>$12,000 × (1−10%)</td><td>$10,800</td></tr>
+      <tr><td>2 年後</td><td>$12,000 × (1−10%) × (1−10%) = $12,000 × (1−10%)²</td><td>$9,720</td></tr>
+      <tr><td>3 年後</td><td>$12,000 × (1−10%)³</td><td>$8,748</td></tr>
+      <tr><td>n 年後</td><td>$12,000 × (1−10%)ⁿ</td><td>餘此類推</td></tr>
+    </table>
+    <p>若一個數值 P 以每期 R% 的率穩定地減少，則在 n 期後它的新值 A 可由以下的公式表示：</p>
+    <div class="formula down">A = P(1 − R%)ⁿ　　其中 (1 − R%) 稱為<b>衰變因子 (Decay factor)</b></div>
+    <div class="hint">⚠️ <b>最常見錯誤：</b>減少 10% 的因子是 <b>0.9</b>（剩下的部分），不是 0.1！<br>🔗 反求 n 期前：P = A ÷ (1 − R%)ⁿ；求平均下調率：(1 − y%)ⁿ = A ÷ P（例 3.15）。</div>
+  </div>
+  <div class="card down">
+    <h2>兩者比較</h2>
+    <table>
+      <tr><th></th><th>增長 (Growth)</th><th>衰變 (Decay)</th></tr>
+      <tr><td>公式</td><td>A = P(1 + R%)ⁿ</td><td>A = P(1 − R%)ⁿ</td></tr>
+      <tr><td>因子大小</td><td>&gt; 1</td><td>介乎 0 與 1</td></tr>
+      <tr><td>課本例子</td><td>金幣、茶樹、考試費、渡海小輪、酒店、細菌</td><td>老虎、魚塘、手提電腦、樓價、交通意外、體重</td></tr>
+      <tr><td>「期」要留意</td><td colspan="2">每 3 年（3B Q4）、每五分鐘（3B Q5）、每半年（例 3.13）、每三個月（例 3.14、3C Q4）</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- ===== 例 3.12–3.15 ===== -->
+<section id="dex">
+  <div class="card down">
+    <h2>例 3.12　老虎</h2>
+    <p>俄俄斯現有的老虎數目是 2,400。已知老虎的數目以每年 4% 的率減少。<br>(a) 求衰變因子。(b) 求 8 年後的老虎數目。（答案須準確至最接近的整數。）(c) 求 1 年前的老虎數目。</p>
+    <p>(a) <input class="ans" id="e312a">　(b) <input class="ans" id="e312b">　(c) <input class="ans" id="e312c"> <button class="btn" onclick="chkMany([['e312a',0.96],['e312b',1731,1],['e312c',2500]],'m312')">檢查</button><span class="msg" id="m312"></span></p>
+    <button class="btn secondary" onclick="tog('s312')">👁 題解</button>
+    <div class="sol" id="s312">(a) 衰變因子 (Decay Factor) = 1 − 4% = <b>0.96 或 96%</b><br>(b) 8 年後的老虎數目 = 2,400 × 0.96⁸ = <b>1,731</b>（準確至最接近的整數）<br>(c) 1 年前的老虎數目 = 2,400 ÷ 0.96 = <b>2,500</b></div>
+  </div>
+  <div class="card down">
+    <h2>例 3.13　魚塘（每半年一期）</h2>
+    <p>在 2023 年年初，元朗盛屋村魚塘內有 2,000 尾魚。預計魚的數目每半年減少 5%。（答案須準確至最接近整數。）<br>(a) 求在 2025 年年終時魚的數目。(b) 求這段時間內減少了的魚的數目。</p>
+    <p>(a) <input class="ans" id="e313a"> 尾　(b) <input class="ans" id="e313b"> 尾 <button class="btn" onclick="chkMany([['e313a',1470,1],['e313b',530,1]],'m313')">檢查</button><span class="msg" id="m313"></span></p>
+    <button class="btn secondary" onclick="tog('s313')">👁 題解</button>
+    <div class="sol" id="s313">(a) 魚的數目減少的期數 = 6（2023 年初至 2025 年終共 3 年 = 6 個半年）<div class="ind">所求的魚的數目 = 2,000 × (1 − 5%)⁶ = 2,000 × 0.95⁶ = <b>1,470</b>（準確至最接近的整數）</div>(b) 所求的減少數目 = 2,000 − 1,470 = <b>530 尾</b></div>
+  </div>
+  <div class="card down">
+    <h2>例 3.14　手提電腦（兩段不同的率）</h2>
+    <p>一部香橙手提電腦現值 $16,000。在未來一年，它的價值每三個月減少 6%。其後，它的價值每年減少 8%。（答案須準確至最接近的元。）<br>(a) 求 6 個月後該手提電腦的價值。(b) 求三年後該部手提電腦的價值。</p>
+    <p>(a) $<input class="ans" id="e314a">　(b) $<input class="ans" id="e314b"> <button class="btn" onclick="chkMany([['e314a',14138,1],['e314b',10573,1]],'m314')">檢查</button><span class="msg" id="m314"></span></p>
+    <button class="btn secondary" onclick="tog('s314')">👁 題解</button>
+    <div class="sol" id="s314">(a) 6 個月後手提電腦的價值 = $16,000 × (1 − 6%)² = $16,000 × 0.94² = <b>$14,138</b>（準確至最接近的元）<br>(b) 三年後該部手提電腦的價值 = $16,000 × (1 − 6%)⁴ × (1 − 8%)² = $16,000 × 0.94⁴ × 0.92² = <b>$10,573</b>（準確至最接近的元）</div>
+    <div class="hint">🤔 為何 (b) 是 0.94 的 <b>4</b> 次方和 0.92 的 <b>2</b> 次方？（第一年 4 個「三個月」；其後兩年各一期）</div>
+  </div>
+  <div class="card down">
+    <h2>例 3.15　樓價平均下調（挑戰）</h2>
+    <p>2019 年的樓價是 2014 年兩倍，而 2022 年樓價則回復至 2014 年水平。計算 2019 年至 2022 年的樓價每年平均下調百分之幾。</p>
+    <p>答：<input class="ans" id="e315"> % <button class="btn" onclick="chk1('e315',20.63,'m315',0.05)">檢查</button><span class="msg" id="m315"></span></p>
+    <button class="btn secondary" onclick="tog('s315')">👁 題解</button>
+    <div class="sol" id="s315">設 2014 年的樓價是 $x，2019 年的樓價是 $2x，2022 年的樓價是 $x，假設每年平均下調 y%<div class="ind">2x (1 − y%)³ = x<br>(1 − y%)³ = 0.5<br>1 − y% = ∛0.5　（按 Shift ∛ EXE）<br>1 − y% = 0.7937<br>1 − 0.7937 = y%<br>y% = 0.2063<br>y% = 20.63%</div>∴ 2019 年至 2022 年的樓價每年平均下調 <b>20.63%</b>。</div>
+  </div>
+</section>
+
+<!-- ===== 練習 3C ===== -->
+<section id="ex3c">
+  <div class="card down">
+    <h2>📝 練習 3C</h2>
+    <div class="two">
+      <div style="background:#f0fdf4;padding:10px;border-radius:10px"><b>🅰 A 同學</b>：第 1、4 題</div>
+      <div style="background:#fef2f2;padding:10px;border-radius:10px"><b>🅱 B 同學</b>：第 2、5 題　→ 互相批改；第 3、6 題課後完成</div>
+    </div>
+    <div class="q"><b>1.</b> 一個城市的新生嬰兒數目以每年 2% 的率穩定地下降。若該城市今年的新生嬰兒數目是 24,000。(a) 求該城市 4 年前的新生嬰兒數目。（答案須準確至最接近的十位。）(b) 預計明年的新生嬰兒數目。<br>(a) <input class="ans" id="c1a">　(b) <input class="ans" id="c1b"></div>
+    <div class="q"><b>2.</b> 四年前，一個地區的交通意外數目是 320 次。假設交通意外數目以每年 3.2% 穩定地減少。(a) 求衰變因子。(b) 求過去四年內交通意外數目的減少的百分數。（答案須準確至三位有效數字。）<br>(a) <input class="ans" id="c2a">　(b) <input class="ans" id="c2b"> %</div>
+    <div class="q"><b>3.</b> 阿阿山森林裏樹木的數量每年減少了 8%。已知森林在 2022 年有 135,424 棵樹。(a) 求阿阿山森林在 2020 年的樹木數量。(b) 求在 2020 年至 2024 年期間阿阿山森林減少了的樹木數量。（答案準確至最接近的整數。）<br>(a) <input class="ans" id="c3a"> 棵　(b) <input class="ans" id="c3b"> 棵</div>
+    <div class="q"><b>4.</b> 一部華華手提電話的現價是 $8,600。該部手提電話的價格每三個月下跌 5%。求一年後該部手提電話的價格（答案須準確至最接近的元。）<br>答：$<input class="ans" id="c4"></div>
+    <div class="q"><b>5.</b> 詩韻參加了一個健身課程。參加這個課程後，她期望自己的體重能夠每星期減少 5%。在課程開始時，她的體重是 84 kg。(a) 求參加該課程兩星期後她的體重。(b) 求參加該課程的這兩星期裏她減少了的體重。<br>(a) <input class="ans" id="c5a"> kg　(b) <input class="ans" id="c5b"> kg</div>
+    <div class="q"><b>6.</b> 一款新型號中米的手提電話於七月開賣。某商店於七月和八月分別售出 400 部和 330 部該型號手提電話。(a) 求七月至八月之間該型號手提電話賣出的數量減少的百分數。(b) 若該型號手提電話往後每月賣出的數量的衰減因子保持不變，求該型號手提電話於十一月賣出的數量，準確至最接近的整數。<br>(a) <input class="ans" id="c6a"> %　(b) <input class="ans" id="c6b"> 部</div>
+    <button class="btn" onclick="chkMany([['c1a',26020,5],['c1b',23520],['c2a',0.968,0.0005],['c2b',12.2,0.05],['c3a',160000,1],['c3b',45377,1],['c4',7005,1],['c5a',75.81,0.01],['c5b',8.19,0.01],['c6a',17.5],['c6b',185,1]],'mc')">✔ 檢查練習 3C</button><span class="msg" id="mc"></span>
+    <div class="hint">💡 第 4 題：一年 = <b>4 期</b>（每三個月一期）。第 6 題：先由 400 → 330 求衰變因子 0.825，再由八月到十一月乘 <b>3</b> 次。</div>
+  </div>
+</section>
+
+<!-- ===== 總複習 3 ===== -->
+<section id="rev">
+  <div class="card">
+    <h2>🏁 總複習 3（課後／測驗前）</h2>
+    <button class="btn warn" onclick="document.querySelectorAll('.rans').forEach(e=>e.classList.toggle('show'))">👁 顯示／隱藏全部答案</button>
+    <div class="q"><b>1.</b> 快樂公司去年的收入和支出分別是 $2,400,000 和 $1,500,000。該公司今年的收入和支出分別增加 30% 和 40%。求快樂公司今年的盈利。<div class="sol rans">快樂公司的盈利 = $2,400,000 × 1.3 − $1,500,000 × 1.4 = <b>$1,020,000</b></div></div>
+    <div class="q"><b>2.</b> 香城大學去年有 6,400 名學生，其中 3,600 名是男生。今年男生的人數減少 10%，而女生的人數則增加 10%。求香城大學今年的總學生人數。<div class="sol rans">3,600 × 0.9 + 2,800 × 1.1 = <b>6,320</b></div></div>
+    <div class="q"><b>3.</b> 優惠傢俱店上星期售出 100 張椅子，每張的成本相同，其中的 70 張，每張可獲盈利 60%，而其餘則每張虧蝕 80%。求整體盈利或虧蝕百分率。<div class="sol rans">(70 × 60% − 30 × 80%) ÷ 100 = <b>盈利百分率 18%</b></div></div>
+    <div class="q"><b>4.</b> 在上學期時，香城中學的男生與女生的人數之比是 5 : 4。在下學期時，男生人數增加 10%，而女生人數減少 8%。該校總學生人數在該兩個學期的百分數增減是多少？<div class="sol rans">(5 × 1.1 + 4 × 0.92) ÷ 9 = 1.02 → <b>+2%</b></div></div>
+    <div class="q"><b>5.</b> 一部小提琴的價值每年上升 9%。已知該部小提琴在 2020 年價值 $12,800。(a) 求該部小提琴在 2018 年的價值。(b) 求在 2018 年至 2021 年間該部小提琴增加了的價值。（答案須準確至最接近的元。）<div class="sol rans">(a) $12,800 ÷ 1.09² = <b>$10,774</b>　(b) $12,800 × 1.09 − $10,774 = <b>$3,178</b></div></div>
+    <div class="q"><b>6.</b> 一個古董花瓶四月時的價值是 $240,000，它的價值每月上升 6%。(a) 求二月時該花瓶的價值。(b) 求二月至七月之間該花瓶增加了的價值。（答案須準確至最接近的元。）<div class="sol rans">(a) $240,000 ÷ 1.06² = <b>$213,599</b>　(b) $240,000 × 1.06³ − $213,599 = <b>$72,245</b></div></div>
+    <div class="q"><b>7.</b> 麗江小城在 2015 年的人口是 320,000。人口在 2015 年至 2018 年間每年增加 3%，而其後每年減少 4%。(a) 求該城市在 2020 年的人口。(b) 求 2015 年至 2020 年間該城市的人口的總百分數增減。（答案須準確至三位有效數字。）<div class="sol rans">(a) 320,000 × 1.03³ × 0.96² = <b>322,000</b>　(b) 1.03³ × 0.96² − 1 = <b>+0.706%</b></div></div>
+    <div class="q"><b>8.</b> 平平保險公司在 2014 年至 2020 年間的盈利每年下跌 3%。已知該公司在 2014 年的盈利是 $2,500,000。(a) 求該公司在 2017 年的盈利。(b) 求該公司在 2017 年至 2019 年間下跌了的盈利。（答案須準確至最接近的元。）<div class="sol rans">(a) $2,500,000 × 0.97³ = <b>$2,281,683</b>　(b) $2,281,683 × (1 − 0.97²) = <b>$134,847</b></div></div>
+    <div class="q"><b>9.</b> 美鳳於一月至六月的月薪每月減少 5%。(a) 求一月至六月之間美鳳的月薪減少的百分數，準確至三位有效數字。(b) 美鳳六月時的月薪是 $12,000，求她一月時的月薪，準確至最接近的百元。<div class="sol rans">(a) 1 − 0.95⁵ = <b>22.6%</b>　(b) $12,000 ÷ 0.95⁵ = <b>$15,500</b></div></div>
+    <div class="q"><b>10.</b> 成功公司在 2014 年至 2017 年間的全年盈利每年減少 20%。其後，在 2017 年至 2020 年間的全年盈利每年增加 16%。該公司在 2014 年的全年盈利是 $1,600,000。(a) 求該公司在 2020 年的全年盈利。(b) 求該公司在 2014 年至 2020 年間全年盈利的總百分數增減。（答案須準確至三位有效數字。）<div class="sol rans">(a) $1,600,000 × 0.8³ × 1.16³ = <b>$1,280,000</b>（準確至三位有效數字）　(b) <b>−20.1%</b></div></div>
+    <div class="q"><b>11.</b> 美麗小島在 2018 年人口是 600,000。該城市人口在 2018 年至 2021 年間每年增加 3%，其後每年減少 4%。（答案須準確至三位有效數字。）(a) 求該城市在 2023 年的人口。(b) 求 2018 年至 2023 年間該城市的人口的總百分數增減。<div class="sol rans">(a) 600,000 × 1.03³ × 0.96² = <b>604,000</b>　(b) <b>+0.706%</b></div></div>
+    <div class="q"><b>12.</b> 文力公司和文量公司三月時的營運成本分別是 $840,000 和 $1,020,000。文力公司的營運成本每月增加 7%，而文量公司的營運成本每月減少 4%。（答案須準確至三位有效數字。）(a) 哪間公司六月時的營運成本較高？(b) 兩間公司均是由鄧先生持有，六月時的總營運成本是否較三月時的總營運成本為低？試解釋你的答案。<div class="sol rans">(a) 文力：$840,000 × 1.07³ ≈ $1,029,037；文量：$1,020,000 × 0.96³ ≈ $902,431 → <b>文力公司</b>六月時的營運成本較高。<br>(b) 六月總營運成本 = <b>$1,931,466.84</b>；三月總營運成本 = $1,860,000 ∴ 六月時的總營運成本<b>較三月時為高</b>（不是較低）。</div></div>
+  </div>
+</section>
+
+<!-- ===== 出口票 ===== -->
+<section id="exit">
+  <div class="card">
+    <h2>🎫 出口票（Exit Ticket）</h2>
+    <p><b>(1)</b> 以每年 4% 的率增加，增長因子是 <input class="ans" id="x1"></p>
+    <p style="margin-top:8px"><b>(2)</b> 以每年 7% 的率減少，衰變因子是 <input class="ans" id="x2"></p>
+    <p style="margin-top:8px"><b>(3)</b> $500 以每年 10% 的率增加，2 年後是 $<input class="ans" id="x3"></p>
+    <p style="margin-top:8px"><b>(4)</b> 某數現值 1,210，一直以每年 10% 的率增加，2 年前的值是 <input class="ans" id="x4"></p>
+    <p style="margin-top:8px"><b>(5)</b> 我今天最不明白的地方是：</p>
+    <textarea placeholder="請寫下你的疑問……"></textarea>
+    <br><button class="btn" onclick="chkMany([['x1',1.04],['x2',0.93],['x3',605],['x4',1000]],'mx')">✔ 提交</button><span class="msg" id="mx"></span>
+  </div>
+  <div class="card">
+    <h2>📌 口訣總結</h2>
+    <p>1️⃣ <b>增加 R% → 乘 (1 + R%)</b>；<b>減少 R% → 乘 (1 − R%)</b>，因子永遠是「變成的部分」</p>
+    <p>2️⃣ <b>n 期就乘 n 次 → A = P × 因子ⁿ</b>；先數清楚「期」是年、半年、三個月還是五分鐘</p>
+    <p>3️⃣ <b>求 n 期前 → 除以因子ⁿ</b>（設 x，用代數）</p>
+    <p>4️⃣ <b>求平均升幅／下調 → 開 n 次方根</b>（Shift ∛），平均升幅 ≠ 各次升幅的平均值</p>
+  </div>
+</section>
+
+<!-- ===== 教師區 ===== -->
+<section id="teacher">
+  <div class="card">
+    <h2>👩‍🏫 答案參考（與課本一致）</h2>
+    <button class="btn warn" onclick="document.getElementById('ans').classList.toggle('show')">👁 顯示／隱藏答案</button>
+    <div class="answer" id="ans">
+      <p><b>例題：</b>3.05 $54,740　3.06 6 米　3.07 (a) 50% (b) 58.74%　3.08 $320,000　3.09 24%、26%，成功公司較高　3.10 5.5 元　3.11 10%</p>
+      <p>3.12 (a) 0.96 (b) 1,731 (c) 2,500　3.13 (a) 1,470 (b) 530　3.14 (a) $14,138 (b) $10,573　3.15 20.63%</p>
+      <p style="margin-top:8px"><b>練習 3B：</b>1. 875　2. (a) 1.03 (b) 1,626　3. 97,472 &lt; 100,000，不會超過　4. 58.8 公噸　5. 51,200　6. (a) $360,000 (b) $248,400　7. 7130 部　8. (a) $220,000 (b) $277,136.64</p>
+      <p style="margin-top:8px"><b>練習 3C：</b>1. (a) 26,020 (b) 23,520　2. (a) 0.968 或 96.8% (b) 12.2%　3. (a) 160,000 (b) 45,377　4. $7,005　5. (a) 75.81 kg (b) 8.19 kg　6. (a) 17.5% (b) 185 部</p>
+      <p style="margin-top:8px"><b>出口票：</b>(1) 1.04　(2) 0.93　(3) $605　(4) 1,000</p>
+    </div>
+    <div class="hint">📎 <b>課本勘誤提示：</b>練習 3B 第 2(b) 題原文印作「一星期<u>期</u>的捐血人數」，但答案 1,626 = 2,000 ÷ 1.03⁷，對應「一星期<b>前</b>」，本網站已按答案改寫題目。若學生理解為「一星期後」，答案應為 2,000 × 1.03⁷ ≈ 2,460，可一併討論。</div>
+  </div>
+  <div class="card">
+    <h2>常見錯誤及應對</h2>
+    <table class="err-table">
+      <tr><th>常見錯誤</th><th>教師回應策略</th></tr>
+      <tr><td>減少 4% 用 × 0.04</td><td>問：「減了 4%，還剩幾多 %？」→ 96% → × 0.96（例 3.12(a) 課本同時寫 0.96 或 96%）</td></tr>
+      <tr><td>數錯期數（例 3.13 當 3 期；3B Q4 當 12 期；3C Q4 當 1 期）</td><td>先在時間線上標出每一期，再數格數；強調「每半年／每三個月／每 3 年」</td></tr>
+      <tr><td>求 n 期前時仍然「乘」因子</td><td>按課本做法設未知數 x：x × 1.03³ = 6，自然得出要「除」；檢查合理性（增長題的過去值必須較小）</td></tr>
+      <tr><td>平均升幅 = 各次升幅的平均值（例 3.07）</td><td>直接對比 61.1% 與 58.74%，引用課本「注意」；用模擬器把 1,000 以 58.74% 乘 3 次驗證得 4,000</td></tr>
+      <tr><td>兩段不同率的題目（例 3.14、3B Q8、總複習 7、10）只用其中一個因子</td><td>把算式拆成兩段並排寫：× 0.94⁴ 再 × 0.92²</td></tr>
+      <tr><td>n 年增 R% 當作增 n×R%</td><td>模擬器勾選「簡單加／減對比」看差額</td></tr>
+    </table>
+  </div>
+  <div class="card">
+    <h2>分層支援</h2>
+    <p><span class="badge">基礎組</span>先做只有一段率、n ≤ 3 的題目（3B Q1、Q2(a)、3C Q1(b)、Q5）；提供「因子對照卡」；允許用模擬器驗證再抄寫算式。</p>
+    <p style="margin-top:8px"><span class="badge">進階組</span>例 3.15 類型：「若樓價 3 年內由 $x 跌至 $0.6x，每年平均下調幾多？」；總複習 3 第 4、12 題；延伸問：先增 20% 再減 20% 會否回到原價？（× 0.96，不會）</p>
+    <p style="margin-top:8px"><span class="badge">GeoGebra</span>課本提供兩個互動教材 QR code（百分數增加／百分數變化），可於概念環節投影使用。</p>
+  </div>
+</section>
+
+</main>
+<footer>單元二｜3.2 以固定的率增加的應用題・3.3 以固定的率減少的應用題｜互動教學網站</footer>
+
+<script>
+function go(id,btn){document.querySelectorAll('section').forEach(s=>s.classList.remove('active'));document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));document.getElementById(id).classList.add('active');btn.classList.add('active');window.scrollTo({top:0,behavior:'smooth'});}
+/* 計時器 */
+let secs=1200,tm=null;
+function render(){document.getElementById('clock').textContent=String(Math.floor(secs/60)).padStart(2,'0')+':'+String(secs%60).padStart(2,'0');}
+function toggleTimer(){const b=document.getElementById('tbtn');if(tm){clearInterval(tm);tm=null;b.textContent='繼續';return;}b.textContent='暫停';tm=setInterval(()=>{if(secs>0){secs--;render();}else{clearInterval(tm);tm=null;alert('⏰ 20 分鐘已結束！');}},1000);}
+function resetTimer(){clearInterval(tm);tm=null;secs=1200;render();document.getElementById('tbtn').textContent='開始';}
+/* 翻卡 */
+function flip(el,ans){if(el.classList.contains('flip')){el.innerHTML=el.dataset.front;el.classList.remove('flip');return;}el.dataset.front=el.innerHTML;el.innerHTML=ans+'<small>再點返回</small>';el.classList.add('flip');}
+/* 模擬器 */
+let mode=1,dir=1;
+function setMode(m){mode=m;document.getElementById('segUp').classList.toggle('on',m===1);document.getElementById('segDn').classList.toggle('on',m===-1);
+  if(m===-1&&document.getElementById('sV').value==='10000'){document.getElementById('sV').value=12000;document.getElementById('sR').value=10;}
+  if(m===1&&document.getElementById('sV').value==='12000'){document.getElementById('sV').value=10000;document.getElementById('sR').value=4;}
+  sim();}
+function setDir(d){dir=d;document.getElementById('dirF').classList.toggle('on',d===1);document.getElementById('dirB').classList.toggle('on',d===-1);sim();}
+function fmt(x){return Number(x.toFixed(2)).toLocaleString('en-US',{maximumFractionDigits:2});}
+function sim(){
+  const V=Number(document.getElementById('sV').value)||0,r=Number(document.getElementById('sR').value),n=Number(document.getElementById('sN').value),cmp=document.getElementById('sCmp').checked;
+  document.getElementById('sRl').textContent=r;document.getElementById('sNl').textContent=n;
+  const f=1+mode*r/100,name=mode===1?'增長因子':'衰變因子',sign=mode===1?'+':'−',col=mode===1?'var(--up)':'var(--down)';
+  const fs=Number(f.toFixed(4));
+  let html=`${name} = 1 ${sign} ${r}% = <b style="color:${col}">${fs}</b><br>`;
+  const vals=[];
+  if(dir===1){
+    const fin=V*Math.pow(f,n),simple=V*(1+mode*r*n/100);
+    html+=`A = P(1 ${sign} R%)ⁿ = ${fmt(V)} × ${fs}<sup>${n}</sup> = <b style="color:${col}">${fmt(fin)}</b><br>總變化 = ${((f**n-1)*100).toFixed(2)}%`;
+    if(cmp)html+=`<br><span style="color:#64748b">簡單${mode===1?'加':'減'} ${r}%×${n} = ${sign}${r*n}% → ${fmt(simple)}　差額 ${fmt(Math.abs(fin-simple))}</span>`;
+    for(let i=0;i<=n;i++)vals.push({v:V*Math.pow(f,i),l:i===0?'現在':i+' 期後',c:i===0?'#64748b':col});
+    if(cmp)vals.push({v:simple,l:'簡單'+(mode===1?'加':'減'),c:'#cbd5e1',dash:true});
+  }else{
+    const P0=V/Math.pow(f,n);
+    html+=`設 n 期前的值為 x：x × ${fs}<sup>${n}</sup> = ${fmt(V)}<br>x = ${fmt(V)} ÷ ${fs}<sup>${n}</sup> = <b style="color:${col}">${fmt(P0)}</b>`;
+    for(let i=0;i<=n;i++)vals.push({v:V/Math.pow(f,n-i),l:i===n?'現在':(n-i)+' 期前',c:i===n?'#64748b':col});
+  }
+  document.getElementById('sOut').innerHTML=html;
+  const ch=document.getElementById('sChart');ch.innerHTML='';
+  const mx=Math.max(...vals.map(o=>o.v))||1;
+  vals.forEach(o=>{const b=document.createElement('div');b.className='bar';b.innerHTML=`<div style="height:${Math.max(2,o.v/mx*150)}px;background:${o.c};${o.dash?'border:2px dashed #64748b':''}"></div><span>${o.l}<br>${fmt(o.v)}</span>`;ch.appendChild(b);});
+}
+sim();
+/* 檢查 */
+function mark(i,ok){i.classList.remove('ok','bad');i.classList.add(ok?'ok':'bad');}
+function num(v){return Number(String(v).replace(/[,\s$]/g,''));}
+function near(v,a,tol){return Math.abs(num(v)-a)<=(tol||0.005);}
+function setMsg(mid,ok,t1,t2){const m=document.getElementById(mid);m.textContent=ok?t1:t2;m.style.color=ok?'var(--up)':'var(--down)';}
+function chk1(id,ans,mid,tol){const i=document.getElementById(id),ok=i.value.trim()!==''&&near(i.value,ans,tol);mark(i,ok);setMsg(mid,ok,'✅ 正確！','❌ 再試一次');}
+function chkMany(list,mid){let all=true;list.forEach(([id,a,tol])=>{const i=document.getElementById(id);const ok=i.value.trim()!==''&&near(i.value,a,tol);mark(i,ok);if(!ok)all=false;});setMsg(mid,all,'🎉 全部正確！','❌ 有錯，紅色格請再試');}
+function chk309(){const a=document.getElementById('e309a'),b=document.getElementById('e309b');const oa=near(a.value,24),ob=near(b.value,26);mark(a,oa);mark(b,ob);const r=document.querySelector('input[name=q309]:checked');const oc=r&&r.value==='B';setMsg('m309',oa&&ob&&oc,'🎉 正確！成功公司 26% > 美滿 24%',`計算 ${oa&&ob?'✅':'❌'}　選擇 ${oc?'✅':'❌'}`);}
+function chk3b(){
+  const list=[['b1',875,1],['b2a',1.03],['b2b',1626,1],['b3',97472,2],['b4',58.8,0.05],['b5',51200],['b6a',360000,1],['b6b',248400,1],['b7',7130,2],['b8a',220000,1],['b8b',277136.64,0.01]];
+  let all=true;list.forEach(([id,a,tol])=>{const i=document.getElementById(id);const ok=i.value.trim()!==''&&near(i.value,a,tol);mark(i,ok);if(!ok)all=false;});
+  const r=document.querySelector('input[name=q3]:checked');const oc=r&&r.value==='N';if(!oc)all=false;
+  setMsg('mb',all,'🎉 全部正確！',`❌ 有錯，紅色格請再試${oc?'':'（第 3 題：97,472 < 100,000，不會超過）'}`);}
+function tog(id){document.getElementById(id).classList.toggle('show');}
+render();
+</script>
+</body>
+</html>

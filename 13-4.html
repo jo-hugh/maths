@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>第 13.4 節｜聯立方程應用題 — 互動教學（30 分鐘）</title>
+<style>
+  :root{--main:#7c3aed;--main-dark:#4c1d95;--ok:#16a34a;--bad:#dc2626;--accent:#f59e0b;--bg:#f5f3ff;--card:#fff;}
+  *{box-sizing:border-box;margin:0;padding:0;font-family:"Noto Sans TC","Microsoft JhengHei","PingFang TC",sans-serif;}
+  body{background:var(--bg);color:#1e293b;}
+  header{background:linear-gradient(135deg,var(--main-dark),var(--main));color:#fff;padding:14px 24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;position:sticky;top:0;z-index:10;box-shadow:0 2px 8px rgba(0,0,0,.2);}
+  header h1{font-size:1.2rem;} header small{opacity:.85;display:block;font-size:.85rem;}
+  .timer{background:rgba(255,255,255,.15);padding:8px 14px;border-radius:10px;display:flex;align-items:center;gap:10px;}
+  .timer span{font-size:1.5rem;font-weight:700;font-variant-numeric:tabular-nums;}
+  .timer button{background:#fff;color:var(--main-dark);border:none;padding:6px 12px;border-radius:6px;cursor:pointer;font-weight:600;}
+  nav{display:flex;flex-wrap:wrap;gap:6px;padding:10px 24px;background:#fff;border-bottom:1px solid #e2e8f0;position:sticky;top:66px;z-index:9;}
+  nav button{border:2px solid var(--main);background:#fff;color:var(--main);padding:6px 12px;border-radius:999px;cursor:pointer;font-weight:600;transition:.2s;font-size:.88rem;}
+  nav button.active,nav button:hover{background:var(--main);color:#fff;}
+  main{max-width:1000px;margin:0 auto;padding:24px;}
+  section{display:none;animation:fade .3s;} section.active{display:block;}
+  @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  .card{background:var(--card);border-radius:14px;padding:22px;margin-bottom:20px;box-shadow:0 2px 10px rgba(0,0,0,.05);line-height:1.8;}
+  .card h2{color:var(--main-dark);margin-bottom:12px;font-size:1.25rem;border-left:5px solid var(--accent);padding-left:10px;line-height:1.4;}
+  .card h3{margin:14px 0 8px;font-size:1.05rem;color:#334155;}
+  .badge{display:inline-block;background:#ede9fe;color:#4c1d95;padding:2px 10px;border-radius:6px;font-size:.85rem;font-weight:600;margin-right:6px;}
+  .badge.y{background:#fef3c7;color:#92400e;}
+  .btn{background:var(--main);color:#fff;border:none;padding:9px 16px;border-radius:8px;cursor:pointer;font-weight:600;font-size:.92rem;margin:6px 4px 4px 0;}
+  .btn.secondary{background:#64748b;} .btn.warn{background:var(--accent);} .btn:hover{filter:brightness(1.1);}
+  .flow{display:grid;gap:10px;}
+  .step{display:grid;grid-template-columns:80px 1fr;gap:12px;background:#f8fafc;border-radius:10px;padding:12px;border-left:5px solid var(--main);line-height:1.6;}
+  .step .t{font-weight:700;color:var(--main-dark);} .step .mode{color:#64748b;font-size:.86rem;margin-top:4px;}
+  .formula{background:#ede9fe;border:2px solid var(--main);border-radius:10px;padding:12px 18px;font-size:1.05rem;margin:10px 0;text-align:center;font-weight:600;}
+  .sys{display:inline-block;border-left:2px solid #1e293b;padding:2px 10px;margin:4px 0;line-height:1.7;font-family:"Cambria Math","Times New Roman",serif;font-size:1.05rem;}
+  .hint{background:#fffbeb;border:1px dashed var(--accent);padding:10px 14px;border-radius:8px;margin:10px 0;}
+  .answer{background:#f0fdf4;border:1px solid var(--ok);padding:12px;border-radius:8px;margin-top:10px;display:none;} .answer.show{display:block;}
+  .msg{font-weight:700;margin-left:8px;}
+  input.ans{width:95px;padding:5px;text-align:center;border:2px solid #cbd5e1;border-radius:6px;font-size:1rem;}
+  input.ans.ok{border-color:var(--ok);background:#f0fdf4;} input.ans.bad{border-color:var(--bad);background:#fef2f2;}
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  @media(max-width:700px){.two{grid-template-columns:1fr}.step{grid-template-columns:1fr}}
+  table{width:100%;border-collapse:collapse;margin:12px 0;} th,td{border:1px solid #cbd5e1;padding:8px;text-align:center;} th{background:#ede9fe;}
+  td.l{text-align:left;}
+  .quiz{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;}
+  .qcard{background:linear-gradient(135deg,#f59e0b,#ef4444);color:#fff;font-size:1.1rem;font-weight:800;padding:20px 14px;border-radius:14px;min-width:200px;text-align:center;cursor:pointer;transition:.3s;user-select:none;line-height:1.5;}
+  .qcard.flip{background:linear-gradient(135deg,#4c1d95,#7c3aed);}
+  .qcard small{display:block;font-size:.78rem;font-weight:400;opacity:.9;margin-top:4px;}
+  .sol{display:none;background:#fef2f2;border-left:4px solid var(--bad);padding:12px 16px;border-radius:8px;margin-top:10px;color:#991b1b;line-height:2;} .sol.show{display:block;}
+  .sol .ind{padding-left:1.5em;}
+  .choice{display:grid;gap:8px;margin:8px 0;} .choice label{background:#f1f5f9;padding:8px 14px;border-radius:8px;cursor:pointer;display:flex;align-items:center;gap:10px;}
+  .choice label.ok{background:#dcfce7;} .choice label.bad{background:#fee2e2;}
+  textarea{width:100%;min-height:70px;padding:10px;border:2px solid #cbd5e1;border-radius:8px;font-size:1rem;}
+  .q{margin-top:14px;padding-top:10px;border-top:1px dashed #e2e8f0;}
+  .solver{background:#f8fafc;border-radius:10px;padding:14px;line-height:2.1;font-family:"Cambria Math","Times New Roman",serif;font-size:1.05rem;}
+  .coef{width:60px;padding:5px;text-align:center;border:2px solid #cbd5e1;border-radius:6px;font-size:1rem;}
+  footer{text-align:center;color:#94a3b8;padding:20px;font-size:.85rem;}
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>🧩 13.4 聯立方程應用題 Application of simultaneous equation</h1>
+    <small>代入消元法・加減消元法｜單元二 數學｜30 分鐘</small>
+  </div>
+  <div class="timer">⏱ <span id="clock">30:00</span><button onclick="toggleTimer()" id="tbtn">開始</button><button onclick="resetTimer()">重設</button></div>
+</header>
+
+
+<nav>
+  <button class="active" onclick="go('flow',this)">📋 流程</button>
+  <button onclick="go('intro',this)">⚡ 引入</button>
+  <button onclick="go('translate',this)">🔤 翻譯機</button>
+  <button onclick="go('match',this)">🎯 方程配對</button>
+  <button onclick="go('ex1',this)">✏️ 例 13.06–13.09</button>
+  <button onclick="go('ex2',this)">✏️ 例 13.10–13.13</button>
+  <button onclick="go('solver',this)">🧮 解題器</button>
+  <button onclick="go('ex13c',this)">📝 練習 13C</button>
+  <button onclick="go('exit',this)">🎫 出口票</button>
+  <button onclick="go('teacher',this)">👩‍🏫 教師區</button>
+</nav>
+
+<main>
+
+<!-- ===== 流程 ===== -->
+<section id="flow" class="active">
+  <div class="card">
+    <h2>學習成果</h2>
+    <p>✅ 能從應用題中<b>設定兩個未知數</b>，並把文字<b>翻譯成兩條一次方程</b></p>
+    <p>✅ 能選用<b>代入消元法</b>或<b>加減消元法</b>解二元一次聯立方程</p>
+    <p>✅ 能處理「相差」、「倍數」、「總數／總值」、「幾年前／後」四類常見題型，並<b>回答原問題</b>（含單位及驗算）</p>
+  </div>
+  <div class="card">
+    <h2>📅 30 分鐘流程</h2>
+    <div class="flow">
+      <div class="step"><div class="t">0–3 分</div><div><b>引入：$150 買筆盒與原子筆送 35 位學生</b><br>重溫上節：10x + 2y = 150、x + y = 35 → 10 個筆盒、25 支原子筆。問：「哪一條式是『數量』？哪一條是『價錢』？」<div class="mode">💬 全班口答</div></div></div>
+      <div class="step"><div class="t">3–8 分</div><div><b>翻譯機 + 方程配對</b><br>翻卡：把「比…多 8」、「是…的 4 倍」、「三年後」等關鍵字變成方程；再做 4 題「選出正確聯立方程」。<div class="mode">⚡ 搶答 / 舉手 A B C</div></div></div>
+      <div class="step"><div class="t">8–18 分</div><div><b>例 13.06（相差，加法消元）→ 例 13.09（豬鴨頭腳）→ 例 13.10（年齡）→ 例 13.12（兩次購物）</b><br>每題先讓學生寫出兩條式，再揭示課本題解。例 13.07、13.08、13.11、13.13 作延伸閱讀。<div class="mode">📝 小白板</div></div></div>
+      <div class="step"><div class="t">18–26 分</div><div><b>練習 13C 配對練習</b><br>🅰 第 1、5、9、13 題；🅱 第 2、8、10、12 題 → 互批。其餘課後完成（第 15–18 題為挑戰題）。<div class="mode">👥 配對</div></div></div>
+      <div class="step"><div class="t">26–30 分</div><div><b>出口票 + 口訣總結</b><br>「設→列→解→答→驗」五步。<div class="mode">🎫 個人</div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 引入 ===== -->
+<section id="intro">
+  <div class="card">
+    <h2>⚡ 引入：課本引例</h2>
+    <p>一位數學老師打算以 $150 買一些筆盒和原子筆作為禮物送給 35 位學生。已知一個筆盒和一枝原子筆的售價分別為 $10 和 $2。</p>
+    <p>現在假如該老師買了 x 個筆盒和 y 枝原子筆。分別運用代入法和消元法解聯立方程：</p>
+    <div class="sys">10x + 2y = 150<br>x + y = 35</div>
+    <div class="two" style="margin-top:12px">
+      <div style="background:#f8fafc;padding:12px;border-radius:10px">
+        <b>方法一：代入消元法</b><br>由 (2)：y = 35 − x<br>代入 (1)：10x + 2(35 − x) = 150<br>10x + 70 − 2x = 150 → 8x = 80 → x = 10<br>y = 35 − 10 = 25
+      </div>
+      <div style="background:#f8fafc;padding:12px;border-radius:10px">
+        <b>方法二：加減消元法</b><br>(2) × 2：2x + 2y = 70 …(3)<br>(1) − (3)：8x = 80 → x = 10<br>代入 (2)：10 + y = 35 → y = 25
+      </div>
+    </div>
+    <p style="margin-top:10px">∴ 該老師購買 <b>10 個筆盒和 25 支原子筆</b>。</p>
+    <div class="hint">🗣 <b>提問：</b>兩條方程分別代表甚麼？（① 總<b>價錢</b> $150；② 總<b>數量</b> 35）→ 應用題幾乎都是「一條數量／一條價值」或「一條總和／一條關係」。</div>
+  </div>
+  <div class="card">
+    <h2>解應用題五步曲</h2>
+    <div class="formula">① 設（兩個未知數 x、y，寫明單位）→ ② 列（兩條方程）→ ③ 解（代入法／消元法）→ ④ 答（回答原問題）→ ⑤ 驗（代回原題）</div>
+  </div>
+</section>
+
+<!-- ===== 翻譯機 ===== -->
+<section id="translate">
+  <div class="card">
+    <h2>🔤 關鍵字翻譯機：文字 → 方程</h2>
+    <p>設兩個數分別為 x 和 y。點擊卡片翻開對應方程：</p>
+    <div class="quiz" style="margin-top:14px">
+      <div class="qcard" onclick="flip(this,'x + y = 112')">x 和 y 共有 112<small>點擊翻開</small></div>
+      <div class="qcard" onclick="flip(this,'x − y = 32<br><small>或 x = y + 32</small>')">x 比 y 多 32<small>點擊翻開</small></div>
+      <div class="qcard" onclick="flip(this,'x = y − 4<br><small>或 y − x = 4</small>')">x 較 y 輕 4 kg<small>點擊翻開</small></div>
+      <div class="qcard" onclick="flip(this,'y = ½x<br><small>或 x = 2y</small>')">y 是 x 的一半<small>點擊翻開</small></div>
+      <div class="qcard" onclick="flip(this,'x + 3 = 4(y + 3)')">三年後 x 是 y 的四倍<small>點擊翻開</small></div>
+      <div class="qcard" onclick="flip(this,'(x − 4) + (y − 4) = 56')">四年前兩人年齡之和是 56<small>點擊翻開</small></div>
+      <div class="qcard" onclick="flip(this,'x = 2y − 3')">x 是 y 的 2 倍少 3<small>點擊翻開</small></div>
+      <div class="qcard" onclick="flip(this,'x : y = 3 : 2<br><small>→ 2x = 3y</small>')">x 與 y 的比是 3 : 2<small>點擊翻開</small></div>
+      <div class="qcard" onclick="flip(this,'5x + 2y = 68')">5 元硬幣 x 個、2 元硬幣 y 個總值 68 元<small>點擊翻開</small></div>
+      <div class="qcard" onclick="flip(this,'4x + 2y = 200')">x 隻豬、y 隻鴨共 200 隻腳<small>點擊翻開</small></div>
+      <div class="qcard" onclick="flip(this,'1.2x × 3 + 1.3y × 2 = 928')">鍵盤加價 20%、滑鼠加價 30% 後，3 鍵盤 2 滑鼠共 $928<small>點擊翻開</small></div>
+      <div class="qcard" onclick="flip(this,'y = ⅗ x')">小說 y 是兒童圖書 x 的 ⅗<small>點擊翻開</small></div>
+    </div>
+    <div class="hint">⚠️ <b>最常見錯誤：</b>「x 比 y 多 32」寫成 x + 32 = y（方向反了）。口訣：<b>誰多，誰減；少的一方加回差額。</b>「幾年後」兩個人都要同時加！</div>
+  </div>
+</section>
+
+<!-- ===== 方程配對 ===== -->
+<section id="match">
+  <div class="card">
+    <h2>🎯 方程配對：哪一組聯立方程正確？</h2>
+    <div class="q"><b>1.</b> 喜來來酒店有 112 名員工，其中男員工比女員工多 32 名。設男 x、女 y。
+      <div class="choice" id="mq1">
+        <label><input type="radio" name="mq1" value="A"> A　x + y = 32；x − y = 112</label>
+        <label><input type="radio" name="mq1" value="B"> B　x + y = 112；x − y = 32</label>
+        <label><input type="radio" name="mq1" value="C"> C　x + y = 112；y − x = 32</label>
+      </div></div>
+    <div class="q"><b>2.</b> 農場有豬和鴨，共 60 個頭和 200 隻腳。設豬 x、鴨 y。
+      <div class="choice" id="mq2">
+        <label><input type="radio" name="mq2" value="A"> A　x + y = 60；4x + 2y = 200</label>
+        <label><input type="radio" name="mq2" value="B"> B　x + y = 60；2x + 4y = 200</label>
+        <label><input type="radio" name="mq2" value="C"> C　x + y = 200；4x + 2y = 60</label>
+      </div></div>
+    <div class="q"><b>3.</b> 父親與小華年齡相差 27 歲。三年後，父親的年齡將會是兒子的四倍。設父 x、小華 y。
+      <div class="choice" id="mq3">
+        <label><input type="radio" name="mq3" value="A"> A　x − y = 27；x = 4y</label>
+        <label><input type="radio" name="mq3" value="B"> B　x − y = 27；x + 3 = 4y + 3</label>
+        <label><input type="radio" name="mq3" value="C"> C　x − y = 27；x + 3 = 4(y + 3)</label>
+      </div></div>
+    <div class="q"><b>4.</b> 杯麵的存量為薯片存量的 2 倍少 3 個，杯麵與薯片的比為 3 : 2。設杯麵 x、薯片 y。
+      <div class="choice" id="mq4">
+        <label><input type="radio" name="mq4" value="A"> A　x = 2y + 3；3x = 2y</label>
+        <label><input type="radio" name="mq4" value="B"> B　x = 2y − 3；2x = 3y</label>
+        <label><input type="radio" name="mq4" value="C"> C　x = 2y − 3；3x = 2y</label>
+      </div></div>
+    <button class="btn" onclick="chkMatch()">✔ 檢查</button><span class="msg" id="mm"></span>
+    <div class="hint">💡 第 3 題 B 選項錯在哪裏？（只有兒子沒加 3 → 「三年後」兩人都要加 3，且括號要括住 (y + 3)）第 4 題：比 3 : 2 → x/y = 3/2 → <b>2x = 3y</b>（交叉相乘）。</div>
+  </div>
+</section>
+
+<!-- ===== 例 13.06–13.09 ===== -->
+<section id="ex1">
+  <div class="card">
+    <h2>例 13.06　員工人數（相差型）</h2>
+    <p>喜來來酒店有 112 名員工，其中男員工比女員工多 32 名。該公司有男員工和女員工各有多少名？</p>
+    <p>男 <input class="ans" id="e06a"> 名　女 <input class="ans" id="e06b"> 名 <button class="btn" onclick="chkMany([['e06a',72],['e06b',40]],'m06')">檢查</button><span class="msg" id="m06"></span></p>
+    <button class="btn secondary" onclick="tog('s06')">👁 題解</button>
+    <div class="sol" id="s06">設男員工的人數為 x，而女員工的人數為 y。<br><span class="sys">x + y = 112 ………… (1)<br>x − y = 32 ………… (2)</span><br>(1) + (2)：2x = 144　　x = 72<br>把 x = 72 代入 (1)：72 + y = 112　　y = 40<br>∴ 公司有 <b>72 名男員工和 40 名女員工</b>。</div>
+  </div>
+  <div class="card">
+    <h2>例 13.07　橙和蘋果（數量＋總值）</h2>
+    <p>新開街市水果店的橙和蘋果的售價分別為每個 $6 和每個 $5，俊彥以 $213 購得橙和蘋果共 39 個。所購得的蘋果是否比橙多？試解釋你的答案。</p>
+    <p>橙 <input class="ans" id="e07a"> 個　蘋果 <input class="ans" id="e07b"> 個 <button class="btn" onclick="chkMany([['e07a',18],['e07b',21]],'m07')">檢查</button><span class="msg" id="m07"></span></p>
+    <button class="btn secondary" onclick="tog('s07')">👁 題解</button>
+    <div class="sol" id="s07">設橙的數目為 x，而蘋果的數目為 y。<br><span class="sys">x + y = 39 ………… (1)<br>6x + 5y = 213 ……… (2)</span><br>(1) × 6：6x + 6y = 234 ………… (3)<br>(3) − (2)：y = 21<br>把 y = 21 代入 (1)：x + 21 = 39　　x = 18<br>蘋果的數目是 21，而橙的數目是 18。∴ <b>所購得的蘋果比橙多</b>。</div>
+  </div>
+  <div class="card">
+    <h2>例 13.08　男女生人數（代入法）</h2>
+    <p>已知應用教育文憑商業實務班有 36 名學生。該班的男生人數較女生人數多 8。求男生人數和女生人數。</p>
+    <p>男 <input class="ans" id="e08a">　女 <input class="ans" id="e08b"> <button class="btn" onclick="chkMany([['e08a',22],['e08b',14]],'m08')">檢查</button><span class="msg" id="m08"></span></p>
+    <button class="btn secondary" onclick="tog('s08')">👁 題解</button>
+    <div class="sol" id="s08">設男生人數和女生人數分別為 x 和 y。<br><span class="sys">x + y = 36 ………… (1)<br>x = y + 8 ………… (2)</span><br>把 (2) 代入 (1)：(y + 8) + y = 36<div class="ind">2y = 28<br>y = 14</div>把 y = 14 代入 (2)：x = 14 + 8 = 22<br>∴ 應用教育文憑班的<b>男生人數是 22 和女生人數是 14</b>。</div>
+  </div>
+  <div class="card">
+    <h2>例 13.09　豬和鴨（頭與腳）🐷🦆</h2>
+    <p>快樂農場裏有若干隻豬和鴨。它們共有 60 個頭和 200 隻腳。<br>(a) 問該農場分別有多少隻豬和鴨？<br>(b) 若每隻豬和每隻鴨的售價分別為 $1800 和 $90，問售出農場中所有豬和鴨的金額是多少？</p>
+    <p>(a) 豬 <input class="ans" id="e09a"> 隻　鴨 <input class="ans" id="e09b"> 隻　(b) $<input class="ans" id="e09c"> <button class="btn" onclick="chkMany([['e09a',40],['e09b',20],['e09c',73800]],'m09')">檢查</button><span class="msg" id="m09"></span></p>
+    <button class="btn secondary" onclick="tog('s09')">👁 題解</button>
+    <div class="sol" id="s09"><span class="badge y">1 式考慮頭的數目，2 式考慮腳的數目</span><br>(a) 設農場有 x 隻豬和 y 隻鴨。<br><span class="sys">x + y = 60 ………… (1)<br>4x + 2y = 200 ……… (2)</span><br>(1) × 2：2x + 2y = 120 ………… (3)<br>(2) − (3)：(4x + 2y) − (2x + 2y) = 200 − 120<div class="ind">4x + 2y − 2x − 2y = 80　　2x = 80　　x = 40</div>把 x = 40 代入 (1)：40 + y = 60　　y = 20<br>∴ 該農場有 <b>40 隻豬和 20 隻鴨</b>。<br>(b) 總售價 = $1800 × 40 隻 + $90 × 20 隻 = <b>$73,800</b></div>
+  </div>
+</section>
+
+<!-- ===== 例 13.10–13.13 ===== -->
+<section id="ex2">
+  <div class="card">
+    <h2>例 13.10　年齡問題</h2>
+    <p>小華父親與小華的年齡相差 27 歲。三年後，父親的年齡將會是兒子的四倍。求小華父親和小華現時的年齡。</p>
+    <p>父親 <input class="ans" id="e10a"> 歲　小華 <input class="ans" id="e10b"> 歲 <button class="btn" onclick="chkMany([['e10a',33],['e10b',6]],'m10')">檢查</button><span class="msg" id="m10"></span></p>
+    <button class="btn secondary" onclick="tog('s10')">👁 題解</button>
+    <div class="sol" id="s10"><span class="badge y">記得三年後，兒子年齡是 (y+3)，父親年齡是 (x+3)</span><br>設小華父親和小華現時的年齡分別為 x 歲和 y 歲。<br><span class="sys">x − y = 27 ………… (1)<br>(x + 3) = 4(y + 3) ……… (2)</span><br>由 (2)，可得 (x + 3) = 4(y + 3)<div class="ind">x + 3 = 4y + 12<br>x − 4y = 9 ………… (3)</div>(1) − (3)：(x − y) − (x − 4y) = 27 − 9<div class="ind">3y = 18<br>y = 6</div>把 y = 6 代入 (1)：x − 6 = 27　　x = 33<br>∴ <b>小華父親現時 33 歲和小華現時 6 歲</b>。</div>
+  </div>
+  <div class="card">
+    <h2>例 13.11　豬仔錢罌（硬幣）</h2>
+    <p>家麒的豬仔錢罌內有 5 元硬幣 x 個，2 元硬幣 y 個，若硬幣共有 22 個，而硬幣的總值為 68 元，求 x 及 y 的值。</p>
+    <p>x = <input class="ans" id="e11a">　y = <input class="ans" id="e11b"> <button class="btn" onclick="chkMany([['e11a',8],['e11b',14]],'m11')">檢查</button><span class="msg" id="m11"></span></p>
+    <button class="btn secondary" onclick="tog('s11')">👁 題解</button>
+    <div class="sol" id="s11"><span class="badge y">1 式考慮硬幣數量 22 個，2 式考慮硬幣價值 $68</span><br><span class="sys">x + y = 22 … (1)<br>5x + 2y = 68 … (2)</span><br>由 (1)，y = 22 − x … (3)<br>代 (3) 入 (2)：5x + 2(22 − x) = 68<div class="ind">5x + 44 − 2x = 68<br>3x = 24<br>x = 8</div>∴ y = 22 − 8 = <b>14</b>，x = <b>8</b></div>
+  </div>
+  <div class="card">
+    <h2>例 13.12　薯片和蝦條（兩次購物）</h2>
+    <p>小恆、阿福兩人到超級市場買同樣的薯片和蝦條，小恆買了 5 包薯片和 4 包蝦條，付款 96 元；阿福買了 3 包薯片和 3 包蝦條，付款 63 元，問薯片和蝦條每包的售價是多少錢？</p>
+    <p>薯片 <input class="ans" id="e12a"> 元　蝦條 <input class="ans" id="e12b"> 元 <button class="btn" onclick="chkMany([['e12a',12],['e12b',9]],'m12')">檢查</button><span class="msg" id="m12"></span></p>
+    <button class="btn secondary" onclick="tog('s12')">👁 題解</button>
+    <div class="sol" id="s12">設薯片和蝦條每包的售價分別為 x 元和 y 元<br><span class="sys">5x + 4y = 96 … (1)<br>3x + 3y = 63 … (2)</span><br>由 (2)，y = 21 − x … (3)<br>代 (3) 入 (1)：5x + 4(21 − x) = 96<div class="ind">5x + 84 − 4x = 96<br>x = 12　　y = 21 − 12 = 9</div>∴ <b>薯片和蝦條每包的售價分別為 12 元和 9 元</b></div>
+    <div class="hint">🤔 為何先由 (2) 做代入？（3x + 3y = 63 兩邊除以 3 得 x + y = 21，係數最簡單。）</div>
+  </div>
+  <div class="card">
+    <h2>例 13.13　鍵盤和滑鼠（加價百分數）⭐</h2>
+    <p>祖光一星期前打算用 $720 購買 2 個鍵盤和 4 個滑鼠。但今日購買時一個鍵盤的售價增加 20% 及一個滑鼠的售價增加 30%，祖光最後用了 $928 購買 3 個鍵盤和 2 個滑鼠。分別求一個鍵盤和一個滑鼠的於一星期前的原來售價。</p>
+    <p>鍵盤 $<input class="ans" id="e13a">　滑鼠 $<input class="ans" id="e13b"> <button class="btn" onclick="chkMany([['e13a',200],['e13b',80]],'m13')">檢查</button><span class="msg" id="m13"></span></p>
+    <button class="btn secondary" onclick="tog('s13')">👁 題解</button>
+    <div class="sol" id="s13"><span class="badge y">1 式考慮原來總值 $720，2 式考慮加價後總價 $928</span><br>設一個鍵盤和一個滑鼠的原來售價分別為 $x 和 $y。<br><span class="sys">2x + 4y = 720 … (1)<br>3x × 1.2 + 2y × 1.3 = 928 … (2)</span><br>由 (1)，我們可得 2x + 4y = 720<div class="ind">2x = 720 − 4y<br>x = 360 − 2y ………… (3)</div>把 (3) 代入 (2)：3.6(360 − 2y) + 2.6y = 928<div class="ind">1296 − 7.2y + 2.6y = 928<br>−4.6y = −368<br>y = 80</div>把 y = 80 代入 (3)：x = 360 − 2 × 80 = 200<br>∴ <b>一個鍵盤的原來售價是 $200 和一個滑鼠的原來售價是 $80</b>。</div>
+  </div>
+</section>
+
+<!-- ===== 解題器 ===== -->
+<section id="solver">
+  <div class="card">
+    <h2>🧮 聯立方程解題器（加減消元法逐步示範）</h2>
+    <p>輸入兩條方程 ax + by = c 的係數（可用負數、小數）：</p>
+    <div style="font-size:1.1rem;line-height:2.4;font-family:'Cambria Math',serif">
+      (1)　<input class="coef" id="a1" value="1"> x + <input class="coef" id="b1" value="1"> y = <input class="coef" id="c1" value="60"><br>
+      (2)　<input class="coef" id="a2" value="4"> x + <input class="coef" id="b2" value="2"> y = <input class="coef" id="c2" value="200">
+    </div>
+    <button class="btn" onclick="solve()">▶ 逐步求解</button>
+    <button class="btn secondary" onclick="preset(1,1,112,1,-1,32)">例 13.06</button>
+    <button class="btn secondary" onclick="preset(1,1,60,4,2,200)">例 13.09</button>
+    <button class="btn secondary" onclick="preset(1,-1,27,1,-4,9)">例 13.10</button>
+    <button class="btn secondary" onclick="preset(5,4,96,3,3,63)">例 13.12</button>
+    <button class="btn secondary" onclick="preset(2,4,720,3.6,2.6,928)">例 13.13</button>
+    <div class="solver" id="sOut" style="margin-top:12px">按「逐步求解」查看步驟。</div>
+    <div class="hint">🎯 <b>試試：</b>把練習 13C 的題目列成方程後輸入，核對自己的答案。注意：像 x = y + 8 要先移項成 x − y = 8 才能輸入。</div>
+  </div>
+</section>
+
+<!-- ===== 練習 13C ===== -->
+<section id="ex13c">
+  <div class="card">
+    <h2>📝 練習 13C</h2>
+    <div class="two">
+      <div style="background:#ede9fe;padding:10px;border-radius:10px"><b>🅰 A 同學</b>：第 1、5、9、13 題</div>
+      <div style="background:#fef3c7;padding:10px;border-radius:10px"><b>🅱 B 同學</b>：第 2、8、10、12 題　→ 互相批改；其餘課後完成</div>
+    </div>
+    <div class="q"><b>1.</b> 香江書店的語文書架上有中文書和英文書共 160 本，其中中文書比英文書多 28 本。書架上有中文書和英文書各多少本？<br>中文 <input class="ans" id="p1a"> 本　英文 <input class="ans" id="p1b"> 本</div>
+    <div class="q"><b>2.</b> 小美的錢包內有若干枚 $2 和 $5 硬幣，總值是 $113。若這些硬幣共有 34 枚，則 $2 及 $5 硬幣各有多少枚？<br>$2 <input class="ans" id="p2a"> 枚　$5 <input class="ans" id="p2b"> 枚</div>
+    <div class="q"><b>3.</b> 在佳佳超級市場中，3 包白米和 2 瓶食油的總售價是 $432，而 4 包白米和 1 瓶食油的總售價是 $496。若美玲購買 2 包白米和 3 瓶食油需付款多少。<br>$<input class="ans" id="p3"></div>
+    <div class="q"><b>4.</b> 延輝的體重是 x kg，而俊生體重是 y kg。他們的總體重為 128 kg。若延輝較俊生輕 4 kg，(a) 建立一個連繫 x 和 y 的聯立方程，(b) 求 x 和 y。<br>(a) 自行寫在簿上　(b) x = <input class="ans" id="p4a">　y = <input class="ans" id="p4b"></div>
+    <div class="q"><b>5.</b> 菲傭瑪莉亞昨天買了 2 罐豆豉鯪魚加 3 個蘋果共 55 元。今天她又買了 3 罐豆豉鯪魚加 5 個蘋果共 84 元。每罐豆豉鯪魚和每個蘋果分別是多少元？<br>鯪魚 <input class="ans" id="p5a"> 元　蘋果 <input class="ans" id="p5b"> 元</div>
+    <div class="q"><b>6.</b> 現有兩個數。較小的數是較大的數的一半。較大的數比較小的數多 8。求該兩個數。<br>較大 <input class="ans" id="p6a">　較小 <input class="ans" id="p6b"></div>
+    <div class="q"><b>7.</b> DAE 班有男學員及女學員 34 人，女生人數的一半為男生少 10 人。求男學員及女學員人數。<br>男 <input class="ans" id="p7a">　女 <input class="ans" id="p7b"></div>
+    <div class="q"><b>8.</b> 開心中學有 48 隊籃球隊及排球隊，當中有 520 名同學參加，其中籃球隊每隊 10 名，排球隊每隊 12 名，假設同學只參加一隊校隊。求籃球隊和排球隊各有多少隊？<br>籃球 <input class="ans" id="p8a"> 隊　排球 <input class="ans" id="p8b"> 隊</div>
+    <div class="q"><b>9.</b> 小光媽媽在書展購買兒童圖書 10 本和小說 16 本共付款 410 元，每本兒童圖書比每本小說貴 15 元。求兩類書籍每本各售多少元？<br>兒童圖書 <input class="ans" id="p9a"> 元　小說 <input class="ans" id="p9b"> 元</div>
+    <div class="q"><b>10.</b> 康健環保化工廠購買甲、乙兩種材料共 56 噸，價值 9860 元。甲材料每噸 190 元，乙材料每噸 160 元，求兩種材料各購買了多少噸？<br>甲 <input class="ans" id="p10a"> 噸　乙 <input class="ans" id="p10b"> 噸</div>
+    <div class="q"><b>11.</b> 開誠學校的小賣部杯麵的存量為薯片的存量的 2 倍少 3 個，而杯麵與薯片的比為 3 : 2。求這兩種食品分別有多少個？<br>杯麵 <input class="ans" id="p11a"> 杯　薯片 <input class="ans" id="p11b"> 包</div>
+    <div class="q"><b>12.</b> 海海公園的成人入場費為 $600，而小童的入場費為 $400。某日，海海公園的小童入場人數是成人的三倍，且入場費的總收入為 $720 000。計算當日的成人入場人數和小童入場人數。<br>成人 <input class="ans" id="p12a">　小童 <input class="ans" id="p12b"></div>
+    <div class="q"><b>13.</b> 開心文具店的 3 支筆和 5 塊橡皮擦的總售價為 $57。一支筆的售價較一塊橡皮擦的兩倍少 $3。分別求一支筆和一塊橡皮擦的售價。<br>筆 $<input class="ans" id="p13a">　橡皮擦 $<input class="ans" id="p13b"></div>
+    <div class="q"><b>14.</b> 書架上共有 96 本小說和兒童圖書。若小說的數量是兒童圖書的 ⅗。該書架上有多少本小說和兒童圖書？<br>兒童圖書 <input class="ans" id="p14a"> 本　小說 <input class="ans" id="p14b"> 本</div>
+    <div class="q"><b>15.</b> ⭐ 四年前，璧恆與偉霖的年齡之和是 56 歲。四年後，偉霖的年齡將會是璧恆的兩倍。求他們現時的年齡。<br>璧恆 <input class="ans" id="p15a"> 歲　偉霖 <input class="ans" id="p15b"> 歲</div>
+    <div class="q"><b>16.</b> ⭐ 兩年前，海燕的年齡的 4 倍相等於浩強的年齡的 3 倍。由現時起計三年後，他們的年齡之和將會是 38 歲。問浩強較海燕年長多少歲？<br><input class="ans" id="p16"> 歲</div>
+    <div class="q"><b>17.</b> ⭐ 愉快小學的一名教師給她的每名學生 9 張貼紙。若有一名學生缺課，則餘下的每名學生會多得一張貼紙。(a) 求貼紙的總數目。(b) 若教師想給她的每名學生 12 張貼紙，她需要多買多少張貼紙？<br>(a) <input class="ans" id="p17a"> 張　(b) <input class="ans" id="p17b"> 張</div>
+    <div class="q"><b>18.</b> ⭐ 把一條長度為 2 米的鐵線剪成兩段，然後把第一段屈成一個正方形，而另一段屈成一個等邊三角形。若正方形的周界較等邊三角形的周界的 2 倍短 70 厘米，求正方形的邊長。<br><input class="ans" id="p18"> 厘米</div>
+    <button class="btn" onclick="chk13c()">✔ 檢查練習 13C</button><span class="msg" id="mp"></span>
+    <div class="hint">💡 第 7 題：「女生人數的一半為男生少 10 人」→ y/2 = x − 10。第 16 題：設現時海燕 x 歲、浩強 y 歲：4(x − 2) = 3(y − 2)，(x + 3) + (y + 3) = 38。第 17 題：設 n 名學生、T 張貼紙：T = 9n，T = 10(n − 1)。第 18 題：2 米 = 200 厘米，設正方形邊長 x、三角形邊長 y：4x + 3y = 200，4x = 2(3y) − 70。</div>
+  </div>
+</section>
+
+<!-- ===== 出口票 ===== -->
+<section id="exit">
+  <div class="card">
+    <h2>🎫 出口票（Exit Ticket）</h2>
+    <p><b>(1)</b> 「甲 (x) 比乙 (y) 多 8」寫成方程：
+      <div class="choice" id="xq1"><label><input type="radio" name="xq1" value="A"> A　x + 8 = y</label><label><input type="radio" name="xq1" value="B"> B　x − y = 8</label><label><input type="radio" name="xq1" value="C"> C　x + y = 8</label></div></p>
+    <p><b>(2)</b> 「5 年後父親 (x) 的年齡是兒子 (y) 的 3 倍」寫成方程：
+      <div class="choice" id="xq2"><label><input type="radio" name="xq2" value="A"> A　x + 5 = 3y</label><label><input type="radio" name="xq2" value="B"> B　x = 3(y + 5)</label><label><input type="radio" name="xq2" value="C"> C　x + 5 = 3(y + 5)</label></div></p>
+    <p style="margin-top:8px"><b>(3)</b> 解 x + y = 20，x − y = 4：x = <input class="ans" id="x3a">　y = <input class="ans" id="x3b"></p>
+    <p style="margin-top:8px"><b>(4)</b> 有 $1 和 $5 硬幣共 12 枚，總值 $36。$1 硬幣 <input class="ans" id="x4a"> 枚、$5 硬幣 <input class="ans" id="x4b"> 枚</p>
+    <p style="margin-top:8px"><b>(5)</b> 我今天最不明白的地方是：</p>
+    <textarea placeholder="請寫下你的疑問……"></textarea>
+    <br><button class="btn" onclick="chkExit()">✔ 提交</button><span class="msg" id="mx"></span>
+  </div>
+  <div class="card">
+    <h2>📌 口訣總結</h2>
+    <p>1️⃣ <b>設</b>：兩個未知數，寫清楚代表甚麼（含單位）</p>
+    <p>2️⃣ <b>列</b>：通常「一條數量／總和，一條價值／關係」；「幾年後」人人都加；「比…多」誰多誰減</p>
+    <p>3️⃣ <b>解</b>：有 x = … 或 y = … 用<b>代入法</b>；係數相同或相反用<b>加減法</b></p>
+    <p>4️⃣ <b>答</b>：回答原本問題（例 13.07 要比較、例 13.09(b) 要再計算總值）</p>
+    <p>5️⃣ <b>驗</b>：代回<b>兩條</b>原方程</p>
+  </div>
+</section>
+
+<!-- ===== 教師區 ===== -->
+<section id="teacher">
+  <div class="card">
+    <h2>👩‍🏫 答案參考（與課本一致）</h2>
+    <button class="btn warn" onclick="document.getElementById('ans').classList.toggle('show')">👁 顯示／隱藏答案</button>
+    <div class="answer" id="ans">
+      <p><b>例題：</b>13.06 男 72、女 40　13.07 蘋果 21、橙 18（蘋果較多）　13.08 男 22、女 14　13.09 (a) 豬 40、鴨 20 (b) $73,800　13.10 父 33、小華 6　13.11 x = 8、y = 14　13.12 薯片 12 元、蝦條 9 元　13.13 鍵盤 $200、滑鼠 $80</p>
+      <p style="margin-top:8px"><b>練習 13C：</b>1. 中文 94、英文 66　2. $2 19 枚、$5 15 枚　3. $368　4. (a) x + y = 128；x = y − 4 (b) x = 62、y = 66　5. 鯪魚 23 元、蘋果 3 元　6. 16 和 8　7. 男 18、女 16　8. 籃球 28、排球 20　9. 兒童圖書 25 元、小說 10 元　10. 甲 30 噸、乙 26 噸　11. 杯麵 9、薯片 6　12. 成人 400、小童 1200　13. 筆 $9、橡皮擦 $6　14. 兒童圖書 60、小說 36　15. 璧恆 20 歲、偉霖 44 歲　16. 4 歲　17. (a) 90 (b) 30　18. 27.5 厘米</p>
+      <p style="margin-top:8px"><b>方程配對：</b>1-B　2-A　3-C　4-B　　<b>出口票：</b>(1) B　(2) C　(3) x = 12、y = 8　(4) $1 6 枚、$5 6 枚</p>
+    </div>
+  </div>
+  <div class="card">
+    <h2>常見錯誤及應對</h2>
+    <table>
+      <tr><th style="width:40%">常見錯誤</th><th>教師回應策略</th></tr>
+      <tr><td class="l">「x 比 y 多 32」寫成 x + 32 = y</td><td class="l">用具體數字試：x = 72、y = 40，哪一條成立？建立「誰多誰減」口訣</td></tr>
+      <tr><td class="l">年齡題只給一個人加年數（例 13.10、13C Q15、Q16）</td><td class="l">畫時間線：現在 / 三年後，兩人並排各加 3；強調括號 4(y + 3)</td></tr>
+      <tr><td class="l">豬鴨題把腳數寫成 2x + 4y（例 13.09）</td><td class="l">先問「一隻豬幾隻腳？」把單位寫在係數旁：4 腳/豬 × x 豬</td></tr>
+      <tr><td class="l">比例 3 : 2 寫成 3x = 2y（13C Q11）</td><td class="l">x/y = 3/2 → 交叉相乘 2x = 3y；用 x = 9、y = 6 驗證</td></tr>
+      <tr><td class="l">只求出 x、y 便停，沒回答原問題（例 13.07 的比較、13.09(b)、13C Q3、Q16、Q17(b)）</td><td class="l">五步曲最後兩步「答、驗」要圈起來；13C Q3 要求的是 2 包米 + 3 瓶油的價錢，不是 x、y</td></tr>
+      <tr><td class="l">加價題把 20% 寫成 0.2x（例 13.13）</td><td class="l">連繫 3.2 節：增加 20% → × 1.2（增長因子）</td></tr>
+      <tr><td class="l">消元時相減符號出錯（(2) − (3) 時 −(+2y)）</td><td class="l">用解題器逐步顯示；要求學生把被減式整條用括號括住再展開</td></tr>
+    </table>
+  </div>
+  <div class="card">
+    <h2>分層支援</h2>
+    <p><span class="badge">基礎組</span>只做「總和 + 相差」型（13C Q1、Q4、Q6、Q7），提供「翻譯機」卡片作參考；容許用解題器核對。</p>
+    <p style="margin-top:8px"><span class="badge">進階組</span>13C Q15–Q18（年齡兩次移動、貼紙需自設未知數、鐵線周界）；延伸：例 13.13 若鍵盤減價 10%、滑鼠加價 25% 又如何？</p>
+    <p style="margin-top:8px"><span class="badge">跨節連繫</span>例 13.13 結合 3.2 節的百分數增加；13C Q14 的「⅗」可連繫比和分數。</p>
+  </div>
+</section>
+
+</main>
+<footer>單元二｜13.4 聯立方程應用題 Application of simultaneous equation｜互動教學網站</footer>
+
+<script>
+function go(id,btn){document.querySelectorAll('section').forEach(s=>s.classList.remove('active'));document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));document.getElementById(id).classList.add('active');btn.classList.add('active');window.scrollTo({top:0,behavior:'smooth'});}
+/* 計時器 30 分鐘 */
+let secs=1800,tm=null;
+function render(){document.getElementById('clock').textContent=String(Math.floor(secs/60)).padStart(2,'0')+':'+String(secs%60).padStart(2,'0');}
+function toggleTimer(){const b=document.getElementById('tbtn');if(tm){clearInterval(tm);tm=null;b.textContent='繼續';return;}b.textContent='暫停';tm=setInterval(()=>{if(secs>0){secs--;render();}else{clearInterval(tm);tm=null;alert('⏰ 30 分鐘已結束！');}},1000);}
+function resetTimer(){clearInterval(tm);tm=null;secs=1800;render();document.getElementById('tbtn').textContent='開始';}
+/* 翻卡 */
+function flip(el,ans){if(el.classList.contains('flip')){el.innerHTML=el.dataset.front;el.classList.remove('flip');return;}el.dataset.front=el.innerHTML;el.innerHTML=ans+'<small>再點返回</small>';el.classList.add('flip');}
+/* 檢查工具 */
+function mark(i,ok){i.classList.remove('ok','bad');i.classList.add(ok?'ok':'bad');}
+function num(v){return Number(String(v).replace(/[,\s$]/g,''));}
+function near(v,a,tol){return Math.abs(num(v)-a)<=(tol||0.005);}
+function setMsg(mid,ok,t1,t2){const m=document.getElementById(mid);m.textContent=ok?t1:t2;m.style.color=ok?'var(--ok)':'var(--bad)';}
+function chkMany(list,mid){let all=true;list.forEach(([id,a,tol])=>{const i=document.getElementById(id);const ok=i.value.trim()!==''&&near(i.value,a,tol);mark(i,ok);if(!ok)all=false;});setMsg(mid,all,'🎉 全部正確！','❌ 有錯，紅色格請再試');}
+function tog(id){document.getElementById(id).classList.toggle('show');}
+function chkRadio(name,correct){const box=document.getElementById(name);let ok=false;box.querySelectorAll('label').forEach(l=>{l.classList.remove('ok','bad');const r=l.querySelector('input');if(r.checked){if(r.value===correct){l.classList.add('ok');ok=true;}else l.classList.add('bad');}});return ok;}
+function chkMatch(){const r=[chkRadio('mq1','B'),chkRadio('mq2','A'),chkRadio('mq3','C'),chkRadio('mq4','B')];const n=r.filter(x=>x).length;setMsg('mm',n===4,'🎉 4 題全對！',`✔ ${n}/4 題正確，紅色選項請再想想`);}
+function chk13c(){
+  const list=[['p1a',94],['p1b',66],['p2a',19],['p2b',15],['p3',368],['p4a',62],['p4b',66],['p5a',23],['p5b',3],['p6a',16],['p6b',8],['p7a',18],['p7b',16],['p8a',28],['p8b',20],['p9a',25],['p9b',10],['p10a',30],['p10b',26],['p11a',9],['p11b',6],['p12a',400],['p12b',1200],['p13a',9],['p13b',6],['p14a',60],['p14b',36],['p15a',20],['p15b',44],['p16',4],['p17a',90],['p17b',30],['p18',27.5]];
+  let right=0,done=0;list.forEach(([id,a])=>{const i=document.getElementById(id);if(i.value.trim()==='')return;done++;const ok=near(i.value,a);mark(i,ok);if(ok)right++;});
+  setMsg('mp',right===done&&done>0,`🎉 已填 ${done} 格全部正確！`,`✔ ${right}/${done} 格正確，紅色格請再試`);}
+function chkExit(){const r1=chkRadio('xq1','B'),r2=chkRadio('xq2','C');const l=[['x3a',12],['x3b',8],['x4a',6],['x4b',6]];let all=r1&&r2;l.forEach(([id,a])=>{const i=document.getElementById(id);const ok=near(i.value,a);mark(i,ok);if(!ok)all=false;});setMsg('mx',all,'🎉 全部正確！','❌ 有錯，請再檢查');}
+/* 解題器 */
+function preset(a1,b1,c1,a2,b2,c2){['a1','b1','c1','a2','b2','c2'].forEach((k,i)=>document.getElementById(k).value=[a1,b1,c1,a2,b2,c2][i]);solve();}
+function f(n){return Number(Number(n).toFixed(4)).toString();}
+function term(c,v,first){if(c===0)return '';const s=c<0?'−':(first?'':'+');const m=Math.abs(c)===1?'':f(Math.abs(c));return (first?s:' '+s+' ')+m+v;}
+function eq(a,b,c){let s=term(a,'x',true);s+=term(b,'y',s==='');if(s==='')s='0';return s+' = '+f(c);}
+function solve(){
+  const g=id=>Number(document.getElementById(id).value);
+  const a1=g('a1'),b1=g('b1'),c1=g('c1'),a2=g('a2'),b2=g('b2'),c2=g('c2');
+  const D=a1*b2-a2*b1;let out='';
+  out+=`(1)　${eq(a1,b1,c1)}<br>(2)　${eq(a2,b2,c2)}<br><br>`;
+  if(D===0){out+='<b style="color:var(--bad)">兩式的 x、y 係數成比例，無法消元（方程組無解或有無限多解）。請檢查方程。</b>';document.getElementById('sOut').innerHTML=out;return;}
+  const x=(c1*b2-c2*b1)/D,y=(a1*c2-a2*c1)/D;
+  out+='<b>消去 y：</b><br>';
+  let k1=b2,k2=b1;
+  if(b1===b2){out+=`(1) − (2)：${eq(a1-a2,0,c1-c2)}<br>`;}
+  else if(b1===-b2){out+=`(1) + (2)：${eq(a1+a2,0,c1+c2)}<br>`;}
+  else{
+    out+=`(1) × ${f(k1)}：${eq(a1*k1,b1*k1,c1*k1)} ………… (3)<br>(2) × ${f(k2)}：${eq(a2*k2,b2*k2,c2*k2)} ………… (4)<br>(3) − (4)：${eq(a1*k1-a2*k2,0,c1*k1-c2*k2)}<br>`;
+  }
+  out+=`∴ <b>x = ${f(x)}</b><br><br><b>把 x = ${f(x)} 代入 (1)：</b><br>`;
+  if(b1!==0){out+=`${f(a1)} × ${f(x)} + ${f(b1)}y = ${f(c1)}<br>${f(b1)}y = ${f(c1-a1*x)}<br>∴ <b>y = ${f(y)}</b>`;}
+  else{out+=`(1) 沒有 y，改代入 (2)：${f(b2)}y = ${f(c2-a2*x)}<br>∴ <b>y = ${f(y)}</b>`;}
+  out+=`<br><br><b>驗算：</b>(1) ${f(a1*x+b1*y)} = ${f(c1)} ✓　(2) ${f(a2*x+b2*y)} = ${f(c2)} ✓`;
+  document.getElementById('sOut').innerHTML=out;
+}
+solve();render();
+</script>
+<nav style="background:#2b3a67;padding:10px 16px;font-family:system-ui,sans-serif;font-size:15px">
+ 
+ <a href="3-1.html" style="color:#cfd8ff;margin-right:18px;text-decoration:none">3.1 折扣 (Discount)</a>
+  <a href="3-2.html" style="color:#cfd8ff;margin-right:18px;text-decoration:none">3.2 以固定的率增加的應用題</a>
+  <a href="3-3.html" style="color:#cfd8ff;text-decoration:none">3.3 以固定的率減少的應用題</a>
+  <a href="13-4.html" style="color:#cfd8ff;margin-right:18px;text-decoration:none">13.4 聯立方程</a>
+  <a href="14-1.html" style="color:#cfd8ff;margin-right:18px;text-decoration:none">14.1 函數概念</a>
+  <a href="14-2.html" style="color:#cfd8ff;text-decoration:none">14.2 函數圖像</a>
+</nav>
+
+</body>
+</html>
