@@ -202,12 +202,14 @@
 <section id="exit">
   <div class="card">
     <h2>🎫 出口票（Exit Ticket）</h2>
+    <p style="margin:10px 0">班別：<input id="et-class" style="width:70px;padding:6px;text-align:center;border:2px solid #cbd5e1;border-radius:6px" placeholder="3A">　姓名：<input id="et-name" style="width:140px;padding:6px;border:2px solid #cbd5e1;border-radius:6px" placeholder="陳大文"></p>
     <p>已知 <b>2x + y = 6</b>。</p>
     <p style="margin:10px 0">(1) 以 y 為主項：y = <input id="e1" style="width:120px;padding:6px;text-align:center;border:2px solid #cbd5e1;border-radius:6px" placeholder="例：6-2x"></p>
     <p style="margin:10px 0">(2) 當 x = 1，y = <input id="e2" style="width:70px;padding:6px;text-align:center;border:2px solid #cbd5e1;border-radius:6px"></p>
     <p style="margin:10px 0">(3) 我今天最不明白的地方是：</p>
     <textarea id="e3" placeholder="請寫下你的疑問……"></textarea>
-    <br><button class="btn" onclick="checkExit()">✔ 提交</button><span class="msg" id="me"></span>
+    <br><button class="btn" id="exit-btn" onclick="checkExit()">✔ 提交</button><span class="msg" id="me"></span>
+    
   </div>
   <div class="card">
     <h2>📌 三句總結</h2>
@@ -304,15 +306,50 @@ function checkEq(){
   m.textContent=ok?'✅ 正確！y = 3x':'❌ 想一想：1 個 3 小時，x 個呢？';
   m.style.color=ok?'var(--ok)':'var(--bad)';
 }
-function checkExit(){
-  const e1=document.getElementById('e1').value.replace(/\s/g,'').toLowerCase();
-  const ok1=['6-2x','-2x+6'].includes(e1);
-  const ok2=Number(document.getElementById('e2').value)===4;
-  const m=document.getElementById('me');
-  m.textContent=(ok1&&ok2)?'🎉 已提交，答案全對！':`已提交。(1) ${ok1?'✅':'❌'}　(2) ${ok2?'✅':'❌'}`;
-  m.style.color=(ok1&&ok2)?'var(--ok)':'var(--accent)';
-}
 
+const SHEET_URL   = "https://script.google.com/macros/s/AKfycbyXoECMifD_PatOXkd1i579dCAQMS2Q1p3DQ7jFIcZ8aoYzmYVrWxCtcFZy1SD8_FCZ/exec";
+const LESSON_NAME = "14-2 一次函數圖像";
+
+function checkExit() {
+  const cls  = document.getElementById('et-class').value.trim();
+  const name = document.getElementById('et-name').value.trim();
+  const a1   = document.getElementById('e1').value.trim();
+  const a2   = document.getElementById('e2').value.trim();
+  const a3   = document.getElementById('e3').value.trim();
+  const msg  = document.getElementById('me');
+  const btn  = document.getElementById('exit-btn');
+
+  if (!cls || !name) { msg.textContent = '請先填寫班別和姓名'; msg.style.color = '#dc2626'; return; }
+  if (!a1 || !a2)    { msg.textContent = '請完成第 (1)、(2) 題';  msg.style.color = '#dc2626'; return; }
+
+  // 簡單批改：去空格、統一減號
+  const norm = s => s.replace(/\s+/g, '').replace(/−|–/g, '-').toLowerCase();
+  const ok1 = ['y=6-2x', 'y=-2x+6', '6-2x', '-2x+6'].includes(norm(a1));
+  const ok2 = norm(a2) === '4';
+
+  btn.disabled = true;
+  msg.textContent = '傳送中…'; msg.style.color = '#64748b';
+
+  fetch(SHEET_URL, {
+    method: 'POST',
+    mode: 'no-cors',
+    headers: { 'Content-Type': 'text/plain' },
+    body: JSON.stringify({
+      lesson: LESSON_NAME,
+      '班別': cls,
+      '姓名': name,
+      'Q1 y為主項': a1,  'Q1正確': ok1 ? '✔' : '✘',
+      'Q2 x=1時y':  a2,  'Q2正確': ok2 ? '✔' : '✘',
+      '不明白的地方': a3
+    })
+  }).then(() => {
+    msg.textContent = '✔ 已提交，謝謝！' + (ok1 && ok2 ? ' 全對 🎉' : '');
+    msg.style.color = '#16a34a';
+  }).catch(() => {
+    msg.textContent = '提交失敗，請再按一次'; msg.style.color = '#dc2626';
+    btn.disabled = false;
+  });
+}
 /* ---------- 繪圖 ---------- */
 function plot(cid,sel,xs,fn,xmin,xmax,ymin,ymax){
   const c=document.getElementById(cid),ctx=c.getContext('2d');
