@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🎲 課堂抽籤｜互動教學</title>
+<style>
+  :root{--main:#2563eb;--ok:#16a34a;--warn:#f59e0b;--bad:#dc2626;--bg:#f3f6fb;--card:#fff;--line:#e5e7eb;}
+  *{box-sizing:border-box;}
+  body{margin:0;font-family:"Noto Sans TC","Microsoft JhengHei","PingFang TC",sans-serif;background:var(--bg);color:#1f2937;}
+  header{background:linear-gradient(135deg,#1e3a8a,#2563eb);color:#fff;padding:18px 24px;}
+  header h1{margin:0;font-size:1.5rem;}
+  header p{margin:6px 0 0;opacity:.9;font-size:.95rem;}
+  header a{color:#fff;text-decoration:underline;font-size:.9rem;}
+  main{max-width:1100px;margin:20px auto;padding:0 16px;display:grid;grid-template-columns:1fr 1.3fr;gap:18px;}
+  @media(max-width:860px){main{grid-template-columns:1fr;}}
+  .card{background:var(--card);border-radius:14px;box-shadow:0 2px 8px rgba(0,0,0,.06);padding:18px;}
+  .card h2{margin:0 0 12px;font-size:1.15rem;border-left:5px solid var(--main);padding-left:10px;}
+  label{display:block;font-weight:600;margin:10px 0 4px;}
+  input[type=text],textarea{width:100%;padding:9px 10px;border:1px solid #cbd5e1;border-radius:8px;font-size:1rem;font-family:inherit;}
+  textarea{min-height:220px;resize:vertical;line-height:1.6;}
+  .hint{font-size:.85rem;color:#6b7280;margin-top:4px;}
+  .btn{border:none;border-radius:10px;padding:10px 16px;font-size:1rem;cursor:pointer;font-weight:600;color:#fff;background:var(--main);transition:.15s;}
+  .btn:hover{filter:brightness(1.08);} .btn:disabled{opacity:.45;cursor:not-allowed;}
+  .btn.big{font-size:1.4rem;padding:16px 30px;}
+  .btn.gray{background:#6b7280;} .btn.green{background:var(--ok);} .btn.orange{background:var(--warn);} .btn.red{background:var(--bad);}
+  .row{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px;align-items:center;}
+  .stage{text-align:center;padding:20px 10px;border:3px dashed #bfdbfe;border-radius:14px;background:#eff6ff;margin-bottom:14px;min-height:150px;}
+  .stage .name{font-size:3.2rem;font-weight:800;color:#1e3a8a;letter-spacing:.1em;min-height:1.3em;}
+  .stage .name.rolling{color:#60a5fa;}
+  .stage .sub{color:#475569;margin-top:6px;}
+  .stats{display:flex;gap:10px;flex-wrap:wrap;margin:10px 0;}
+  .stat{background:#f1f5f9;border-radius:10px;padding:8px 14px;font-size:.95rem;}
+  .stat b{color:var(--main);font-size:1.1rem;}
+  table{width:100%;border-collapse:collapse;margin-top:8px;}
+  th,td{padding:8px 6px;border-bottom:1px solid var(--line);text-align:left;font-size:.98rem;}
+  th{background:#f8fafc;font-size:.9rem;color:#475569;}
+  tr.drawn td{background:#fef9c3;}
+  tr.drawn td.nm{text-decoration:line-through;color:#92400e;}
+  tr.hand td{box-shadow:inset 4px 0 0 var(--ok);}
+  .badge{display:inline-block;background:#f59e0b;color:#fff;border-radius:999px;padding:2px 9px;font-size:.8rem;font-weight:700;}
+  .hand input{width:22px;height:22px;cursor:pointer;accent-color:var(--ok);}
+  #status{margin-top:10px;font-weight:600;min-height:1.4em;}
+  .ok{color:var(--ok);} .err{color:var(--bad);}
+  footer{text-align:center;color:#94a3b8;font-size:.85rem;padding:20px;}
+</style>
+</head>
+<body>
+<header>
+  <h1>🎲 課堂抽籤・回答問題紀錄</h1>
+  <p>輸入名單 → 逐一抽籤（抽中者不會重複）→ 剔選舉手同學 → 下課送出紀錄　｜　<a href="index.html">⬅ 返回目錄</a></p>
+</header>
+
+<main>
+  <!-- 左：設定及名單輸入 -->
+  <section class="card">
+    <h2>📋 課堂資料及名單</h2>
+    <label for="cls">班別 <span style="color:var(--bad)">*</span></label>
+    <input type="text" id="cls" placeholder="例：CS1">
+    <label for="topic">課題（選填）</label>
+    <input type="text" id="topic" placeholder="例：第 4 節 單利息、複利息">
+    <label for="names">學生姓名（每行一個）</label>
+    <textarea id="names" placeholder="陳大文&#10;李小明&#10;張美玲&#10;…"></textarea>
+    <div class="hint">貼上或輸入後名單會即時更新；重複姓名只會保留一個。資料會自動暫存在此瀏覽器。</div>
+    <div class="row">
+      <button class="btn gray" onclick="sortNames()">🔤 排序名單</button>
+      <button class="btn red" onclick="clearAll()">🗑 全部清除</button>
+    </div>
+  </section>
+
+  <!-- 右：抽籤區 -->
+  <section class="card">
+    <h2>🎯 抽籤</h2>
+    <div class="stage">
+      <div class="name" id="stageName">—</div>
+      <div class="sub" id="stageSub">按「抽籤」開始</div>
+    </div>
+    <div class="row" style="justify-content:center;">
+      <button class="btn big" id="drawBtn" onclick="draw()">🎲 抽籤</button>
+      <button class="btn orange" id="undoBtn" onclick="undoLast()">↩ 復原上一次</button>
+      <button class="btn gray" onclick="resetDraw()">🔄 重設抽籤</button>
+    </div>
+    <div class="stats">
+      <div class="stat">總人數 <b id="stTotal">0</b></div>
+      <div class="stat">已抽中 <b id="stDrawn">0</b></div>
+      <div class="stat">未抽 <b id="stLeft">0</b></div>
+      <div class="stat">✋ 舉手 <b id="stHand">0</b></div>
+    </div>
+
+    <table>
+      <thead><tr><th style="width:60px">抽中</th><th>姓名</th><th style="width:90px;text-align:center">✋ 舉手</th></tr></thead>
+      <tbody id="list"></tbody>
+    </table>
+  </section>
+
+  <!-- 下：送出 -->
+  <section class="card" style="grid-column:1/-1;">
+    <h2>📤 送出課堂紀錄</h2>
+    <label for="note">備註（選填）</label>
+    <input type="text" id="note" placeholder="例：第 3 組表現積極">
+    <div class="row">
+      <button class="btn green" id="sendBtn" onclick="sendRecord()">✔ 送出紀錄至 Google 試算表</button>
+      <button class="btn gray" onclick="copySummary()">📋 複製摘要</button>
+    </div>
+    <div id="status"></div>
+    <div class="hint">送出內容：班別、課題、日期時間、全部名單、抽中順序、舉手名單、備註。</div>
+  </section>
+</main>
+<footer>單元教學互動網站｜課堂抽籤・舉手紀錄</footer>
+
+<script>
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyXoECMifD_PatOXkd1i579dCAQMS2Q1p3DQ7jFIcZ8aoYzmYVrWxCtcFZy1SD8_FCZ/exec";
+const STORE_KEY = "drawPage_v1";
+
+// state.students = [{name, drawn:0|次序, hand:true/false}]
+let state = { students: [], counter: 0 };
+let rolling = false;
+
+const $ = id => document.getElementById(id);
+
+/* ---------- 名單解析（保留已抽中／舉手狀態） ---------- */
+function parseNames(){
+  const lines = $("names").value.split(/\r?\n/).map(s=>s.trim()).filter(Boolean);
+  const seen = new Set();
+  const old = Object.fromEntries(state.students.map(s=>[s.name,s]));
+  const students = [];
+  lines.forEach(n=>{
+    if(seen.has(n)) return; seen.add(n);
+    students.push(old[n] ? old[n] : {name:n, drawn:0, hand:false});
+  });
+  state.students = students;
+  renumber();
+  render(); save();
+}
+function renumber(){ // 保持抽中次序連續
+  const drawn = state.students.filter(s=>s.drawn).sort((a,b)=>a.drawn-b.drawn);
+  drawn.forEach((s,i)=>s.drawn=i+1);
+  state.counter = drawn.length;
+}
+
+/* ---------- 畫面 ---------- */
+function render(){
+  const tb = $("list"); tb.innerHTML = "";
+  state.students.forEach((s,i)=>{
+    const tr = document.createElement("tr");
+    tr.className = (s.drawn?"drawn ":"") + (s.hand?"hand":"");
+    tr.innerHTML = `
+      <td>${s.drawn?`<span class="badge">#${s.drawn}</span>`:""}</td>
+      <td class="nm">${esc(s.name)}</td>
+      <td class="hand" style="text-align:center">
+        <input type="checkbox" ${s.hand?"checked":""} onchange="toggleHand(${i},this.checked)" title="舉手答問題">
+      </td>`;
+    tb.appendChild(tr);
+  });
+  const total = state.students.length, drawn = state.students.filter(s=>s.drawn).length;
+  $("stTotal").textContent = total; $("stDrawn").textContent = drawn;
+  $("stLeft").textContent = total-drawn;
+  $("stHand").textContent = state.students.filter(s=>s.hand).length;
+  $("drawBtn").disabled = rolling || total-drawn===0;
+  $("undoBtn").disabled = rolling || drawn===0;
+  if(total && total===drawn){ $("stageSub").textContent = "✅ 全班已抽完！可按「重設抽籤」再來一輪"; }
+}
+function esc(s){ return s.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])); }
+function toggleHand(i,v){ state.students[i].hand = v; render(); save(); }
+
+/* ---------- 抽籤 ---------- */
+function draw(){
+  const left = state.students.filter(s=>!s.drawn);
+  if(!left.length || rolling) return;
+  rolling = true; render();
+  const nameEl = $("stageName"); nameEl.classList.add("rolling");
+  $("stageSub").textContent = "抽籤中…";
+  let ticks = 0, max = 18;
+  const timer = setInterval(()=>{
+    nameEl.textContent = left[Math.floor(Math.random()*left.length)].name;
+    if(++ticks>=max){
+      clearInterval(timer);
+      const pick = left[Math.floor(Math.random()*left.length)];
+      pick.drawn = ++state.counter;
+      nameEl.textContent = pick.name; nameEl.classList.remove("rolling");
+      $("stageSub").textContent = `第 ${pick.drawn} 位抽中　｜　尚餘 ${left.length-1} 人`;
+      rolling = false; render(); save();
+    }
+  }, 70);
+}
+function undoLast(){
+  const last = state.students.filter(s=>s.drawn).sort((a,b)=>b.drawn-a.drawn)[0];
+  if(!last) return;
+  last.drawn = 0; renumber();
+  $("stageName").textContent = "—"; $("stageSub").textContent = `已復原：${last.name} 放回名單`;
+  render(); save();
+}
+function resetDraw(){
+  if(!confirm("重設所有抽籤次序？（舉手剔選會保留）")) return;
+  state.students.forEach(s=>s.drawn=0); state.counter=0;
+  $("stageName").textContent="—"; $("stageSub").textContent="按「抽籤」開始";
+  render(); save();
+}
+function sortNames(){
+  const arr = $("names").value.split(/\r?\n/).map(s=>s.trim()).filter(Boolean);
+  $("names").value = arr.sort((a,b)=>a.localeCompare(b,"zh-Hant")).join("\n");
+  parseNames();
+}
+function clearAll(){
+  if(!confirm("清除名單、抽籤及舉手紀錄？")) return;
+  $("names").value=""; $("note").value=""; state={students:[],counter:0};
+  $("stageName").textContent="—"; $("stageSub").textContent="按「抽籤」開始";
+  render(); save();
+}
+
+/* ---------- 送出紀錄 ---------- */
+function buildPayload(){
+  const now = new Date();
+  const pad = n=>String(n).padStart(2,"0");
+  const drawn = state.students.filter(s=>s.drawn).sort((a,b)=>a.drawn-b.drawn).map(s=>s.name);
+  const hands = state.students.filter(s=>s.hand).map(s=>s.name);
+  const left  = state.students.filter(s=>!s.drawn).map(s=>s.name);
+  return {
+    type: "抽籤紀錄",
+    班別: $("cls").value.trim(),
+    課題: $("topic").value.trim(),
+    日期: `${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())}`,
+    時間: `${pad(now.getHours())}:${pad(now.getMinutes())}`,
+    總人數: state.students.length,
+    全部名單: state.students.map(s=>s.name).join("、"),
+    抽中人數: drawn.length,
+    抽中順序: drawn.join("、"),
+    未抽中: left.join("、"),
+    舉手人數: hands.length,
+    舉手名單: hands.join("、"),
+    備註: $("note").value.trim()
+  };
+}
+async function sendRecord(){
+  const st = $("status");
+  if(!$("cls").value.trim()){ st.className="err"; st.textContent="⚠ 請先輸入班別。"; $("cls").focus(); return; }
+  if(!state.students.length){ st.className="err"; st.textContent="⚠ 名單是空的。"; return; }
+  $("sendBtn").disabled = true; st.className=""; st.textContent="⏳ 送出中…";
+  try{
+    await fetch(SCRIPT_URL,{
+      method:"POST", mode:"no-cors",
+      headers:{"Content-Type":"text/plain;charset=utf-8"},
+      body: JSON.stringify(buildPayload())
+    });
+    st.className="ok"; st.textContent="✅ 已送出！（請到 Google 試算表「抽籤紀錄」工作表核對）";
+  }catch(e){
+    st.className="err"; st.textContent="❌ 送出失敗："+e.message+"　可先按「複製摘要」備份。";
+  }finally{ $("sendBtn").disabled=false; }
+}
+function copySummary(){
+  const p = buildPayload();
+  const txt = `班別：${p.班別}　課題：${p.課題}　${p.日期} ${p.時間}
+抽中順序（${p.抽中人數}）：${p.抽中順序}
+舉手（${p.舉手人數}）：${p.舉手名單}
+未抽中：${p.未抽中}
+備註：${p.備註}`;
+  navigator.clipboard.writeText(txt).then(()=>{ $("status").className="ok"; $("status").textContent="📋 已複製摘要"; });
+}
+
+/* ---------- 本機暫存 ---------- */
+function save(){
+  localStorage.setItem(STORE_KEY, JSON.stringify({
+    cls:$("cls").value, topic:$("topic").value, note:$("note").value,
+    names:$("names").value, state
+  }));
+}
+function load(){
+  try{
+    const d = JSON.parse(localStorage.getItem(STORE_KEY)||"null"); if(!d) return;
+    $("cls").value=d.cls||""; $("topic").value=d.topic||""; $("note").value=d.note||"";
+    $("names").value=d.names||""; state=d.state||{students:[],counter:0};
+  }catch(e){}
+}
+
+/* ---------- 事件 ---------- */
+$("names").addEventListener("input", parseNames);
+["cls","topic","note"].forEach(id=>$(id).addEventListener("input", save));
+document.addEventListener("keydown", e=>{ // 空白鍵快速抽籤（非輸入框時）
+  if(e.code==="Space" && !["INPUT","TEXTAREA"].includes(document.activeElement.tagName)){ e.preventDefault(); draw(); }
+});
+load(); parseNames();
+</script>
+</body>
+</html>
