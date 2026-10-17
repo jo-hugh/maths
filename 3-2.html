@@ -382,13 +382,15 @@
 <section id="exit">
   <div class="card">
     <h2>🎫 出口票（Exit Ticket）</h2>
+    <p style="margin:10px 0">班別：<input id="et-class" style="width:70px;padding:6px;text-align:center;border:2px solid #cbd5e1;border-radius:6px" placeholder="CS1">　姓名：<input id="et-name" style="width:140px;padding:6px;border:2px solid #cbd5e1;border-radius:6px" placeholder="陳大文"></p>
     <p><b>(1)</b> 以每年 4% 的率增加，增長因子是 <input class="ans" id="x1"></p>
     <p style="margin-top:8px"><b>(2)</b> 以每年 7% 的率減少，衰變因子是 <input class="ans" id="x2"></p>
     <p style="margin-top:8px"><b>(3)</b> $500 以每年 10% 的率增加，2 年後是 $<input class="ans" id="x3"></p>
     <p style="margin-top:8px"><b>(4)</b> 某數現值 1,210，一直以每年 10% 的率增加，2 年前的值是 <input class="ans" id="x4"></p>
     <p style="margin-top:8px"><b>(5)</b> 我今天最不明白的地方是：</p>
     <textarea placeholder="請寫下你的疑問……"></textarea>
-    <br><button class="btn" onclick="chkMany([['x1',1.04],['x2',0.93],['x3',605],['x4',1000]],'mx')">✔ 提交</button><span class="msg" id="mx"></span>
+    <br>
+    <button class="btn" id="exit-btn" onclick="chkExit()">✔ 提交</button> <span class="msg" id="exit-msg"></span>
   </div>
   <div class="card">
     <h2>📌 口訣總結</h2>
@@ -492,6 +494,51 @@ function chk3b(){
   setMsg('mb',all,'🎉 全部正確！',`❌ 有錯，紅色格請再試${oc?'':'（第 3 題：97,472 < 100,000，不會超過）'}`);}
 function tog(id){document.getElementById(id).classList.toggle('show');}
 render();
+  const SHEET_URL   = "https://script.google.com/macros/s/AKfycbyXoECMifD_PatOXkd1i579dCAQMS2Q1p3DQ7jFIcZ8aoYzmYVrWxCtcFZy1SD8_FCZ/exec";
+const LESSON_NAME = "3-2 增長與衰變";
+const EXIT_ANS    = [1.04, 0.93, 605, 1000];   // (1)–(4) 標準答案
+
+function chkExit(){
+  try{
+    const btn = document.getElementById('exit-btn');
+    const msg = document.getElementById('exit-msg');
+    const cls  = document.getElementById('et-class').value.trim();
+    const name = document.getElementById('et-name').value.trim();
+
+    // 自動找出口票區塊：由按鈕向上找，直到包含 et-class 的容器
+    let box = btn; while(box && !box.querySelector('#et-class')) box = box.parentElement;
+    const fields = [...box.querySelectorAll('input, textarea')].filter(e => e.id!=='et-class' && e.id!=='et-name');
+    const inputs = fields.filter(e => e.tagName==='INPUT').slice(0,4);
+    const ta     = fields.find(e => e.tagName==='TEXTAREA');
+    if(inputs.length<4){ alert('只找到 '+inputs.length+' 個答案框，請把出口票 HTML 貼給老師助手'); return; }
+
+    if(!cls||!name){ msg.textContent='請先填寫班別和姓名'; msg.style.color='var(--bad)'; return; }
+    const ans = inputs.map(i => i.value.trim());
+    if(ans.some(a => a==='')){ msg.textContent='請完成第 (1)–(4) 題'; msg.style.color='var(--bad)'; return; }
+
+    const oks = ans.map((a,k) => Math.abs(Number(a.replace(/,/g,''))-EXIT_ANS[k]) < 0.005);
+    inputs.forEach((el,k) => {
+      if(typeof mark==='function') mark(el, oks[k]);
+      else el.style.borderColor = oks[k] ? '#16a34a' : '#dc2626';
+    });
+    const score = oks.filter(Boolean).length;
+
+    btn.disabled = true; msg.textContent='傳送中…'; msg.style.color='#64748b';
+
+    fetch(SHEET_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain'},
+      body: JSON.stringify({
+        lesson: LESSON_NAME, '班別': cls, '姓名': name,
+        'Q1 增長因子': ans[0], 'Q1正確': oks[0]?'✔':'✘',
+        'Q2 衰變因子': ans[1], 'Q2正確': oks[1]?'✔':'✘',
+        'Q3 2年後':    ans[2], 'Q3正確': oks[2]?'✔':'✘',
+        'Q4 2年前':    ans[3], 'Q4正確': oks[3]?'✔':'✘',
+        '得分': score+'/4',
+        '不明白的地方': ta ? ta.value.trim() : ''
+      })
+    }).then(()=>{ msg.textContent=`✔ 已提交，謝謝！（${score}/4）`; msg.style.color='var(--ok)'; })
+      .catch(()=>{ msg.textContent='提交失敗，請再按一次'; msg.style.color='var(--bad)'; btn.disabled=false; });
+  }catch(e){ alert('chkExit 錯誤：'+e.message); }
+}
 </script>
 </body>
 </html>
