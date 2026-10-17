@@ -386,45 +386,36 @@ render();
 const LESSON_NAME = "3-1 折扣";
 
 function chkExit(){
-  const ID_Q1  = 'x1';   // ← 改這裡：(1) 售價 input 的 id
-  const ID_Q2  = 'x2';   // ← 改這裡：(2) 折扣% input 的 id
-  const ID_Q3  = 'x3';   // ← 改這裡：(3) textarea 的 id
-  const MSG_ID = 'mx';   // ← 改這裡：提交按鈕旁 span 的 id
+  try{
+    const ID_Q1='x1', ID_Q2='x2', ID_Q3='x3';   // ← 只需確認這三個 input 的 id
 
-  const cls  = document.getElementById('et-class').value.trim();
-  const name = document.getElementById('et-name').value.trim();
-  const btn  = document.getElementById('exit-btn');
-  const msg  = document.getElementById(MSG_ID);
-  const i1 = document.getElementById(ID_Q1), i2 = document.getElementById(ID_Q2);
-  const a1 = i1.value.trim(), a2 = i2.value.trim();
-  const a3 = (document.getElementById(ID_Q3)||{value:''}).value.trim();
+    const btn = document.getElementById('exit-btn') || document.querySelector('button[onclick*="chkExit"]');
+    let msg = document.getElementById('mx') || (btn && btn.nextElementSibling);
+    if(!msg || msg.tagName!=='SPAN'){ msg=document.createElement('span'); msg.className='msg'; btn.after(msg); }
 
-  if(!cls||!name){ msg.textContent='請先填寫班別和姓名'; msg.style.color='var(--bad)'; return; }
-  if(a1===''||a2===''){ msg.textContent='請完成第 (1)–(2) 題'; msg.style.color='var(--bad)'; return; }
+    const cls  = document.getElementById('et-class').value.trim();
+    const name = document.getElementById('et-name').value.trim();
+    const i1=document.getElementById(ID_Q1), i2=document.getElementById(ID_Q2);
+    if(!i1||!i2){ alert('找不到答案框 id：'+ID_Q1+' / '+ID_Q2); return; }
+    const a1=i1.value.trim(), a2=i2.value.trim();
+    const a3=(document.getElementById(ID_Q3)||{value:''}).value.trim();
 
-  // 沿用原有 mark() 做紅綠標示
-  const ok1 = Math.abs(Number(a1)-200) < 0.01; mark(i1,ok1);
-  const ok2 = Math.abs(Number(a2)-25)  < 0.01; mark(i2,ok2);
-  const score = [ok1,ok2].filter(Boolean).length;
+    if(!cls||!name){ msg.textContent='請先填寫班別和姓名'; msg.style.color='var(--bad)'; return; }
+    if(a1===''||a2===''){ msg.textContent='請完成第 (1)–(2) 題'; msg.style.color='var(--bad)'; return; }
 
-  btn.disabled = true;
-  msg.textContent='傳送中…'; msg.style.color='#64748b';
+    const ok1=Math.abs(Number(a1)-200)<0.01; mark(i1,ok1);
+    const ok2=Math.abs(Number(a2)-25)<0.01;  mark(i2,ok2);
+    const score=[ok1,ok2].filter(Boolean).length;
 
-  fetch(SHEET_URL,{
-    method:'POST', mode:'no-cors', headers:{'Content-Type':'text/plain'},
-    body: JSON.stringify({
-      lesson: LESSON_NAME,
-      '班別': cls, '姓名': name,
-      'Q1 售價':  a1, 'Q1正確': ok1?'✔':'✘',
-      'Q2 折扣%': a2, 'Q2正確': ok2?'✔':'✘',
-      '得分': score+'/2',
-      '不明白的地方': a3
-    })
-  }).then(()=>{
-    msg.textContent=`✔ 已提交，謝謝！（${score}/2）`; msg.style.color='var(--ok)';
-  }).catch(()=>{
-    msg.textContent='提交失敗，請再按一次'; msg.style.color='var(--bad)'; btn.disabled=false;
-  });
+    btn.disabled=true; msg.textContent='傳送中…'; msg.style.color='#64748b';
+
+    fetch(SHEET_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain'},
+      body:JSON.stringify({lesson:LESSON_NAME,'班別':cls,'姓名':name,
+        'Q1 售價':a1,'Q1正確':ok1?'✔':'✘','Q2 折扣%':a2,'Q2正確':ok2?'✔':'✘',
+        '得分':score+'/2','不明白的地方':a3})
+    }).then(()=>{ msg.textContent=`✔ 已提交，謝謝！（${score}/2）`; msg.style.color='var(--ok)'; })
+      .catch(()=>{ msg.textContent='提交失敗，請再按一次'; msg.style.color='var(--bad)'; btn.disabled=false; });
+  }catch(e){ alert('chkExit 錯誤：'+e.message); }
 }
 </script>
 </body>
