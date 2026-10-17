@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>第 4 節｜單利息、複利息及實際年利率 — 互動教學（40 分鐘）</title>
+<style>
+  :root{--main:#047857;--main-dark:#064e3b;--ok:#16a34a;--bad:#dc2626;--accent:#f59e0b;--bg:#ecfdf5;--card:#fff;}
+  *{box-sizing:border-box;margin:0;padding:0;font-family:"Noto Sans TC","Microsoft JhengHei","PingFang TC",sans-serif;}
+  body{background:var(--bg);color:#1e293b;}
+  header{background:linear-gradient(135deg,var(--main-dark),var(--main));color:#fff;padding:14px 24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;position:sticky;top:0;z-index:10;box-shadow:0 2px 8px rgba(0,0,0,.2);}
+  header h1{font-size:1.2rem;} header small{opacity:.85;display:block;font-size:.85rem;}
+  .timer{background:rgba(255,255,255,.15);padding:8px 14px;border-radius:10px;display:flex;align-items:center;gap:10px;}
+  .timer span{font-size:1.5rem;font-weight:700;font-variant-numeric:tabular-nums;}
+  .timer button{background:#fff;color:var(--main-dark);border:none;padding:6px 12px;border-radius:6px;cursor:pointer;font-weight:600;}
+  nav{display:flex;flex-wrap:wrap;gap:6px;padding:10px 24px;background:#fff;border-bottom:1px solid #e2e8f0;position:sticky;top:66px;z-index:9;}
+  nav button{border:2px solid var(--main);background:#fff;color:var(--main);padding:6px 12px;border-radius:999px;cursor:pointer;font-weight:600;transition:.2s;font-size:.88rem;}
+  nav button.active,nav button:hover{background:var(--main);color:#fff;}
+  main{max-width:1000px;margin:0 auto;padding:24px;}
+  section{display:none;animation:fade .3s;} section.active{display:block;}
+  @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  .card{background:var(--card);border-radius:14px;padding:22px;margin-bottom:20px;box-shadow:0 2px 10px rgba(0,0,0,.05);line-height:1.8;}
+  .card h2{color:var(--main-dark);margin-bottom:12px;font-size:1.25rem;border-left:5px solid var(--accent);padding-left:10px;line-height:1.4;}
+  .badge{display:inline-block;background:#d1fae5;color:#064e3b;padding:2px 10px;border-radius:6px;font-size:.85rem;font-weight:600;margin-right:6px;}
+  .btn{background:var(--main);color:#fff;border:none;padding:9px 16px;border-radius:8px;cursor:pointer;font-weight:600;font-size:.92rem;margin:6px 4px 4px 0;}
+  .btn.secondary{background:#64748b;} .btn.warn{background:var(--accent);} .btn.danger{background:var(--bad);} .btn:hover{filter:brightness(1.1);}
+  .flow{display:grid;gap:10px;}
+  .step{display:grid;grid-template-columns:90px 1fr;gap:12px;background:#f8fafc;border-radius:10px;padding:12px;border-left:5px solid var(--main);line-height:1.6;}
+  .step .t{font-weight:700;color:var(--main-dark);} .step .mode{color:#64748b;font-size:.86rem;margin-top:4px;}
+  .formula{background:#d1fae5;border:2px solid var(--main);border-radius:10px;padding:12px 18px;font-size:1.05rem;margin:10px 0;text-align:center;font-weight:600;}
+  .hint{background:#fffbeb;border:1px dashed var(--accent);padding:10px 14px;border-radius:8px;margin:10px 0;}
+  .answer{background:#f0fdf4;border:1px solid var(--ok);padding:12px;border-radius:8px;margin-top:10px;display:none;} .answer.show{display:block;}
+  .msg{font-weight:700;margin-left:8px;}
+  input.ans{width:110px;padding:5px;text-align:center;border:2px solid #cbd5e1;border-radius:6px;font-size:1rem;}
+  input.ans.sm{width:70px;}
+  input.ans.ok{border-color:var(--ok);background:#f0fdf4;} input.ans.bad{border-color:var(--bad);background:#fef2f2;}
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  @media(max-width:700px){.two{grid-template-columns:1fr}.step{grid-template-columns:1fr}}
+  table{width:100%;border-collapse:collapse;margin:12px 0;} th,td{border:1px solid #cbd5e1;padding:8px;text-align:center;} th{background:#d1fae5;}
+  td.l{text-align:left;}
+  .sol{display:none;background:#fef2f2;border-left:4px solid var(--bad);padding:12px 16px;border-radius:8px;margin-top:10px;color:#991b1b;line-height:2;} .sol.show{display:block;}
+  .sol .ind{padding-left:1.5em;}
+  .choice{display:grid;gap:8px;margin:8px 0;} .choice label{background:#f1f5f9;padding:8px 14px;border-radius:8px;cursor:pointer;display:flex;align-items:center;gap:10px;}
+  .choice label.ok{background:#dcfce7;} .choice label.bad{background:#fee2e2;}
+  textarea{width:100%;min-height:70px;padding:10px;border:2px solid #cbd5e1;border-radius:8px;font-size:1rem;}
+  .q{margin-top:14px;padding-top:10px;border-top:1px dashed #e2e8f0;}
+  .m{font-family:"Cambria Math","Times New Roman",serif;font-style:italic;}
+  .steps{background:#f8fafc;border-radius:10px;padding:14px;line-height:2.1;font-family:"Cambria Math","Times New Roman",serif;font-size:1.05rem;}
+  select,input.x{padding:6px 10px;border:2px solid #cbd5e1;border-radius:6px;font-size:1rem;}
+  .machine{display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap;margin:14px 0;}
+  .box{background:linear-gradient(135deg,#047857,#10b981);color:#fff;border-radius:16px;padding:18px 22px;text-align:center;min-width:190px;box-shadow:0 4px 12px rgba(0,0,0,.15);}
+  .box .lab{font-size:.8rem;opacity:.9;} .box .val{font-size:1.3rem;font-weight:800;}
+  .io{background:#fff;border:3px solid var(--main);color:var(--main-dark);border-radius:16px;padding:14px 20px;text-align:center;min-width:140px;}
+  .io .val{font-size:1.3rem;font-weight:800;}
+  .arrow{font-size:2rem;color:var(--main-dark);}
+  .lock{background:#fef2f2;border:2px solid var(--bad);border-radius:10px;padding:14px;display:flex;gap:10px;align-items:center;flex-wrap:wrap;}
+  .lock input{padding:8px;border:2px solid #cbd5e1;border-radius:6px;font-size:1rem;width:220px;}
+  footer{text-align:center;color:#94a3b8;padding:20px;font-size:.85rem;}
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>💰 第 4 節：單利息、複利息及實際年利率</h1>
+    <small>單利息 I = PRT・複利息 A = P(1 + r/n)^(nt)・實際年利率 ER｜單元二 數學｜40 分鐘</small>
+  </div>
+  <div class="timer">⏱ <span id="clock">40:00</span><button onclick="toggleTimer()" id="tbtn">開始</button><button onclick="resetTimer()">重設</button></div>
+</header>
+
+<nav>
+  <button class="active" onclick="go('flow',this)">📋 流程</button>
+  <button onclick="go('si',this)">🏦 4.1 單利息</button>
+  <button onclick="go('ex4a',this)">📝 練習 4A</button>
+  <button onclick="go('ci',this)">📈 4.2 複利息</button>
+  <button onclick="go('cmp',this)">⚖️ 單利 vs 複利</button>
+  <button onclick="go('ciex',this)">✏️ 例 4.05–4.10</button>
+  <button onclick="go('ex4b',this)">📝 練習 4B</button>
+  <button onclick="go('er',this)">📐 4.3 實際年利率 + 4C</button>
+  <button onclick="go('exit',this)">🎫 出口票</button>
+  <button onclick="go('teacher',this)">👩‍🏫 教師區 🔒</button>
+</nav>
+
+<main>
+
+<!-- ===== 流程 ===== -->
+<section id="flow" class="active">
+  <div class="card">
+    <h2>學習成果</h2>
+    <p>✅ 能運用 <b>單利息</b> 公式 <span class="m">I = P × R% × T</span>、<span class="m">A = P + I</span>，並反求本金、利率或年期</p>
+    <p>✅ 能分辨 <b>單利息與複利息</b> 的分別（線性增長 vs 指數增長）</p>
+    <p>✅ 能運用 <b>複利息</b> 公式 <span class="m">A = P(1 + r%/n)<sup>nt</sup></span>，理解「每年結息次數 n」（每年 1、每半年 2、每季 4、每月 12、每星期 52、每日 365）</p>
+    <p>✅ 能計算 <b>實際年利率</b> <span class="m">ER = (1 + r%/n)<sup>n</sup> − 1</span>，比較不同存款計劃</p>
+  </div>
+  <div class="card">
+    <h2>📅 40 分鐘流程</h2>
+    <div class="flow">
+      <div class="step"><div class="t">0–4 分</div><div><b>引入：甚麼是利息？「厘」= %</b><br>本金 P、年利率 R%、年期 T → I = PRT；注意 18 個月 = 1.5 年。<div class="mode">💬 全班口答</div></div></div>
+      <div class="step"><div class="t">4–10 分</div><div><b>例 4.01–4.03 + 練習 4A 配對</b><br>🅰 Q2、Q6；🅱 Q4、Q8 → 互批。<div class="mode">📝 小白板／配對</div></div></div>
+      <div class="step"><div class="t">10–16 分</div><div><b>複利息概念 + 「單利 vs 複利」互動圖</b><br>$100、10%、3 年逐年表 → 拉動年期滑桿觀察直線 vs 曲線 → 情境判斷 4 題搶答。<div class="mode">⚡ 搶答</div></div></div>
+      <div class="step"><div class="t">16–26 分</div><div><b>例 4.05 → 4.06 → 4.07 → 4.08（換利率）→ 4.09（反求 r）→ 4.10（log 求 t）</b><div class="mode">📝 小白板</div></div></div>
+      <div class="step"><div class="t">26–32 分</div><div><b>練習 4B 配對練習</b><br>🅰 Q1、Q5、Q7、Q10；🅱 Q2、Q6、Q9、Q14；其餘課後完成（Q11–13、15–18 為挑戰題）。<div class="mode">👥 配對</div></div></div>
+      <div class="step"><div class="t">32–37 分</div><div><b>4.3 實際年利率 ER + 練習 4C</b><br>例 4.11：5% 每年 vs 4.8% 每星期，誰多？<div class="mode">⚡ 搶答</div></div></div>
+      <div class="step"><div class="t">37–40 分</div><div><b>出口票 + 總結</b><br>三條公式、n 的對應、先換利率再計算。<div class="mode">🎫 個人</div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 4.1 單利息 ===== -->
+<section id="si">
+  <div class="card">
+    <h2>🏦 4.1 單利息（Simple Interest）</h2>
+    <p>本金（Principal）$<span class="m">P</span>，年利率（Annual interest rate）<span class="m">R</span>%（R 厘），存款年期 <span class="m">T</span> 年：</p>
+    <div class="formula">單利息 <span class="m">I = P × R% × T</span>　　本利和（Amount）<span class="m">A = P + I = P + P × R% × T</span></div>
+    <div class="hint">📌 <b>「厘」即 %</b>：2 厘 = 2%，2 厘半 = 2.5% = 0.025，5 厘 = 5%。<br>📌 <b>T 必須用「年」</b>：18 個月 → T = 1.5；9 個月 → T = 0.75；1 季 = 3 個月 → T = 0.25。</div>
+    <p>🗣 提問：$10,000 存 1 年，年利率 3 厘，利息多少？<input class="ans" id="i0"> <button class="btn" onclick="chkMany([['i0',300]],'mi0')">檢查</button><span class="msg" id="mi0"></span></p>
+  </div>
+  <div class="card">
+    <h2>例 4.01　求單利息</h2>
+    <p>$60,000 存入銀行，年利率 2.5%，以單利息計算，求以下年期的利息：(a) 4 年　(b) 3 個月　(c) 18 個月</p>
+    <p>(a) $<input class="ans" id="e01a">　(b) $<input class="ans" id="e01b">　(c) $<input class="ans" id="e01c"> <button class="btn" onclick="chkMany([['e01a',6000],['e01b',375],['e01c',2250]],'m01')">檢查</button><span class="msg" id="m01"></span></p>
+    <button class="btn secondary" onclick="tog('s01')">👁 題解</button>
+    <div class="sol" id="s01">(a) I = 60,000 × 2.5% × 4 = <b>$6,000</b><br>(b) 3 個月 = 0.25 年：I = 60,000 × 2.5% × 0.25 = <b>$375</b><br>(c) 18 個月 = 1.5 年：I = 60,000 × 2.5% × 1.5 = <b>$2,250</b></div>
+  </div>
+  <div class="card">
+    <h2>例 4.02　反求本金／利率</h2>
+    <p>(a) 以年利率 2% 單利息存款 4 年，可得利息 $2,600，求本金。<br>(b) $75,000 存款 8 年，可得單利息 $21,000，求年利率。</p>
+    <p>(a) P = $<input class="ans" id="e02a">　(b) r = <input class="ans sm" id="e02b"> % <button class="btn" onclick="chkMany([['e02a',32500],['e02b',3.5]],'m02')">檢查</button><span class="msg" id="m02"></span></p>
+    <button class="btn secondary" onclick="tog('s02')">👁 題解</button>
+    <div class="sol" id="s02">(a) 設本金 $P：2,600 = P × 2% × 4 → 2,600 = 0.08P → <b>P = 32,500</b><br>(b) 21,000 = 75,000 × r% × 8 → 21,000 = 6,000r → <b>r = 3.5</b>，即年利率 3.5%</div>
+  </div>
+  <div class="card">
+    <h2>例 4.03　長年期</h2>
+    <p>$40,000 以年利率 4.8% 單利息存款 20 年，求利息。</p>
+    <p>I = $<input class="ans" id="e03"> <button class="btn" onclick="chkMany([['e03',38400]],'m03')">檢查</button><span class="msg" id="m03"></span></p>
+    <button class="btn secondary" onclick="tog('s03')">👁 題解</button>
+    <div class="sol" id="s03">I = 40,000 × 4.8% × 20 = <b>$38,400</b>（幾乎等於本金！）</div>
+    <div class="hint">🤔 單利息每年利息<b>固定</b>（$1,920／年），利息不會「生利息」。稍後比較複利息。</div>
+  </div>
+</section>
+
+<!-- ===== 練習 4A ===== -->
+<section id="ex4a">
+  <div class="card">
+    <h2>📝 練習 4A（單利息）</h2>
+    <div class="two">
+      <div style="background:#d1fae5;padding:10px;border-radius:10px"><b>🅰 A 同學</b>：第 2、6 題</div>
+      <div style="background:#fef3c7;padding:10px;border-radius:10px"><b>🅱 B 同學</b>：第 4、8 題　→ 互相批改；其餘課後完成</div>
+    </div>
+    <p style="margin-top:8px"><small>金額答案可不填「$」及逗號；利率以 % 數值填寫（如 3.5）。</small></p>
+    <div class="q"><b>1.</b> $15,000 以年利率 2% 單利息存款，求利息：(a) 6 年 $<input class="ans sm" id="a1a">　(b) 9 個月 $<input class="ans sm" id="a1b">　(c) 1 季（1 季 = 3 個月）$<input class="ans sm" id="a1c"></div>
+    <div class="q"><b>2.</b> $90,000 以年利率 3% 單利息存款，獲利息 $9,450，求年期：<input class="ans sm" id="a2"> 年</div>
+    <div class="q"><b>3.</b> 以年利率 9% 單利息存款 5 年，獲利息 $21,600，求本金：$<input class="ans" id="a3"></div>
+    <div class="q"><b>4.</b> $9,000 以年利率 2% 單利息存款 4 年，求本利和：$<input class="ans" id="a4"></div>
+    <div class="q"><b>5.</b> $64,000 以年利率 12% 單利息存款 3 年，求利息 $<input class="ans" id="a5a"> 及本利和 $<input class="ans" id="a5b"></div>
+    <div class="q"><b>6.</b> $18,000 以年利率 2.5% 單利息存款，本利和為 $21,600，求年期：<input class="ans sm" id="a6"> 年</div>
+    <div class="q"><b>7.</b> 以年利率 2% 單利息存款 7 年，本利和為 $102,600，求本金：$<input class="ans" id="a7"></div>
+    <div class="q"><b>8.</b> $60,000 單利息存款 9 年，本利和為 $76,200，求年利率：<input class="ans sm" id="a8"> %</div>
+    <div class="q"><b>9.</b> $P 以年利率 5% 單利息存款，本利和為本金的 2 倍，求年期：<input class="ans sm" id="a9"> 年</div>
+    <button class="btn" onclick="chk4a()">✔ 檢查練習 4A</button><span class="msg" id="ma"></span>
+    <div class="hint">💡 本利和題目先求「利息 = 本利和 − 本金」再用 I = PRT。第 9 題：2P = P + P × 5% × T → 利息 = P → T = 1 ÷ 0.05。</div>
+  </div>
+</section>
+
+<!-- ===== 4.2 複利息 ===== -->
+<section id="ci">
+  <div class="card">
+    <h2>📈 4.2 複利息（Compound Interest）：利息會「生利息」</h2>
+    <p>$100 存款，年利率 10%，3 年。比較單利息與複利息（每年結息一次）：</p>
+    <table>
+      <tr><th>年</th><th>單利息：本利和</th><th>複利息：年初本金</th><th>該年利息</th><th>複利息：本利和</th></tr>
+      <tr><td>1</td><td>100 + 10 = 110</td><td>100</td><td>100 × 10% = 10</td><td>110</td></tr>
+      <tr><td>2</td><td>110 + 10 = 120</td><td>110</td><td>110 × 10% = 11</td><td>121</td></tr>
+      <tr><td>3</td><td>120 + 10 = 130</td><td>121</td><td>121 × 10% = 12.1</td><td><b>133.1</b></td></tr>
+    </table>
+    <p>複利息：每年本利和 × (1 + 10%)，3 年即 100 × (1 + 10%)³ = 133.1。</p>
+    <div class="formula">本利和 <span class="m">A = P (1 + r%/n)<sup>nt</sup></span>　　複利息 <span class="m">I = A − P</span><br><small>P 本金、r% 年利率、t 年、n = 每年結息次數（Number of payments per year）</small></div>
+    <table>
+      <tr><th>結息方式</th><td>每年</td><td>每半年</td><td>每季</td><td>每月</td><td>每星期</td><td>每日</td></tr>
+      <tr><th>n</th><td>1</td><td>2</td><td>4</td><td>12</td><td>52（365 ÷ 7 ≈ 52.14）</td><td>365</td></tr>
+      <tr><th>每期利率</th><td>r%</td><td>r%/2</td><td>r%/4</td><td>r%/12</td><td>r%/52</td><td>r%/365</td></tr>
+    </table>
+    <div class="hint">📌 兩個步驟：<b>每期利率 = r% ÷ n</b>；<b>期數 = n × t</b>。例：3%，每季結息，1.5 年 → 每期 0.75%，期數 6。</div>
+  </div>
+  <div class="card">
+    <h2>🧮 複利計算機</h2>
+    <p>本金 P = $<input class="x" id="cP" value="100" style="width:100px" oninput="runCalc()">　年利率 r = <input class="x" id="cR" value="10" style="width:70px" oninput="runCalc()"> %　
+      結息 <select id="cN" onchange="runCalc()"><option value="1">每年 (n=1)</option><option value="2">每半年 (n=2)</option><option value="4">每季 (n=4)</option><option value="12">每月 (n=12)</option><option value="52">每星期 (n=52)</option><option value="365">每日 (n=365)</option></select>　
+      年期 t = <input class="x" id="cT" value="3" style="width:70px" oninput="runCalc()"> 年</p>
+    <div class="machine">
+      <div class="io"><div class="lab">本金 P</div><div class="val" id="kIn">$100</div></div>
+      <div class="arrow">➜</div>
+      <div class="box"><div class="lab">複利機器</div><div class="val" id="kF">× (1 + 10%/1)^(1×3)</div></div>
+      <div class="arrow">➜</div>
+      <div class="io"><div class="lab">本利和 A</div><div class="val" id="kOut">$133.10</div></div>
+    </div>
+    <div class="steps" id="kSteps"></div>
+    <div id="kTable"></div>
+    <div class="hint">⚡ 搶答：保持 10%、3 年，把 n 由 1 改為 12、365，本利和會怎樣變？（愈多次結息，本利和愈大，但增幅漸小）</div>
+  </div>
+</section>
+
+<!-- ===== 單利 vs 複利 比較 ===== -->
+<section id="cmp">
+  <div class="card">
+    <h2>⚖️ 單利息 vs 複利息：有甚麼分別？</h2>
+    <table>
+      <tr><th style="width:22%"></th><th>單利息（Simple Interest）</th><th>複利息（Compound Interest）</th></tr>
+      <tr><td class="l"><b>利息以甚麼計算？</b></td><td class="l">永遠以<b>原本金 P</b> 計算</td><td class="l">以<b>上一期的本利和</b>計算（利息會「生利息」）</td></tr>
+      <tr><td class="l"><b>每年利息</b></td><td class="l">固定不變：P × R%</td><td class="l">逐年<b>增加</b></td></tr>
+      <tr><td class="l"><b>公式</b></td><td class="l"><span class="m">I = P × R% × T</span><br><span class="m">A = P(1 + R% × T)</span></td><td class="l"><span class="m">A = P(1 + r%/n)<sup>nt</sup></span><br><span class="m">I = A − P</span></td></tr>
+      <tr><td class="l"><b>增長方式</b></td><td class="l">📏 線性增長（直線）</td><td class="l">🚀 指數增長（向上彎的曲線）</td></tr>
+      <tr><td class="l"><b>「年期」位置</b></td><td class="l">T 在<b>乘數</b>位置</td><td class="l">t 在<b>指數</b>位置</td></tr>
+      <tr><td class="l"><b>結息次數 n</b></td><td class="l">沒有影響</td><td class="l">n 愈大，本利和愈大</td></tr>
+      <tr><td class="l"><b>何時兩者相等？</b></td><td class="l" colspan="2">存款 <b>1 年、每年結息一次</b>（t = 1，n = 1）時，單利息 = 複利息；之後複利息必定較多</td></tr>
+    </table>
+    <div class="formula">單利息：A = P + P·R%·T（每年加<b>相同</b>金額）　｜　複利息：A = P × (1 + r%)ᵗ（每年乘<b>相同</b>倍數）</div>
+  </div>
+
+  <div class="card">
+    <h2>📊 互動增長圖：兩條線怎樣分開？</h2>
+    <p>本金 P = $<input class="x" id="gP" value="10000" style="width:100px" oninput="drawCmp()">　年利率 r = <input class="x" id="gR" value="8" style="width:60px" oninput="drawCmp()"> %　
+      年期 t = <input type="range" id="gT" min="1" max="40" value="20" oninput="drawCmp()"> <b id="gTv">20</b> 年　
+      複利結息 <select id="gN" onchange="drawCmp()"><option value="1">每年</option><option value="2">每半年</option><option value="4">每季</option><option value="12">每月</option></select></p>
+    <canvas id="gCanvas" width="900" height="380" style="width:100%;max-width:900px;background:#fff;border:1px solid #cbd5e1;border-radius:10px"></canvas>
+    <div class="steps" id="gSteps"></div>
+    <div class="hint">⚡ 搶答：把 t 拉到 1 年再拉到 40 年，兩條線的距離怎樣變？把 r 由 8% 改為 2%，差距又如何？</div>
+    <div id="gTable"></div>
+  </div>
+
+  <div class="card">
+    <h2>🔁 本金翻倍要多少年？</h2>
+    <p>年利率 r = <input class="x" id="dR" value="5" style="width:60px" oninput="runDouble()"> %（每年結息一次）</p>
+    <div class="two">
+      <div style="background:#d1fae5;padding:12px;border-radius:10px"><b>單利息</b><br>2P = P + P·r%·T → T = 1 ÷ r%<br><b id="dS"></b></div>
+      <div style="background:#fef3c7;padding:12px;border-radius:10px"><b>複利息</b><br>2P = P(1 + r%)ᵗ → t = log 2 ÷ log(1 + r%)<br><b id="dC"></b></div>
+    </div>
+    <div class="hint">💡 「72 法則」：複利翻倍年期 ≈ 72 ÷ r（r 以 % 計）。例如 8% → 約 9 年。試試看是否接近！（對應練習 4A Q9 及 4B Q15）</div>
+  </div>
+
+  <div class="card">
+    <h2>🧐 情境判斷：單利還是複利？</h2>
+    <div class="q"><b>(1)</b> 小明借 $5,000 給朋友，約定每年收 $250 利息，借 4 年。
+      <div class="choice" id="j1"><label><input type="radio" name="j1" value="S"> 單利息</label><label><input type="radio" name="j1" value="C"> 複利息</label></div></div>
+    <div class="q"><b>(2)</b> 銀行儲蓄戶口每月把利息存入戶口，下月以新結餘計息。
+      <div class="choice" id="j2"><label><input type="radio" name="j2" value="S"> 單利息</label><label><input type="radio" name="j2" value="C"> 複利息</label></div></div>
+    <div class="q"><b>(3)</b> 第 1 年利息 $300，第 2 年利息 $309，第 3 年利息 $318.27。
+      <div class="choice" id="j3"><label><input type="radio" name="j3" value="S"> 單利息</label><label><input type="radio" name="j3" value="C"> 複利息</label></div></div>
+    <div class="q"><b>(4)</b> 本利和 A 與年期 T 的圖像是一條直線。
+      <div class="choice" id="j4"><label><input type="radio" name="j4" value="S"> 單利息</label><label><input type="radio" name="j4" value="C"> 複利息</label></div></div>
+  </div>
+
+  <div class="card">
+    <h2>✏️ 快速計算：$10,000，年利率 5%，每年結息一次</h2>
+    <table>
+      <tr><th>年期</th><th>單利息</th><th>複利息（$0.01）</th><th>相差</th></tr>
+      <tr><td>1 年</td><td>$<input class="ans sm" id="k1s"></td><td>$<input class="ans sm" id="k1c"></td><td>$<input class="ans sm" id="k1d"></td></tr>
+      <tr><td>2 年</td><td>$<input class="ans sm" id="k2s"></td><td>$<input class="ans sm" id="k2c"></td><td>$<input class="ans sm" id="k2d"></td></tr>
+      <tr><td>10 年</td><td>$<input class="ans sm" id="k3s"></td><td>$<input class="ans" id="k3c"></td><td>$<input class="ans sm" id="k3d"></td></tr>
+    </table>
+    <p><b>(5)</b> 練習 4B Q6：$50,000、年利率 20%、3 年——複利息（每季結息）比單利息多 $<input class="ans sm" id="k5">（準確至整數）</p>
+    <button class="btn" onclick="chkCmp()">✔ 檢查本頁</button><span class="msg" id="mcmp"></span>
+    <div class="hint">🧠 結論：第 1 年兩者相同；年期愈長、利率愈高、結息愈頻密，複利息「拋離」單利息愈多——這就是「時間是投資最好的朋友」的數學原因。</div>
+  </div>
+</section>
+
+<!-- ===== 例 4.05–4.10 ===== -->
+<section id="ciex">
+  <div class="card">
+    <h2>例 4.05　每年結息</h2>
+    <p>$40,000 存入銀行，年利率 2%，每年結息一次（複利）。(a) 求 6 年後本利和　(b) 求 5 年後的複利息（答案準確至整數）</p>
+    <p>(a) $<input class="ans" id="e05a">　(b) $<input class="ans" id="e05b"> <button class="btn" onclick="chkMany([['e05a',45046,1],['e05b',4163,1]],'m05')">檢查</button><span class="msg" id="m05"></span></p>
+    <button class="btn secondary" onclick="tog('s05')">👁 題解</button>
+    <div class="sol" id="s05">(a) A = 40,000 × (1 + 2%)⁶ = <b>$45,046</b>（準確至整數）<br>(b) I = 40,000 × (1 + 2%)⁵ − 40,000 = <b>$4,163</b></div>
+  </div>
+  <div class="card">
+    <h2>例 4.06　單利 vs 複利</h2>
+    <p>$180,000 存款，年利率 5 厘，3 年。(a) 求單利息　(b) 求複利息（每年結息一次，準確至 $0.01）</p>
+    <p>(a) $<input class="ans" id="e06a">　(b) $<input class="ans" id="e06b"> <button class="btn" onclick="chkMany([['e06a',27000],['e06b',28372.5,0.01]],'m06')">檢查</button><span class="msg" id="m06"></span></p>
+    <button class="btn secondary" onclick="tog('s06')">👁 題解</button>
+    <div class="sol" id="s06">(a) I = 180,000 × 5% × 3 = <b>$27,000</b>（5 厘 = 5%）<br>(b) I = 180,000 × (1 + 5%)³ − 180,000 = 208,372.50 − 180,000 = <b>$28,372.50</b>（比單利多 $1,372.50）</div>
+  </div>
+  <div class="card">
+    <h2>例 4.07　反求利率 + 改變結息次數</h2>
+    <p>$18,000 存入銀行，每半年結息一次，1 年後本利和為 $19,096.2。(a) 求年利率。(b) 若改以同一年利率存款 3 年、每 3 個月結息一次，求 3 年後的本利和（準確至 $0.01）。</p>
+    <p>(a) r = <input class="ans sm" id="e07a"> %　(b) $<input class="ans" id="e07b"> <button class="btn" onclick="chkMany([['e07a',6],['e07b',21521.14,0.5]],'m07')">檢查</button><span class="msg" id="m07"></span></p>
+    <button class="btn secondary" onclick="tog('s07')">👁 題解</button>
+    <div class="sol" id="s07">(a) 18,000 (1 + r%/2)² = 19,096.2 → (1 + r%/2)² = 1.0609 → 1 + r%/2 = 1.03 → r% = 0.06 → <b>r = 6</b>（6 厘）<br>(b) 每 3 個月 = 每季，n = 4，每期利率 6%/4 = 1.5%，期數 4 × 3 = 12<div class="ind">A = 18,000 × (1 + 1.5%)¹² = <b>$21,521.14</b></div></div>
+  </div>
+  <div class="card">
+    <h2>例 4.08　每季結息、中途換利率 ⭐</h2>
+    <p>$80,000 存入銀行，年利率 3%，每季結息一次。(a) 求 1.5 年後的本利和。(b) 若 1.5 年後年利率改為 4%，求存款 2 年所得的複利息。（準確至 $0.01）</p>
+    <p>(a) $<input class="ans" id="e08a">　(b) $<input class="ans" id="e08b"> <button class="btn" onclick="chkMany([['e08a',83668.18,0.02],['e08b',5349.91,0.02]],'m08')">檢查</button><span class="msg" id="m08"></span></p>
+    <button class="btn secondary" onclick="tog('s08')">👁 題解</button>
+    <div class="sol" id="s08">(a) 期數 = 1.5 × 4 = 6；每期利率 = 3% ÷ 4 = 0.75%<div class="ind">A = 80,000 × (1 + 0.75%)⁶ = 80,000 × 1.0075⁶ = <b>$83,668.18</b></div>(b) 4% 的期數 = (2 − 1.5) × 4 = 2；每期利率 = 4% ÷ 4 = 1%<div class="ind">A = 80,000 × 1.0075⁶ × 1.01²<br>I = 80,000 × 1.0075⁶ × 1.01² − 80,000 = <b>$5,349.91</b></div></div>
+    <div class="hint">🧠 換利率時<b>不要重新開始</b>：把前一段的本利和繼續乘上新利率的因子即可。</div>
+  </div>
+  <div class="card">
+    <h2>例 4.09　用計算機反求利率</h2>
+    <p>$70,000 存入銀行，每月結息一次，3 個月後本利和為 $70,966.92，求年利率。</p>
+    <p>r = <input class="ans sm" id="e09"> % <button class="btn" onclick="chkMany([['e09',5.5,0.01]],'m09')">檢查</button><span class="msg" id="m09"></span></p>
+    <button class="btn secondary" onclick="tog('s09')">👁 題解</button>
+    <div class="sol" id="s09">70,000 (1 + r%/12)³ = 70,966.92<div class="ind">(1 + r%/12)³ = 1.013813…<br>1 + r%/12 = ∛1.013813 = 1.0045833…（計算機：Shift → ˣ√ 或 ^(1/3)，再 EXE）<br>r%/12 = 0.0045833 → r% = 0.055</div>年利率 = <b>5.5%</b>（5 厘半）</div>
+  </div>
+  <div class="card">
+    <h2>例 4.10　用 log 求年期</h2>
+    <p>$12,300 以年利率 5% 每年結息一次存款，要獲得利息 $1,500，最少需存款多少年？</p>
+    <p>t ≈ <input class="ans sm" id="e10a">（準確至 2 位小數）　→ 至少需存 <input class="ans sm" id="e10b"> 整年 <button class="btn" onclick="chkMany([['e10a',2.36,0.03],['e10b',3]],'m10')">檢查</button><span class="msg" id="m10"></span></p>
+    <button class="btn secondary" onclick="tog('s10')">👁 題解</button>
+    <div class="sol" id="s10">本利和 = 12,300 + 1,500 = $13,800<div class="ind">12,300 (1.05)ᵗ = 13,800 → 1.05ᵗ = 1.12195…<br>兩邊取 log（Take log）：t log 1.05 = log 1.12195<br>t = log 1.12195 ÷ log 1.05 ≈ <b>2.36</b></div>∵ 每年結息一次，∴ 至少需存 <b>3 年</b>，利息才超過 $1,500。</div>
+  </div>
+</section>
+
+<!-- ===== 練習 4B ===== -->
+<section id="ex4b">
+  <div class="card">
+    <h2>📝 練習 4B（複利息）</h2>
+    <div class="two">
+      <div style="background:#d1fae5;padding:10px;border-radius:10px"><b>🅰 A 同學</b>：第 1、5、7、10 題</div>
+      <div style="background:#fef3c7;padding:10px;border-radius:10px"><b>🅱 B 同學</b>：第 2、6、9、14 題　→ 互批；其餘課後完成</div>
+    </div>
+    <p style="margin-top:8px"><small>除特別註明外，金額準確至整數；標示「$0.01」者準確至兩位小數。</small></p>
+    <div class="q"><b>1.</b> $60,000 存款 4 年，年利率 2.5%。(a) 單利息 $<input class="ans sm" id="b1a">　(b) 複利息（每年結息）$<input class="ans sm" id="b1b"></div>
+    <div class="q"><b>2.</b> $15,000 存款，年利率 4%，3 年。(a) 單利息 $<input class="ans sm" id="b2a">　(b) 複利息（每年結息，$0.01）$<input class="ans" id="b2b"></div>
+    <div class="q"><b>3.</b> $30,000 存款，年利率 4%，每年結息，3 年後的複利息 $<input class="ans sm" id="b3"></div>
+    <div class="q"><b>4.</b> 以年利率 4% 每年結息存款 3 年，複利息為 $7,491.84，求本金 $<input class="ans" id="b4"></div>
+    <div class="q"><b>5.</b> $18,000 存款，年利率 6%，每半年結息一次，4 年後本利和 $<input class="ans" id="b5"></div>
+    <div class="q"><b>6.</b> $50,000 存款，年利率 20%，每季結息一次，3 年後本利和 $<input class="ans" id="b6"></div>
+    <div class="q"><b>7.</b> $P 以年利率 3% 每年結息存款 2 年，本利和為 $31,827，求 P = $<input class="ans" id="b7"></div>
+    <div class="q"><b>8.</b> $45,000 存款，年利率 2 厘，每年結息一次。(a) 1 年後本利和 $<input class="ans" id="b8a">　(b) 若第 2 年年利率改為 3 厘，2 年後本利和 $<input class="ans" id="b8b"></div>
+    <div class="q"><b>9.</b> 2017 年初存入 $24,000，年利率 8%，每年結息，2024 年初的本利和 $<input class="ans" id="b9"></div>
+    <div class="q"><b>10.</b> $100,000 存款 4 年。計劃一：年利率 4.4%，每年結息；計劃二：年利率 4%，每半年結息。計劃一利息 $<input class="ans" id="b10a">　計劃二利息 $<input class="ans" id="b10b">　較佳：
+      <div class="choice" id="b10c"><label><input type="radio" name="b10c" value="A"> A　計劃一</label><label><input type="radio" name="b10c" value="B"> B　計劃二</label></div></div>
+    <div class="q"><b>11.</b> ⭐ 年利率 24%，每月結息一次，2 個月後所得利息為 $1,212，求本金 $<input class="ans" id="b11"></div>
+    <div class="q"><b>12.</b> ⭐ 年利率 3%，每季結息一次，2 年後本利和為 $212,319.77，求本金 $<input class="ans" id="b12"></div>
+    <div class="q"><b>13.</b> ⭐ 年利率 4%，每季結息一次，1 年後利息為 $8,120.8，求本金 $<input class="ans" id="b13"></div>
+    <div class="q"><b>14.</b> $100,000 存款 5 年。計劃 A：年利率 3%，每月結息；計劃 B：年利率 3.2%，每季結息。（$0.01）A 本利和 $<input class="ans" id="b14a">　B 本利和 $<input class="ans" id="b14b"></div>
+    <div class="q"><b>15.</b> ⭐ $2,000 以年利率 8% 每年結息存款，至少需存多少整年，本利和才會超過本金的 2 倍？<input class="ans sm" id="b15"> 年</div>
+    <div class="q"><b>16.</b> ⭐ 年利率 2%，每月結息一次，6 個月後本利和為 $2,020.08，求本金 $<input class="ans" id="b16"></div>
+    <div class="q"><b>17.</b> ⭐ $100,000 以年利率 7% 每年結息存款，至少需存多少整年，本利和才會超過 $380,000？<input class="ans sm" id="b17"> 年</div>
+    <div class="q"><b>18.</b> ⭐ (a) $1,000 以年利率 8% 每年結息存款 4 年，本利和（$0.01）$<input class="ans" id="b18a">　(b) 複利息比單利息多 $<input class="ans sm" id="b18b"></div>
+    <button class="btn" onclick="chk4b()">✔ 檢查練習 4B</button><span class="msg" id="mb"></span>
+    <div class="hint">💡 先寫下 <b>n、每期利率、期數</b> 再代公式。Q9：2017 → 2024 共 7 年。Q11：24% ÷ 12 = 2%／月。Q15、17：用 log 或試算 1.08ᵗ、1.07ᵗ。</div>
+  </div>
+</section>
+
+<!-- ===== 4.3 ER + 4C ===== -->
+<section id="er">
+  <div class="card">
+    <h2>📐 4.3 實際年利率（Effective Interest Rate, ER）</h2>
+    <p>不同結息次數的計劃，單看「年利率」無法比較。把一年內實際增長換算成「每年結息一次」的利率：</p>
+    <div class="formula"><span class="m">ER = (1 + r%/n)<sup>n</sup> − 1</span>　　（與本金 P 無關）</div>
+    <p>🧮 試算：年利率 <input class="x" id="erR" value="4.8" style="width:70px" oninput="runER()"> %，結息 <select id="erN" onchange="runER()"><option value="1">每年</option><option value="2">每半年</option><option value="4">每季</option><option value="12">每月</option><option value="52" selected>每星期</option><option value="365">每日</option></select>　→ <b id="erOut"></b></p>
+  </div>
+  <div class="card">
+    <h2>例 4.11　比較兩個計劃</h2>
+    <p>《計劃一》年利率 5%，每年結息一次；《計劃二》年利率 4.8%，每星期結息一次。哪個計劃利息較多？</p>
+    <p>計劃一 ER = <input class="ans sm" id="e11a"> %　計劃二 ER = <input class="ans sm" id="e11b"> %（2 位小數）
+      <div class="choice" id="e11c"><label><input type="radio" name="e11c" value="A"> A　計劃一較多</label><label><input type="radio" name="e11c" value="B"> B　計劃二較多</label></div>
+      <button class="btn" onclick="chkMany([['e11a',5,0.01],['e11b',4.91,0.01]],'m11');setMsg('m11c',chkRadio('e11c','A'),'✔ 正確','❌ 再想想')">檢查</button><span class="msg" id="m11"></span><span class="msg" id="m11c"></span></p>
+    <button class="btn secondary" onclick="tog('s11')">👁 題解</button>
+    <div class="sol" id="s11">《計劃一》ER = (1 + 5%)¹ − 1 = <b>5%</b><br>《計劃二》ER = (1 + 4.8%/52)⁵² − 1 = <b>4.91%</b><br>由此可知，<b>《計劃一》</b>所提供的利息會較多。</div>
+  </div>
+  <div class="card">
+    <h2>📝 練習 4C</h2>
+    <div class="q"><b>1.</b> 大大銀行：《計劃一》年利率 2.3%，每半年結息一次；《計劃二》年利率 2.2%，每星期結息一次。<br>ER₁ = <input class="ans sm" id="c1a"> %　ER₂ = <input class="ans sm" id="c1b"> %　較多利息：
+      <div class="choice" id="c1c"><label><input type="radio" name="c1c" value="A"> A　計劃一</label><label><input type="radio" name="c1c" value="B"> B　計劃二</label></div></div>
+    <div class="q"><b>2.</b> 建造銀行：《計劃一》年利率 3.9%，每月結息一次；《計劃二》年利率 4%，每季結息一次。<br>ER₁ = <input class="ans sm" id="c2a"> %　ER₂ = <input class="ans sm" id="c2b"> %　較多利息：
+      <div class="choice" id="c2c"><label><input type="radio" name="c2c" value="A"> A　計劃一</label><label><input type="radio" name="c2c" value="B"> B　計劃二</label></div></div>
+    <div class="q"><b>3.</b> 靜宜的月薪為 62,000 元，她將一年薪金的一成半存入恩怡銀行，年利率為 4 厘。<br>(a) 本金 $<input class="ans" id="c3a">　按複利及每月結息一次，三年後的複利息（$0.01）$<input class="ans" id="c3b">　本利和 $<input class="ans" id="c3c"><br>(b) 實際年利率 = <input class="ans sm" id="c3d"> %</div>
+    <button class="btn" onclick="chk4c()">✔ 檢查練習 4C</button><span class="msg" id="mc"></span>
+    <div class="hint">💡 一成半 = 15%；一年薪金 = 62,000 × 12。ER 只與 r 和 n 有關，與本金、年期無關。</div>
+  </div>
+</section>
+
+<!-- ===== 出口票 ===== -->
+<section id="exit">
+  <div class="card">
+    <h2>🎫 出口票（Exit Ticket）</h2>
+<p style="margin:10px 0">班別：<input id="et-class" style="width:70px;padding:6px;text-align:center;border:2px solid #cbd5e1;border-radius:6px" placeholder="CS1">　姓名：<input id="et-name" style="width:140px;padding:6px;border:2px solid #cbd5e1;border-radius:6px" placeholder="陳大文"></p>
+    <p><b>(1)</b> 「每季結息一次」的 n 是：
+      <div class="choice" id="xq1"><label><input type="radio" name="xq1" value="A"> A　2</label><label><input type="radio" name="xq1" value="B"> B　4</label><label><input type="radio" name="xq1" value="C"> C　12</label></div></p>
+    <p><b>(2)</b> 相同本金、年利率及年期（2 年以上），哪種利息較多？
+      <div class="choice" id="xq2"><label><input type="radio" name="xq2" value="A"> A　單利息</label><label><input type="radio" name="xq2" value="B"> B　複利息</label><label><input type="radio" name="xq2" value="C"> C　一樣</label></div></p>
+    <p style="margin-top:8px"><b>(3)</b> $5,000 以年利率 3% 單利息存款 2 年，利息 = $<input class="ans sm" id="x3"></p>
+    <p style="margin-top:8px"><b>(4)</b> $10,000 以年利率 4% 每半年結息存款 1 年，本利和 = $<input class="ans" id="x4"></p>
+    <p style="margin-top:8px"><b>(5)</b> 年利率 6%，每月結息，實際年利率 ER = <input class="ans sm" id="x5"> %（2 位小數）</p>
+    <p style="margin-top:8px"><b>(6)</b> 我今天最不明白的地方是：</p>
+    <textarea placeholder="請寫下你的疑問……"></textarea>
+    <br><button class="btn" id="exit-btn" onclick="chkExit()">✔ 提交</button> <span class="msg" id="exit-msg"></span>
+  </div>
+  <div class="card">
+    <h2>📌 總結</h2>
+    <p>1️⃣ <b>單利息</b>：I = P × R% × T；A = P + I；T 用「年」；「厘」= %</p>
+    <p>2️⃣ <b>複利息</b>：A = P(1 + r%/n)<sup>nt</sup>；每期利率 = r% ÷ n，期數 = n × t；複利息 = A − P</p>
+    <p>3️⃣ <b>單利 vs 複利</b>：單利是直線（每年加相同金額），複利是曲線（每年乘相同倍數）；1 年每年結息時相等，之後複利必較多</p>
+    <p>4️⃣ <b>n</b>：每年 1、每半年 2、每季 4、每月 12、每星期 52、每日 365</p>
+    <p>5️⃣ <b>反求</b>：求 P → 除法；求 r → 開 n 次方根；求 t → 取 log</p>
+    <p>6️⃣ <b>實際年利率</b> ER = (1 + r%/n)<sup>n</sup> − 1，用來公平比較不同結息次數的計劃</p>
+  </div>
+</section>
+
+<!-- ===== 教師區 ===== -->
+<section id="teacher">
+  <div class="card">
+    <h2>👩‍🏫 答案參考（須輸入密碼）</h2>
+    <div class="lock" id="lockbox">
+      🔒 請輸入教師密碼：<input type="password" id="pw" placeholder="密碼" onkeydown="if(event.key==='Enter')unlock()">
+      <button class="btn" onclick="unlock()">解鎖</button><span class="msg" id="mpw"></span>
+    </div>
+    <div class="answer" id="ans">
+      <p style="text-align:right"><button class="btn danger" onclick="lock()">🔒 重新鎖上</button></p>
+      <p><b>引入提問：</b>$300　<b>例 4.01：</b>(a) $6,000 (b) $375 (c) $2,250　<b>例 4.02：</b>(a) P = 32,500 (b) 3.5%　<b>例 4.03：</b>$38,400</p>
+      <p style="margin-top:8px"><b>練習 4A：</b>1. (a) $1,800 (b) $225 (c) $75　2. 3.5 年　3. $48,000　4. $9,810　5. 利息 $23,040，本利和 $87,040　6. 8 年　7. $90,000　8. 3%　9. 20 年</p>
+      <p style="margin-top:8px"><b>單利 vs 複利 頁：</b>情境 (1) 單利 (2) 複利 (3) 複利（每年 ×1.03）(4) 單利；快速計算：1 年 $500 / $500 / $0；2 年 $1,000 / $1,025 / $25；10 年 $5,000 / $6,288.95 / $1,288.95；(5) 4B Q6：複利 $39,793 − 單利 $30,000 = 多 $9,793。翻倍：5% 單利 20 年、複利約 14.21 年。</p>
+      <p style="margin-top:8px"><b>例 4.05：</b>(a) $45,046 (b) $4,163　<b>例 4.06：</b>(a) $27,000 (b) $28,372.50　<b>例 4.07：</b>(a) 6% (b) $21,521.14　<b>例 4.08：</b>(a) $83,668.18 (b) $5,349.91　<b>例 4.09：</b>5.5%　<b>例 4.10：</b>t ≈ 2.36，需 3 年</p>
+      <p style="margin-top:8px"><b>練習 4B：</b>1. (a) $6,000 (b) $6,229　2. (a) $1,800 (b) $1,872.96　3. $3,746　4. $60,000　5. $22,802　6. $89,793　7. P = 30,000　8. (a) $45,900 (b) $47,277　9. $41,132　10. 計劃一 $18,796、計劃二 $17,166 → 計劃一較佳　11. $30,000　12. $200,000　13. $200,000　14. A $116,161.68、B $117,276.40 → B 較佳　15. 10 年（t ≈ 9.01）　16. $2,000　17. 20 年　18. (a) $1,360.49 (b) 多 $40.49（單利 $320，複利 $360.49）</p>
+      <p style="margin-top:8px"><b>例 4.11：</b>5%、4.91% → 計劃一　<b>練習 4C：</b>1. ER = 2.31%、2.22% → 計劃一　2. ER = 3.97%、4.06% → 計劃二　3. (a) 本金 $111,600，複利息 $14,203.54，本利和 $125,803.54 (b) 4.07%</p>
+      <p style="margin-top:8px"><b>出口票：</b>(1) B (2) B (3) $300 (4) $10,404 (5) 6.17%</p>
+      <p style="margin-top:8px;color:#92400e"><small>※ 原稿部分題目文字缺漏（例 4.01 年期、4B 第 8、15、17、18 題），已按課本答案欄反推／改編，請老師按原書核對。</small></p>
+    </div>
+  </div>
+  <div class="card">
+    <h2>常見錯誤及應對</h2>
+    <table>
+      <tr><th style="width:40%">常見錯誤</th><th>教師回應策略</th></tr>
+      <tr><td class="l">月數直接當作 T（18 個月寫 T = 18）</td><td class="l">強調「年利率配年期」：18 ÷ 12 = 1.5；1 季 = 0.25 年</td></tr>
+      <tr><td class="l">本利和題目直接套 I = PRT</td><td class="l">先寫「利息 = 本利和 − 本金」，再反求</td></tr>
+      <tr><td class="l">以為第 1 年複利息比單利息多</td><td class="l">用「單利 vs 複利」頁的圖：t = 1、n = 1 時兩線重合，之後才分開</td></tr>
+      <tr><td class="l">複利公式忘記把 r 除以 n（例 4.08、4B Q5、Q6）</td><td class="l">規定先寫三行：n = ？、每期利率 = ？、期數 = ？</td></tr>
+      <tr><td class="l">期數用年數而非 n × t</td><td class="l">用計算機示範同一 r、t，n = 1 與 n = 4 的差別</td></tr>
+      <tr><td class="l">換利率時由本金重新計算（例 4.08b）</td><td class="l">強調「接力」：前段本利和 × 新因子</td></tr>
+      <tr><td class="l">求複利息時忘記減本金</td><td class="l">口訣：「利息 = A − P」</td></tr>
+      <tr><td class="l">ER 計算時把 P 代入（練習 4C Q3b）</td><td class="l">ER 與 P、t 無關，只看 r 和 n</td></tr>
+      <tr><td class="l">log 求 t 後直接答 2.36 年</td><td class="l">每年結息 → 必須整年，取上整數 3</td></tr>
+    </table>
+  </div>
+  <div class="card">
+    <h2>分層支援</h2>
+    <p><span class="badge">基礎組</span>練習 4A 全部；「單利 vs 複利」快速計算表；4B Q1–Q3、Q5、Q7、Q9（直接代公式），可用複利計算機核對。</p>
+    <p style="margin-top:8px"><span class="badge">進階組</span>4B Q11–Q13（反求 P）、Q15 & Q17（log 求 t）、Q10 & Q14（計劃比較）；4C Q3（多步驟應用）；驗證「72 法則」為何成立。</p>
+    <p style="margin-top:8px"><span class="badge">延伸</span>GeoGebra 複利模型（課本連結）：觀察 n → ∞ 時本利和趨近 Pe^(rt)。</p>
+  </div>
+</section>
+
+</main>
+<footer>單元二｜第 4 節 單利息、複利息及實際年利率｜練習 4A・4B・4C｜互動教學網站</footer>
+
+<script>
+function go(id,btn){document.querySelectorAll('section').forEach(s=>s.classList.remove('active'));document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));document.getElementById(id).classList.add('active');btn.classList.add('active');window.scrollTo({top:0,behavior:'smooth'});if(id==='cmp')drawCmp();}
+/* 計時器 40 分鐘 */
+let secs=2400,tm=null;
+function render(){document.getElementById('clock').textContent=String(Math.floor(secs/60)).padStart(2,'0')+':'+String(secs%60).padStart(2,'0');}
+function toggleTimer(){const b=document.getElementById('tbtn');if(tm){clearInterval(tm);tm=null;b.textContent='繼續';return;}b.textContent='暫停';tm=setInterval(()=>{if(secs>0){secs--;render();}else{clearInterval(tm);tm=null;alert('⏰ 40 分鐘已結束！');}},1000);}
+function resetTimer(){clearInterval(tm);tm=null;secs=2400;render();document.getElementById('tbtn').textContent='開始';}
+/* 檢查工具 */
+function num(v){v=String(v).replace(/[,\s$%元]/g,'').replace(/[−–]/g,'-');if(v.includes('/')){const [a,b]=v.split('/');return Number(a)/Number(b);}return Number(v);}
+function near(v,a,tol){const n=num(v);return !isNaN(n)&&Math.abs(n-a)<=(tol===undefined?0.005:tol);}
+function mark(i,ok){i.classList.remove('ok','bad');i.classList.add(ok?'ok':'bad');}
+function setMsg(mid,ok,t1,t2){const m=document.getElementById(mid);if(ok===null){m.textContent='';return;}m.textContent=ok?t1:t2;m.style.color=ok?'var(--ok)':'var(--bad)';}
+function chkMany(list,mid){let all=true;list.forEach(([id,a,tol])=>{const i=document.getElementById(id);const ok=i.value.trim()!==''&&near(i.value,a,tol);mark(i,ok);if(!ok)all=false;});setMsg(mid,all,'🎉 全部正確！','❌ 有錯，紅色格請再試');}
+function tog(id){document.getElementById(id).classList.toggle('show');}
+function chkRadio(name,correct){const box=document.getElementById(name);let ok=false,any=false;box.querySelectorAll('label').forEach(l=>{l.classList.remove('ok','bad');const r=l.querySelector('input');if(r.checked){any=true;if(r.value===correct){l.classList.add('ok');ok=true;}else l.classList.add('bad');}});return any?ok:null;}
+function chkSet(list,radios,mid){let right=0,done=0;list.forEach(([id,a,tol])=>{const i=document.getElementById(id);if(i.value.trim()==='')return;done++;const ok=near(i.value,a,tol);mark(i,ok);if(ok)right++;});radios.forEach(([n,c])=>{const r=chkRadio(n,c);if(r!==null){done++;if(r)right++;}});setMsg(mid,right===done&&done>0,`🎉 已填 ${done} 格全部正確！`,`✔ ${right}/${done} 格正確，紅色格請再試`);}
+function chk4a(){chkSet([['a1a',1800],['a1b',225],['a1c',75],['a2',3.5],['a3',48000],['a4',9810],['a5a',23040],['a5b',87040],['a6',8],['a7',90000],['a8',3],['a9',20]],[],'ma');}
+function chk4b(){chkSet([['b1a',6000],['b1b',6229,1],['b2a',1800],['b2b',1872.96,0.01],['b3',3746,1],['b4',60000,1],['b5',22802,1],['b6',89793,1],['b7',30000,1],['b8a',45900],['b8b',47277,1],['b9',41132,1],['b10a',18796,1],['b10b',17166,1],['b11',30000,1],['b12',200000,1],['b13',200000,1],['b14a',116161.68,0.05],['b14b',117276.40,0.05],['b15',10],['b16',2000,1],['b17',20],['b18a',1360.49,0.02],['b18b',40.49,0.02]],[['b10c','A']],'mb');}
+function chk4c(){chkSet([['c1a',2.31,0.01],['c1b',2.22,0.01],['c2a',3.97,0.01],['c2b',4.06,0.01],['c3a',111600,1],['c3b',14203.54,0.05],['c3c',125803.54,0.05],['c3d',4.07,0.01]],[['c1c','A'],['c2c','B']],'mc');}
+function chkExit(){const r1=chkRadio('xq1','B'),r2=chkRadio('xq2','B');let all=(r1===true)&&(r2===true);[['x3',300,0.01],['x4',10404,0.01],['x5',6.17,0.01]].forEach(([id,a,tol])=>{const i=document.getElementById(id);const ok=near(i.value,a,tol);mark(i,ok);if(!ok)all=false;});setMsg('mx',all,'🎉 全部正確！','❌ 有錯，請再檢查');}
+/* 複利計算機 */
+function money(n){return '$'+Number(n).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});}
+function runCalc(){const P=Number(document.getElementById('cP').value),r=Number(document.getElementById('cR').value),n=Number(document.getElementById('cN').value),t=Number(document.getElementById('cT').value);if([P,r,t].some(isNaN)){return;}const per=r/n,k=n*t,A=P*Math.pow(1+r/100/n,k),I=A-P,SI=P*r/100*t;
+ document.getElementById('kIn').textContent=money(P);document.getElementById('kF').textContent=`× (1 + ${r}%/${n})^(${n}×${t})`;document.getElementById('kOut').textContent=money(A);
+ document.getElementById('kSteps').innerHTML=`<b>步驟：</b><br>n = ${n}，每期利率 = ${r}% ÷ ${n} = ${+(per).toFixed(6)}%，期數 = ${n} × ${t} = ${k}<br>A = ${P} × (1 + ${+(per).toFixed(6)}%)<sup>${k}</sup> = <b>${money(A)}</b><br>複利息 I = A − P = <b>${money(I)}</b>　｜　同條件單利息 = ${P} × ${r}% × ${t} = <b>${money(SI)}</b>　（相差 ${money(I-SI)}）`;
+ let rows='';const yrs=Math.min(Math.ceil(t),10);for(let y=1;y<=yrs;y++){const s=P+P*r/100*y,c=P*Math.pow(1+r/100/n,n*y);rows+=`<tr><td>${y}</td><td>${money(s)}</td><td>${money(c)}</td><td>${money(c-s)}</td></tr>`;}
+ document.getElementById('kTable').innerHTML=yrs>0?`<table><tr><th>年</th><th>單利息本利和</th><th>複利息本利和</th><th>複利多出</th></tr>${rows}</table>`:'';}
+/* ER 試算 */
+function runER(){const r=Number(document.getElementById('erR').value),n=Number(document.getElementById('erN').value);const er=(Math.pow(1+r/100/n,n)-1)*100;document.getElementById('erOut').textContent=`ER = (1 + ${r}%/${n})^${n} − 1 = ${er.toFixed(4)}% ≈ ${er.toFixed(2)}%`;}
+/* ===== 單利 vs 複利 圖表 ===== */
+function drawCmp(){
+ const P=Number(document.getElementById('gP').value),r=Number(document.getElementById('gR').value),T=Number(document.getElementById('gT').value),n=Number(document.getElementById('gN').value);
+ if(!(P>0)||!(r>0)||!(T>0))return;
+ document.getElementById('gTv').textContent=T;
+ const cv=document.getElementById('gCanvas'),c=cv.getContext('2d'),W=cv.width,H=cv.height,L=80,R=30,Tp=30,B=50;
+ c.clearRect(0,0,W,H);
+ const simple=t=>P*(1+r/100*t),comp=t=>P*Math.pow(1+r/100/n,n*t);
+ const maxY=Math.max(comp(T),simple(T))*1.05;
+ const X=t=>L+(W-L-R)*t/T,Y=v=>H-B-(H-Tp-B)*v/maxY;
+ /* 網格與座標軸 */
+ c.strokeStyle='#e2e8f0';c.lineWidth=1;c.font='12px sans-serif';c.fillStyle='#64748b';
+ for(let i=0;i<=5;i++){const v=maxY*i/5,y=Y(v);c.beginPath();c.moveTo(L,y);c.lineTo(W-R,y);c.stroke();c.fillText('$'+Math.round(v).toLocaleString(),4,y+4);}
+ const step=T<=10?1:T<=20?2:5;
+ for(let t=0;t<=T;t+=step){const x=X(t);c.beginPath();c.moveTo(x,Tp);c.lineTo(x,H-B);c.stroke();c.fillText(t,x-4,H-B+16);}
+ c.fillText('年',W-R-10,H-B+32);
+ c.strokeStyle='#1e293b';c.lineWidth=2;c.beginPath();c.moveTo(L,Tp);c.lineTo(L,H-B);c.lineTo(W-R,H-B);c.stroke();
+ /* 單利：直線 */
+ c.strokeStyle='#2563eb';c.lineWidth=3;c.beginPath();c.moveTo(X(0),Y(simple(0)));c.lineTo(X(T),Y(simple(T)));c.stroke();
+ /* 複利：曲線 */
+ c.strokeStyle='#dc2626';c.beginPath();for(let i=0;i<=200;i++){const t=T*i/200;const x=X(t),y=Y(comp(t));i?c.lineTo(x,y):c.moveTo(x,y);}c.stroke();
+ /* 終點標示與差距 */
+ const yS=Y(simple(T)),yC=Y(comp(T)),xE=X(T);
+ c.setLineDash([5,4]);c.strokeStyle='#f59e0b';c.lineWidth=2;c.beginPath();c.moveTo(xE,yS);c.lineTo(xE,yC);c.stroke();c.setLineDash([]);
+ c.fillStyle='#2563eb';c.beginPath();c.arc(xE,yS,5,0,7);c.fill();
+ c.fillStyle='#dc2626';c.beginPath();c.arc(xE,yC,5,0,7);c.fill();
+ /* 圖例 */
+ c.font='bold 13px sans-serif';c.fillStyle='#2563eb';c.fillRect(L+10,Tp+6,18,4);c.fillText('單利息 A = P(1 + r%·T)',L+34,Tp+12);
+ c.fillStyle='#dc2626';c.fillRect(L+10,Tp+26,18,4);c.fillText(`複利息 A = P(1 + r%/${n})^(${n}t)`,L+34,Tp+32);
+ const dS=simple(T),dC=comp(T);
+ document.getElementById('gSteps').innerHTML=`<b>${T} 年後：</b><br>單利息本利和 = ${P} × (1 + ${r}% × ${T}) = <span style="color:#2563eb"><b>${money(dS)}</b></span>（利息 ${money(dS-P)}）<br>複利息本利和 = ${P} × (1 + ${r}%/${n})<sup>${n*T}</sup> = <span style="color:#dc2626"><b>${money(dC)}</b></span>（利息 ${money(dC-P)}）<br>複利比單利多 <span style="color:#b45309"><b>${money(dC-dS)}</b></span>，即多 ${((dC-dS)/(dS-P)*100).toFixed(1)}% 利息`;
+ let rows='';const show=[1,2,3,5,10,15,20,25,30,40].filter(y=>y<=T);if(!show.includes(T))show.push(T);
+ show.forEach(y=>{const s=simple(y),k=comp(y);rows+=`<tr><td>${y}</td><td>${money(s-P)}</td><td>${money(k-P)}</td><td style="color:#b45309"><b>${money(k-s)}</b></td></tr>`;});
+ document.getElementById('gTable').innerHTML=`<table><tr><th>年</th><th>單利息（累計）</th><th>複利息（累計）</th><th>複利多出</th></tr>${rows}</table>`;
+}
+function runDouble(){const r=Number(document.getElementById('dR').value);if(!(r>0)){return;}const ts=1/(r/100),tc=Math.log(2)/Math.log(1+r/100);
+ document.getElementById('dS').textContent=`T = 1 ÷ ${r}% = ${(+ts.toFixed(2))} 年`;
+ document.getElementById('dC').textContent=`t = log 2 ÷ log ${+(1+r/100).toFixed(4)} ≈ ${tc.toFixed(2)} 年（72 法則：約 ${(72/r).toFixed(1)} 年）`;}
+function chkCmp(){
+ const radios=[['j1','S'],['j2','C'],['j3','C'],['j4','S']];
+ chkSet([['k1s',500],['k1c',500],['k1d',0],['k2s',1000],['k2c',1025],['k2d',25],['k3s',5000],['k3c',6288.95,0.02],['k3d',1288.95,0.02],['k5',9793,2]],radios,'mcmp');}
+/* 教師區密碼 */
+const PW='msJohughpw';
+function unlock(){const v=document.getElementById('pw').value;if(v===PW){document.getElementById('ans').classList.add('show');document.getElementById('lockbox').style.display='none';}else{setMsg('mpw',false,'','❌ 密碼錯誤');document.getElementById('pw').value='';}}
+function lock(){document.getElementById('ans').classList.remove('show');document.getElementById('lockbox').style.display='flex';document.getElementById('mpw').textContent='';}
+runCalc();runER();drawCmp();runDouble();render();
+const SHEET_URL   = "https://script.google.com/macros/s/AKfycbyXoECMifD_PatOXkd1i579dCAQMS2Q1p3DQ7jFIcZ8aoYzmYVrWxCtcFZy1SD8_FCZ/exec";
+const LESSON_NAME = "4-1 單利複利";
+const MC_ANS      = ['B','B'];            // (1)(2) 選擇題答案
+const NUM_ANS     = [300, 10404, 6.17];   // (3)(4)(5) 計算題答案
+
+function chkExit(){
+  try{
+    const btn = document.getElementById('exit-btn');
+    const msg = document.getElementById('exit-msg');
+    const cls  = document.getElementById('et-class').value.trim();
+    const name = document.getElementById('et-name').value.trim();
+
+    // 由按鈕向上找到出口票容器
+    let box = btn; while(box && !box.querySelector('#et-class')) box = box.parentElement;
+    const all = [...box.querySelectorAll('input, textarea')].filter(e => e.id!=='et-class' && e.id!=='et-name');
+
+    // --- 選擇題：按 radio 的 name 分組，讀取已選的 A/B/C ---
+    const radios = all.filter(e => e.type==='radio');
+    const groups = [...new Set(radios.map(r => r.name))];
+    if(groups.length < 2){ alert('找不到選擇題的 radio（只找到 '+groups.length+' 組），請把出口票 HTML 貼給老師助手'); return; }
+    const mc = groups.slice(0,2).map(g => {
+      const r = radios.find(x => x.name===g && x.checked); if(!r) return '';
+      const lab = r.closest('label'); const txt = (r.value || (lab ? lab.textContent : '') || '').trim();
+      return txt.charAt(0).toUpperCase();        // 取 "B　4" 的第一個字母
+    });
+
+    // --- 計算題：出口票內前 3 個文字/數字輸入框 ---
+    const inputs = all.filter(e => e.tagName==='INPUT' && (e.type==='text'||e.type==='number'||!e.type)).slice(0,3);
+    const ta     = all.find(e => e.tagName==='TEXTAREA');
+    if(inputs.length<3){ alert('只找到 '+inputs.length+' 個計算題答案框，請把出口票 HTML 貼給老師助手'); return; }
+
+    if(!cls||!name){ msg.textContent='請先填寫班別和姓名'; msg.style.color='var(--bad)'; return; }
+    const nums = inputs.map(i => i.value.trim());
+    if(mc.some(a=>a==='') || nums.some(a=>a==='')){ msg.textContent='請完成第 (1)–(5) 題'; msg.style.color='var(--bad)'; return; }
+
+    const okMC  = mc.map((a,k) => a===MC_ANS[k]);
+    const okNum = nums.map((a,k) => Math.abs(Number(a.replace(/[,$]/g,''))-NUM_ANS[k]) < 0.005);
+    inputs.forEach((el,k) => {
+      if(typeof mark==='function') mark(el, okNum[k]);
+      else el.style.borderColor = okNum[k] ? '#16a34a' : '#dc2626';
+    });
+    const score = [...okMC, ...okNum].filter(Boolean).length;
+
+    btn.disabled = true; msg.textContent='傳送中…'; msg.style.color='#64748b';
+
+    fetch(SHEET_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain'},
+      body: JSON.stringify({
+        lesson: LESSON_NAME, '班別': cls, '姓名': name,
+        'Q1 每季n':   mc[0],   'Q1正確': okMC[0]?'✔':'✘',
+        'Q2 單vs複':  mc[1],   'Q2正確': okMC[1]?'✔':'✘',
+        'Q3 單利息':  nums[0], 'Q3正確': okNum[0]?'✔':'✘',
+        'Q4 本利和':  nums[1], 'Q4正確': okNum[1]?'✔':'✘',
+        'Q5 ER':      nums[2], 'Q5正確': okNum[2]?'✔':'✘',
+        '得分': score+'/5',
+        '不明白的地方': ta ? ta.value.trim() : ''
+      })
+    }).then(()=>{ msg.textContent=`✔ 已提交，謝謝！（${score}/5）`; msg.style.color='var(--ok)'; })
+      .catch(()=>{ msg.textContent='提交失敗，請再按一次'; msg.style.color='var(--bad)'; btn.disabled=false; });
+  }catch(e){ alert('chkExit 錯誤：'+e.message); }
+}
+</script>
+</body>
+</html>
