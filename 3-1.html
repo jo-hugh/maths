@@ -285,11 +285,13 @@
 <section id="exit">
   <div class="card">
     <h2>🎫 出口票（Exit Ticket）</h2>
+    <p style="margin:10px 0">班別：<input id="et-class" style="width:70px;padding:6px;text-align:center;border:2px solid #cbd5e1;border-radius:6px" placeholder="CS1">　姓名：<input id="et-name" style="width:140px;padding:6px;border:2px solid #cbd5e1;border-radius:6px" placeholder="陳大文"></p>
     <p><b>(1)</b> 一件衣服標價 $250，以八折出售。售價是 $<input class="ans" id="x1"></p>
     <p style="margin-top:10px"><b>(2)</b> 一本書標價 $120，現以 $90 售出。折扣百分率是 <input class="ans" id="x2"> %</p>
     <p style="margin-top:10px"><b>(3)</b> 我今天最不明白的地方是：</p>
     <textarea id="x3" placeholder="請寫下你的疑問……"></textarea>
-    <br><button class="btn" onclick="chkMany([['x1',200],['x2',25]],'mx')">✔ 提交</button><span class="msg" id="mx"></span>
+    <br>
+    <button class="btn" onclick="chkMany([['x1',200],['x2',25]],'mx')">✔ 提交</button> <span class="msg" id="mx"></span>
   </div>
   <div class="card">
     <h2>📌 口訣總結</h2>
@@ -380,6 +382,50 @@ function chk6(){const a=document.getElementById('p6a'),b=document.getElementById
   const m=document.getElementById('m6');m.textContent=(oa&&ob&&oc)?'🎉 正確！B 的 37.5% > A 的 25%':`折扣 % ${oa&&ob?'✅':'❌'}　選擇 ${oc?'✅':'❌'}`;m.style.color=(oa&&ob&&oc)?'var(--ok)':'var(--bad)';}
 function tog(id){document.getElementById(id).classList.toggle('show');}
 render();
+  const SHEET_URL   = "https://script.google.com/macros/s/AKfycbyXoECMifD_PatOXkd1i579dCAQMS2Q1p3DQ7jFIcZ8aoYzmYVrWxCtcFZy1SD8_FCZ/exec";
+const LESSON_NAME = "3-1 折扣";
+
+function chkExit(){
+  const ID_Q1  = 'x1';   // ← 改這裡：(1) 售價 input 的 id
+  const ID_Q2  = 'x2';   // ← 改這裡：(2) 折扣% input 的 id
+  const ID_Q3  = 'x3';   // ← 改這裡：(3) textarea 的 id
+  const MSG_ID = 'mx';   // ← 改這裡：提交按鈕旁 span 的 id
+
+  const cls  = document.getElementById('et-class').value.trim();
+  const name = document.getElementById('et-name').value.trim();
+  const btn  = document.getElementById('exit-btn');
+  const msg  = document.getElementById(MSG_ID);
+  const i1 = document.getElementById(ID_Q1), i2 = document.getElementById(ID_Q2);
+  const a1 = i1.value.trim(), a2 = i2.value.trim();
+  const a3 = (document.getElementById(ID_Q3)||{value:''}).value.trim();
+
+  if(!cls||!name){ msg.textContent='請先填寫班別和姓名'; msg.style.color='var(--bad)'; return; }
+  if(a1===''||a2===''){ msg.textContent='請完成第 (1)–(2) 題'; msg.style.color='var(--bad)'; return; }
+
+  // 沿用原有 mark() 做紅綠標示
+  const ok1 = Math.abs(Number(a1)-200) < 0.01; mark(i1,ok1);
+  const ok2 = Math.abs(Number(a2)-25)  < 0.01; mark(i2,ok2);
+  const score = [ok1,ok2].filter(Boolean).length;
+
+  btn.disabled = true;
+  msg.textContent='傳送中…'; msg.style.color='#64748b';
+
+  fetch(SHEET_URL,{
+    method:'POST', mode:'no-cors', headers:{'Content-Type':'text/plain'},
+    body: JSON.stringify({
+      lesson: LESSON_NAME,
+      '班別': cls, '姓名': name,
+      'Q1 售價':  a1, 'Q1正確': ok1?'✔':'✘',
+      'Q2 折扣%': a2, 'Q2正確': ok2?'✔':'✘',
+      '得分': score+'/2',
+      '不明白的地方': a3
+    })
+  }).then(()=>{
+    msg.textContent=`✔ 已提交，謝謝！（${score}/2）`; msg.style.color='var(--ok)';
+  }).catch(()=>{
+    msg.textContent='提交失敗，請再按一次'; msg.style.color='var(--bad)'; btn.disabled=false;
+  });
+}
 </script>
 </body>
 </html>
