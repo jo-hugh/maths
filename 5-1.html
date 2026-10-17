@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>第 5 節｜借貸：信用卡貸款、樓宇按揭及壓力測試 — 互動教學（60 分鐘）</title>
+<style>
+  :root{--main:#1d4ed8;--main-dark:#1e3a8a;--ok:#16a34a;--bad:#dc2626;--accent:#f59e0b;--bg:#eff6ff;--card:#fff;}
+  *{box-sizing:border-box;margin:0;padding:0;font-family:"Noto Sans TC","Microsoft JhengHei","PingFang TC",sans-serif;}
+  body{background:var(--bg);color:#1e293b;}
+  header{background:linear-gradient(135deg,var(--main-dark),var(--main));color:#fff;padding:14px 24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;position:sticky;top:0;z-index:10;box-shadow:0 2px 8px rgba(0,0,0,.2);}
+  header h1{font-size:1.2rem;} header small{opacity:.85;display:block;font-size:.85rem;}
+  .timer{background:rgba(255,255,255,.15);padding:8px 14px;border-radius:10px;display:flex;align-items:center;gap:10px;}
+  .timer span{font-size:1.5rem;font-weight:700;font-variant-numeric:tabular-nums;}
+  .timer button{background:#fff;color:var(--main-dark);border:none;padding:6px 12px;border-radius:6px;cursor:pointer;font-weight:600;}
+  nav{display:flex;flex-wrap:wrap;gap:6px;padding:10px 24px;background:#fff;border-bottom:1px solid #e2e8f0;position:sticky;top:66px;z-index:9;}
+  nav button{border:2px solid var(--main);background:#fff;color:var(--main);padding:6px 12px;border-radius:999px;cursor:pointer;font-weight:600;transition:.2s;font-size:.88rem;}
+  nav button.active,nav button:hover{background:var(--main);color:#fff;}
+  main{max-width:1000px;margin:0 auto;padding:24px;}
+  section{display:none;animation:fade .3s;} section.active{display:block;}
+  @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  .card{background:var(--card);border-radius:14px;padding:22px;margin-bottom:20px;box-shadow:0 2px 10px rgba(0,0,0,.05);line-height:1.8;}
+  .card h2{color:var(--main-dark);margin-bottom:12px;font-size:1.25rem;border-left:5px solid var(--accent);padding-left:10px;line-height:1.4;}
+  .badge{display:inline-block;background:#dbeafe;color:#1e3a8a;padding:2px 10px;border-radius:6px;font-size:.85rem;font-weight:600;margin-right:6px;}
+  .btn{background:var(--main);color:#fff;border:none;padding:9px 16px;border-radius:8px;cursor:pointer;font-weight:600;font-size:.92rem;margin:6px 4px 4px 0;}
+  .btn.secondary{background:#64748b;} .btn.warn{background:var(--accent);} .btn.danger{background:var(--bad);} .btn:hover{filter:brightness(1.1);}
+  .flow{display:grid;gap:10px;}
+  .step{display:grid;grid-template-columns:90px 1fr;gap:12px;background:#f8fafc;border-radius:10px;padding:12px;border-left:5px solid var(--main);line-height:1.6;}
+  .step .t{font-weight:700;color:var(--main-dark);} .step .mode{color:#64748b;font-size:.86rem;margin-top:4px;}
+  .formula{background:#dbeafe;border:2px solid var(--main);border-radius:10px;padding:12px 18px;font-size:1.05rem;margin:10px 0;text-align:center;font-weight:600;}
+  .hint{background:#fffbeb;border:1px dashed var(--accent);padding:10px 14px;border-radius:8px;margin:10px 0;}
+  .answer{background:#f0fdf4;border:1px solid var(--ok);padding:12px;border-radius:8px;margin-top:10px;display:none;} .answer.show{display:block;}
+  .msg{font-weight:700;margin-left:8px;}
+  input.ans{width:120px;padding:5px;text-align:center;border:2px solid #cbd5e1;border-radius:6px;font-size:1rem;}
+  input.ans.sm{width:75px;}
+  input.ans.ok{border-color:var(--ok);background:#f0fdf4;} input.ans.bad{border-color:var(--bad);background:#fef2f2;}
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  @media(max-width:700px){.two{grid-template-columns:1fr}.step{grid-template-columns:1fr}}
+  table{width:100%;border-collapse:collapse;margin:12px 0;} th,td{border:1px solid #cbd5e1;padding:7px;text-align:center;} th{background:#dbeafe;}
+  td.l{text-align:left;}
+  .sol{display:none;background:#fef2f2;border-left:4px solid var(--bad);padding:12px 16px;border-radius:8px;margin-top:10px;color:#991b1b;line-height:2;} .sol.show{display:block;}
+  .sol .ind{padding-left:1.5em;}
+  .choice{display:grid;gap:8px;margin:8px 0;} .choice label{background:#f1f5f9;padding:8px 14px;border-radius:8px;cursor:pointer;display:flex;align-items:center;gap:10px;}
+  .choice label.ok{background:#dcfce7;} .choice label.bad{background:#fee2e2;}
+  .choice.row{grid-template-columns:1fr 1fr;}
+  textarea{width:100%;min-height:70px;padding:10px;border:2px solid #cbd5e1;border-radius:8px;font-size:1rem;}
+  .q{margin-top:14px;padding-top:10px;border-top:1px dashed #e2e8f0;}
+  .m{font-family:"Cambria Math","Times New Roman",serif;font-style:italic;}
+  .steps{background:#f8fafc;border-radius:10px;padding:14px;line-height:2.1;font-size:1.02rem;}
+  select,input.x{padding:6px 10px;border:2px solid #cbd5e1;border-radius:6px;font-size:1rem;}
+  .mtbl{font-size:.9rem;} .mtbl td{cursor:pointer;} .mtbl td.hl{background:#fde68a;font-weight:800;outline:3px solid var(--accent);}
+  .mtbl tr.hr th{background:#bfdbfe;} .mtbl th.hc{background:#bfdbfe;}
+  .pass{color:var(--ok);font-weight:800;} .fail{color:var(--bad);font-weight:800;}
+  .lock{background:#fef2f2;border:2px solid var(--bad);border-radius:10px;padding:14px;display:flex;gap:10px;align-items:center;flex-wrap:wrap;}
+  .lock input{padding:8px;border:2px solid #cbd5e1;border-radius:6px;font-size:1rem;width:220px;}
+  .wrap{overflow-x:auto;}
+  footer{text-align:center;color:#94a3b8;padding:20px;font-size:.85rem;}
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>🏦 第 5 節：借貸 — 信用卡貸款、樓宇按揭及壓力測試</h1>
+    <small>5.1 信用卡貸款・5.2 樓宇按揭（P 按／H 按・每月供款表）・5.3 壓力測試｜單元二 數學｜60 分鐘</small>
+  </div>
+  <div class="timer">⏱ <span id="clock">60:00</span><button onclick="toggleTimer()" id="tbtn">開始</button><button onclick="resetTimer()">重設</button></div>
+</header>
+
+<nav>
+  <button class="active" onclick="go('flow',this)">📋 流程</button>
+  <button onclick="go('cc',this)">💳 5.1 信用卡貸款</button>
+  <button onclick="go('mort',this)">🏠 5.2 樓宇按揭</button>
+  <button onclick="go('tbl',this)">📊 供款表＋計算機</button>
+  <button onclick="go('stress',this)">🧪 5.3 壓力測試</button>
+  <button onclick="go('ex5',this)">📝 練習 5</button>
+  <button onclick="go('exit',this)">🎫 出口票</button>
+  <button onclick="go('teacher',this)">👩‍🏫 教師區 🔒</button>
+</nav>
+
+<main>
+
+<!-- ===== 流程 ===== -->
+<section id="flow" class="active">
+  <div class="card">
+    <h2>學習成果</h2>
+    <p>✅ 認識<b>信用卡貸款</b>的運作：免息還款期、年利率（APR）、利息按日計算、最低還款額的「債務雪球」</p>
+    <p>✅ 認識<b>樓宇按揭</b>名詞：樓價、首期、按揭成數、貸款額、年期、P 按（最優惠利率）、H 按（銀行同業拆息）及鎖息上限</p>
+    <p>✅ 能運用<b>每月供款表</b>（每 $10,000 貸款的每月供款）及公式計算每月供款、總還款額及總利息</p>
+    <p>✅ 能進行<b>供款與入息比率</b>（≤ 50%）及<b>壓力測試</b>（利率 + 3% 後 ≤ 60%）的計算並作出判斷</p>
+  </div>
+  <div class="card">
+    <h2>📅 60 分鐘流程</h2>
+    <div class="flow">
+      <div class="step"><div class="t">0–5 分</div><div><b>引入：借錢要付甚麼代價？</b><br>信用卡、私人貸款、按揭——年利率由 2% 到 36% 以上！誰借得最貴？為甚麼？<div class="mode">💬 全班口答</div></div></div>
+      <div class="step"><div class="t">5–15 分</div><div><b>5.1 信用卡貸款：例 5.01（按日計息）、例 5.02（最低還款額）</b><br>用「最低還款額模擬器」看 $20,000 要還多少年。<div class="mode">📝 小白板 ＋ 🖥 模擬器</div></div></div>
+      <div class="step"><div class="t">15–20 分</div><div><b>練習 5 Q1–Q2</b>（信用卡利息、最低還款額）<div class="mode">📝 小白板／即時批改</div></div></div>
+      <div class="step"><div class="t">20–33 分</div><div><b>5.2 樓宇按揭：名詞 → P 按 / H 按 → 查「每月供款表」→ 公式計算器 → 例 5.03</b><div class="mode">📊 查表競賽</div></div></div>
+      <div class="step"><div class="t">33–40 分</div><div><b>例 5.04 (a)–(c)（樓價 $9,900,000）+ 練習 5 Q3</b><div class="mode">📝 小白板</div></div></div>
+      <div class="step"><div class="t">40–48 分</div><div><b>5.3 壓力測試：兩條門檻（50% / 60%）→ 例 5.04 (d)–(f) → 壓力測試檢查器</b><div class="mode">⚡ 搶答</div></div></div>
+      <div class="step"><div class="t">48–56 分</div><div><b>練習 5 Q4–Q10 配對</b><br>🅰 Q4、Q6、Q8；🅱 Q5、Q9、Q10；Q7 全班搶答 → 互批<div class="mode">👥 配對</div></div></div>
+      <div class="step"><div class="t">56–60 分</div><div><b>出口票 + 總結</b><br>查表三步曲、P 按／H 按、兩個比率。<div class="mode">🎫 個人</div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 5.1 信用卡貸款 ===== -->
+<section id="cc">
+  <div class="card">
+    <h2>💬 引入：三種常見借貸</h2>
+    <table>
+      <tr><th>借貸種類</th><th>典型年利率</th><th>有沒有抵押品？</th><th>特點</th></tr>
+      <tr><td>樓宇按揭</td><td>約 2%–4%</td><td>有（樓宇）</td><td class="l">年期長（20–30 年），銀行風險低 → 利率最低</td></tr>
+      <tr><td>私人貸款</td><td>約 5%–20%</td><td>無</td><td class="l">固定每月還款，須審批入息</td></tr>
+      <tr><td>信用卡欠款／現金透支</td><td><b>約 30%–40%</b></td><td>無</td><td class="l">最方便，但利率最高，<b>利息按日計算</b></td></tr>
+    </table>
+    <div class="hint">🗣 提問：為甚麼信用卡利率比按揭高十倍？（無抵押、金額小、風險高、方便即「貴」）</div>
+  </div>
+  <div class="card">
+    <h2>💳 5.1 信用卡貸款（Credit Card Loan）</h2>
+    <p><b>免息還款期</b>（Interest-free period）：由簽賬日至到期還款日，一般最長約 56 日。<b>於到期日前全數清還 → 不用付利息。</b></p>
+    <p><b>只還部分</b>（例如只還最低還款額）：餘下結欠及所有新簽賬會<b>由簽賬日起</b>按日計息，直至全數清還。</p>
+    <div class="formula">利息 <span class="m">I = 結欠 × 年利率 × 日數 ÷ 365</span>　　（年利率 APR 約 30%–40%）</div>
+    <p><b>最低還款額</b>（Minimum payment）：通常為結欠的某個百分率（例如 5%）或某個下限（例如 $300），以較高者為準。</p>
+    <p><b>現金透支</b>（Cash advance）：沒有免息期，由提款日起即日計息，另加手續費（例如 透支額 3% + $50）。</p>
+    <p>🔗 參考：<a href="https://reurl.cc/lnVEjA" target="_blank">資料一</a>｜<a href="https://reurl.cc/OQ123v" target="_blank">資料二</a>｜<a href="https://reurl.cc/Z8OR33" target="_blank">資料三</a>｜<a href="https://www.geogebra.org/m/fvtn9uwf#material/vcwtrbmf" target="_blank">GeoGebra 信用卡模型</a></p>
+  </div>
+  <div class="card">
+    <h2>例 5.01　按日計息</h2>
+    <p>小芬的信用卡月結單結欠 $12,000，年利率 35%，利息按日計算（一年 365 日）。<br>(a) 她在到期還款日後 15 日才全數清還，求須付利息。<br>(b) 她另外以信用卡現金透支 $5,000，手續費為透支額 3% 另加 $50，30 日後清還。求手續費、利息及總成本。（準確至 $0.01）</p>
+    <p>(a) $<input class="ans" id="e01a">　(b) 手續費 $<input class="ans sm" id="e01b">　利息 $<input class="ans sm" id="e01c">　總成本 $<input class="ans sm" id="e01d">
+      <button class="btn" onclick="chkMany([['e01a',172.60,0.02],['e01b',200],['e01c',143.84,0.02],['e01d',343.84,0.03]],'m01')">檢查</button><span class="msg" id="m01"></span></p>
+    <button class="btn secondary" onclick="tog('s01')">👁 題解</button>
+    <div class="sol" id="s01">(a) I = 12,000 × 35% × 15 ÷ 365 = <b>$172.60</b><br>(b) 手續費 = 5,000 × 3% + 50 = <b>$200</b>；利息 = 5,000 × 35% × 30 ÷ 365 = <b>$143.84</b><div class="ind">總成本 = 200 + 143.84 = <b>$343.84</b>——借 $5,000 一個月，成本已達 6.9%！</div></div>
+  </div>
+  <div class="card">
+    <h2>例 5.02　最低還款額的「雪球」</h2>
+    <p>阿明結欠 $20,000，年利率 36%（即每月約 3%），每月只還最低還款額（結欠的 5%，最少 $300）。完成下表首兩個月：</p>
+    <table>
+      <tr><th>月</th><th>月初結欠</th><th>利息（3%）</th><th>最低還款額（5%）</th><th>月底結欠</th></tr>
+      <tr><td>1</td><td>$20,000</td><td>$<input class="ans sm" id="e02a"></td><td>$<input class="ans sm" id="e02b"></td><td>$<input class="ans sm" id="e02c"></td></tr>
+      <tr><td>2</td><td>$19,600</td><td>$<input class="ans sm" id="e02d"></td><td>$<input class="ans sm" id="e02e"></td><td>$<input class="ans sm" id="e02f"></td></tr>
+    </table>
+    <button class="btn" onclick="chkMany([['e02a',600],['e02b',1000],['e02c',19600],['e02d',588],['e02e',980],['e02f',19208]],'m02')">檢查</button><span class="msg" id="m02"></span>
+    <button class="btn secondary" onclick="tog('s02')">👁 題解</button>
+    <div class="sol" id="s02">第 1 月：利息 = 20,000 × 3% = $600；還款 = 20,000 × 5% = $1,000；月底結欠 = 20,000 + 600 − 1,000 = <b>$19,600</b><br>第 2 月：利息 = 19,600 × 3% = $588；還款 = 19,600 × 5% = $980；月底結欠 = 19,600 + 588 − 980 = <b>$19,208</b><br>每月只減少約 2%！用下面的模擬器看看要還多久。</div>
+    <div class="hint">📌 本例為簡化計算，以「月利率 = 年利率 ÷ 12」及「最低還款額 = 月初結欠 × 5%」計算。</div>
+  </div>
+  <div class="card">
+    <h2>🧮 最低還款額模擬器</h2>
+    <p>結欠 $<input class="x" id="ccB" value="20000" style="width:100px" oninput="runCC()">　年利率 <input class="x" id="ccR" value="36" style="width:60px" oninput="runCC()"> %　
+      最低還款額：結欠的 <input class="x" id="ccP" value="5" style="width:50px" oninput="runCC()"> %，最少 $<input class="x" id="ccF" value="300" style="width:70px" oninput="runCC()"><br>
+      或改為每月固定還款 $<input class="x" id="ccX" value="0" style="width:90px" oninput="runCC()">（填 0 = 只還最低還款額）</p>
+    <div class="steps" id="ccOut"></div>
+    <div id="ccTbl"></div>
+    <div class="hint">⚡ 搶答：(1) 只還最低還款額，$20,000 要還多少年？利息總額是多少？(2) 改為每月固定還 $1,000，又如何？(3) 把年利率改為 3%（按揭水平），差別有多大？</div>
+  </div>
+  <div class="card">
+    <h2>🔎 延伸：「免息分期」真的免息嗎？</h2>
+    <p>信用卡分期：借 $12,000 分 12 期，「免息」但每月手續費為本金的 0.3%。</p>
+    <p>總手續費 = 12,000 × 0.3% × 12 = $432，名義年利率 = 0.3% × 12 = 3.6%。</p>
+    <p>但由於本金<b>逐月減少</b>，而手續費卻以<b>全數本金</b>計算，實際年利率（APR）約為 2n/(n+1) × 3.6% = 24/13 × 3.6% ≈ <b>6.6%</b>——接近名義利率的兩倍。香港銀行須在宣傳品列明「實際年利率」，記得看清楚！</p>
+  </div>
+</section>
+
+<!-- ===== 5.2 樓宇按揭 ===== -->
+<section id="mort">
+  <div class="card">
+    <h2>🏠 5.2 樓宇按揭（Housing Mortgage）：基本名詞</h2>
+    <table>
+      <tr><th style="width:28%">名詞</th><th>意思</th></tr>
+      <tr><td class="l"><b>樓價</b>（Property price）</td><td class="l">物業的買入價</td></tr>
+      <tr><td class="l"><b>按揭成數</b>（Loan-to-value ratio）</td><td class="l">貸款額佔樓價的百分率，例如「七成按揭」= 借樓價 70%</td></tr>
+      <tr><td class="l"><b>首期</b>（Down payment）</td><td class="l">首期 = 樓價 − 貸款額 = 樓價 × (1 − 按揭成數)</td></tr>
+      <tr><td class="l"><b>貸款額</b>（Loan amount）</td><td class="l">貸款額 = 樓價 × 按揭成數</td></tr>
+      <tr><td class="l"><b>按揭年期</b>（Tenor）</td><td class="l">分多少年還清，一般最長 30 年</td></tr>
+      <tr><td class="l"><b>每月供款</b>（Monthly repayment）</td><td class="l">每月固定還款額，包含利息及部分本金</td></tr>
+      <tr><td class="l"><b>總還款額 / 總利息</b></td><td class="l">總還款額 = 每月供款 × 年期 × 12；總利息 = 總還款額 − 貸款額</td></tr>
+    </table>
+    <div class="formula">貸款額 = 樓價 × 按揭成數　　首期 = 樓價 − 貸款額　　每月供款 = (貸款額 ÷ 10,000) × 供款表數值</div>
+  </div>
+  <div class="card">
+    <h2>📌 P 按 vs H 按</h2>
+    <div class="two">
+      <div style="background:#dbeafe;padding:12px;border-radius:10px"><b>P 按（最優惠利率按揭）</b><br>按息 = P − x%<br>P = 最優惠利率（Prime rate），由銀行公布，例如 5.25%、5.75%<br>例：P − 2%，P = 5.75% → 按息 3.75%<br>特點：P 變動較少，供款較穩定</div>
+      <div style="background:#fef3c7;padding:12px;border-radius:10px"><b>H 按（拆息按揭）</b><br>按息 = H + y%<br>H = 香港銀行同業拆息（HIBOR），每日變動<br>例：H + 1.3%，H = 1.2% → 按息 2.5%<br>特點：通常較低，但波動大；一般設有<b>鎖息上限</b>（如 P − 2%），H 升得太高時改以上限計算</div>
+    </div>
+    <p style="margin-top:8px">🗣 提問：P = 5.25%，P − 2.25% 是多少？H = 3.5%，H + 1.3% 是多少？若鎖息上限為 P − 2%，H 按實際按息會是多少？<br>
+      <input class="ans sm" id="pq1"> %　<input class="ans sm" id="pq2"> %　<input class="ans sm" id="pq3"> % <button class="btn" onclick="chkMany([['pq1',3],['pq2',4.8],['pq3',3.25]],'mpq')">檢查</button><span class="msg" id="mpq"></span></p>
+    <div class="hint">🧠 鎖息上限：H + 1.3% = 4.8% 已超過上限 P − 2% = 3.25%，所以實際按 3.25% 計算——上限保護了借款人。</div>
+  </div>
+  <div class="card">
+    <h2>例 5.03　查表計算：P 按 vs H 按</h2>
+    <p>貸款額 $4,000,000，年期 25 年。《P 按》P − 2.25%（P = 5.25%）；《H 按》H + 1.3%（H = 1.2%），鎖息上限 P − 2%。</p>
+    <p>(a) P 按每月供款 $<input class="ans" id="e03a">　(b) H 按每月供款 $<input class="ans" id="e03b">　(c) 若 H 升至 3%，H 按每月供款 $<input class="ans" id="e03c">
+      <button class="btn" onclick="chkMany([['e03a',18968,0.5],['e03b',17944,0.5],['e03c',19492,0.5]],'m03')">檢查</button><span class="msg" id="m03"></span></p>
+    <button class="btn secondary" onclick="tog('s03')">👁 題解</button>
+    <div class="sol" id="s03">(a) 按息 = 5.25% − 2.25% = 3%；查表 25 年、3% → $47.42；每月供款 = 400 × 47.42 = <b>$18,968</b><br>(b) 按息 = 1.2% + 1.3% = 2.5%（未超上限 3.25%）；查表 25 年、2.5% → $44.86；400 × 44.86 = <b>$17,944</b><br>(c) H + 1.3% = 4.3% > 上限 3.25% → 以 3.25% 計；查表 25 年、3.25% → $48.73；400 × 48.73 = <b>$19,492</b></div>
+    <div class="hint">📌 查表三步曲：① 計出實際按息　② 在表中找「利率 × 年期」的數值　③ × (貸款額 ÷ 10,000)</div>
+  </div>
+  <div class="card">
+    <h2>例 5.04　完整按揭個案 (a)–(c)　⭐</h2>
+    <p>陳先生打算購買一個樓價 <b>$9,900,000</b> 的單位，承造<b>七成</b>按揭，年期 <b>25 年</b>，按息為 P − 2%（P = 5%）。</p>
+    <p>(a) 首期 $<input class="ans" id="e04a">　(b) 貸款額 $<input class="ans" id="e04b">　(c) 實際按息 <input class="ans sm" id="e04c"> %，每月供款 $<input class="ans" id="e04d">
+      <button class="btn" onclick="chkMany([['e04a',2970000],['e04b',6930000],['e04c',3],['e04d',32862.06,0.05]],'m04')">檢查</button><span class="msg" id="m04"></span></p>
+    <button class="btn secondary" onclick="tog('s04')">👁 題解</button>
+    <div class="sol" id="s04">(a) 首期 = 9,900,000 × (1 − 70%) = <b>$2,970,000</b><br>(b) 貸款額 = 9,900,000 × 70% = <b>$6,930,000</b><br>(c) 按息 = 5% − 2% = <b>3%</b>；查表 25 年、3% → $47.42<div class="ind">每月供款 = (6,930,000 ÷ 10,000) × 47.42 = 693 × 47.42 = <b>$32,862.06</b></div>（(d)–(f) 見「5.3 壓力測試」）</div>
+  </div>
+</section>
+
+<!-- ===== 供款表 + 計算機 ===== -->
+<section id="tbl">
+  <div class="card">
+    <h2>📊 每月供款表：每 $10,000 貸款的每月供款</h2>
+    <p>選擇年利率 <select id="tR" onchange="lookup()"></select>　年期 <select id="tT" onchange="lookup()"><option value="5">5 年</option><option value="10">10 年</option><option value="15">15 年</option><option value="20">20 年</option><option value="25" selected>25 年</option><option value="30">30 年</option></select>　
+      貸款額 $<input class="x" id="tL" value="6930000" style="width:120px" oninput="lookup()"></p>
+    <div class="steps" id="tOut"></div>
+    <div class="wrap"><table class="mtbl" id="mtbl"></table></div>
+    <div class="hint">📊 查表競賽：老師說「4.5%、20 年、貸款 $3,000,000」，最快在表中找到並算出每月供款的一組勝出！（亦可直接點擊表格儲存格）</div>
+  </div>
+  <div class="card">
+    <h2>🧮 按揭公式計算器（表格以外的利率也可計算）</h2>
+    <div class="formula">每月供款 <span class="m">M = L × i ÷ [1 − (1 + i)<sup>−N</sup>]</span>　　i = 年利率 ÷ 12，N = 年期 × 12</div>
+    <p>貸款額 L = $<input class="x" id="fL" value="6930000" style="width:120px" oninput="runMort()">　年利率 r = <input class="x" id="fR" value="3" style="width:70px" oninput="runMort()"> %　年期 t = <input class="x" id="fT" value="25" style="width:60px" oninput="runMort()"> 年</p>
+    <div class="steps" id="fOut"></div>
+    <div id="fTbl"></div>
+    <div class="hint">🗣 試把年期由 25 年改為 30 年：每月供款少了，但總利息多了多少？再把利率加 3%，每月供款多了多少？（為壓力測試鋪路）</div>
+    <p>🔗 <a href="https://www.geogebra.org/m/fvtn9uwf#material/jbjexc6m" target="_blank">GeoGebra 按揭模型</a></p>
+  </div>
+</section>
+
+<!-- ===== 5.3 壓力測試 ===== -->
+<section id="stress">
+  <div class="card">
+    <h2>🧪 5.3 壓力測試（Stress Test）</h2>
+    <p>銀行批核按揭時，要確保借款人<b>供得起</b>，即使將來加息也供得起。課本採用以下兩個門檻：</p>
+    <div class="formula">① 供款與入息比率 = 每月供款（連其他債務還款）÷ 每月入息 ≤ <b>50%</b><br>② 壓力測試：假設按息<b>上升 3%</b> 後，供款與入息比率 ≤ <b>60%</b></div>
+    <table>
+      <tr><th>步驤</th><th>做法</th></tr>
+      <tr><td>1</td><td class="l">以現時按息查表 → 每月供款 M₁ → M₁ ÷ 入息 ≤ 50%？</td></tr>
+      <tr><td>2</td><td class="l">以（按息 + 3%）查表 → 每月供款 M₂ → M₂ ÷ 入息 ≤ 60%？</td></tr>
+      <tr><td>3</td><td class="l">兩項都通過 → 銀行才會批出按揭</td></tr>
+    </table>
+    <div class="hint">📌 若有其他每月債務（如車貸、私人貸款），須加入「每月供款」一起計算。<br>📌 注意：金管局自 2024 年 2 月起暫停壓力測試要求，但供款與入息比率仍須符合；本節按課本內容教學。</div>
+  </div>
+  <div class="card">
+    <h2>例 5.04　完整按揭個案 (d)–(f)　⭐</h2>
+    <p>（續）陳先生貸款 $6,930,000，25 年，按息 3%，每月供款 $32,862.06。他的每月入息為 <b>$76,000</b>，沒有其他債務。</p>
+    <p>(d) 供款與入息比率 = <input class="ans sm" id="e04e"> %（2 位小數）　(e) 按息升 3% 後每月供款 $<input class="ans" id="e04f">，比率 = <input class="ans sm" id="e04g"> %<br>
+      (f) 他能否通過銀行審批？
+      <div class="choice row" id="e04h"><label><input type="radio" name="e04h" value="Y"> ✅ 能通過</label><label><input type="radio" name="e04h" value="N"> ❌ 不能通過</label></div>
+      <button class="btn" onclick="chkMany([['e04e',43.24,0.05],['e04f',44649.99,0.05],['e04g',58.75,0.05]],'m04b');setMsg('m04c',chkRadio('e04h','Y'),'✔ 判斷正確','❌ 再想想')">檢查</button><span class="msg" id="m04b"></span><span class="msg" id="m04c"></span></p>
+    <button class="btn secondary" onclick="tog('s04b')">👁 題解</button>
+    <div class="sol" id="s04b">(d) 32,862.06 ÷ 76,000 = <b>43.24%</b> ≤ 50% ✓<br>(e) 按息 3% + 3% = 6%；查表 25 年、6% → $64.43；693 × 64.43 = <b>$44,649.99</b><div class="ind">44,649.99 ÷ 76,000 = <b>58.75%</b> ≤ 60% ✓</div>(f) 兩項測試均通過，<b>能</b>獲銀行批出按揭。</div>
+  </div>
+  <div class="card">
+    <h2>🧮 壓力測試檢查器</h2>
+    <p>每月入息 $<input class="x" id="sI" value="76000" style="width:100px" oninput="runStress()">　其他每月債務 $<input class="x" id="sD" value="0" style="width:80px" oninput="runStress()">　
+      貸款額 $<input class="x" id="sL" value="6930000" style="width:120px" oninput="runStress()">　按息 <input class="x" id="sR" value="3" style="width:60px" oninput="runStress()"> %　年期 <input class="x" id="sT" value="25" style="width:50px" oninput="runStress()"> 年　
+      加息 <input class="x" id="sUp" value="3" style="width:50px" oninput="runStress()"> %</p>
+    <div class="steps" id="sOut"></div>
+    <div class="hint">⚡ 搶答：陳先生入息要降到多少以下，才會「不通過」？（提示：先看哪一項測試較接近門檻）</div>
+  </div>
+</section>
+
+<!-- ===== 練習 5 ===== -->
+<section id="ex5">
+  <div class="card">
+    <h2>📝 練習 5</h2>
+    <div class="two">
+      <div style="background:#dbeafe;padding:10px;border-radius:10px"><b>🅰 A 同學</b>：第 4、6、8 題</div>
+      <div style="background:#fef3c7;padding:10px;border-radius:10px"><b>🅱 B 同學</b>：第 5、9、10 題　→ 互批；Q1–3 隨堂、Q7 全班搶答</div>
+    </div>
+    <p style="margin-top:8px"><small>每月供款以「每月供款表」計算；金額答案可不填「$」及逗號；利率及百分率填寫數值（如 3.75）。</small></p>
+    <div class="q"><b>1.</b> 阿強的信用卡結欠 $8,000，年利率 36.5%，他於到期還款日後 20 日才全數清還。求利息（按日計算，一年 365 日）：$<input class="ans sm" id="q1"></div>
+    <div class="q"><b>2.</b> 美儀的信用卡結欠 $15,000，最低還款額為結欠的 5%（最少 $300）。(a) 最低還款額 $<input class="ans sm" id="q2a">　(b) 只還最低還款額後餘下結欠 $<input class="ans sm" id="q2b">　(c) 餘款以年利率 36% 計 30 日的利息（$0.01）$<input class="ans sm" id="q2c"></div>
+    <div class="q"><b>3.</b> 樓價 $6,000,000，承造六成按揭，年期 30 年，按息 3.5%。(a) 首期 $<input class="ans" id="q3a">　(b) 貸款額 $<input class="ans" id="q3b">　(c) 每月供款 $<input class="ans sm" id="q3c">　(d) 總利息 $<input class="ans" id="q3d"></div>
+    <div class="q"><b>4.</b> 樓價 $3,800,000，承造七成按揭，年期 20 年，按息為 P − 2%（P = 5.75%）。(a) 首期 $<input class="ans" id="q4a">　(b) 每月供款 $<input class="ans" id="q4b">　(c) 20 年總還款額 $<input class="ans" id="q4c"></div>
+    <div class="q"><b>5.</b> 阿健月入 $20,000，欲購買 $2,200,000 的單位，承造七成按揭，年期 20 年，按息 3.5%。<br>(a) 貸款額 $<input class="ans" id="q5a">　(b) 每月供款 $<input class="ans sm" id="q5b">，供款與入息比率是否 ≤ 50%？
+      <div class="choice row" id="q5r1"><label><input type="radio" name="q5r1" value="Y"> ✅ 通過</label><label><input type="radio" name="q5r1" value="N"> ❌ 不通過</label></div>
+      (c) 加息 3% 後每月供款 $<input class="ans sm" id="q5c">，是否 ≤ 入息 60%？
+      <div class="choice row" id="q5r2"><label><input type="radio" name="q5r2" value="Y"> ✅ 通過</label><label><input type="radio" name="q5r2" value="N"> ❌ 不通過</label></div></div>
+    <div class="q"><b>6.</b> 小玲月入 $35,000（銀行只計算基本薪金 $30,000 作入息，沒有其他債務），欲購買 $3,200,000 的單位，承造七成按揭，年期 30 年，按息 2.5%。<br>(a) 貸款額 $<input class="ans" id="q6a">　(b) 每月供款 $<input class="ans sm" id="q6b">　(c)(1) 供款與入息比率 <input class="ans sm" id="q6c"> %（1 位小數）　(2) 加息 3% 後每月供款 $<input class="ans sm" id="q6d">，能否通過壓力測試？
+      <div class="choice row" id="q6r"><label><input type="radio" name="q6r" value="Y"> ✅ 通過</label><label><input type="radio" name="q6r" value="N"> ❌ 不通過</label></div></div>
+    <div class="q"><b>7.</b> 判斷下列說法是否正確：<br>(a) 按揭年期愈長，每月供款愈少，但總利息愈多。
+      <div class="choice row" id="q7a"><label><input type="radio" name="q7a" value="T"> ✔ 正確</label><label><input type="radio" name="q7a" value="F"> ✘ 錯誤</label></div>
+      (b) H 按的實際按息永遠低於 P 按。
+      <div class="choice row" id="q7b"><label><input type="radio" name="q7b" value="T"> ✔ 正確</label><label><input type="radio" name="q7b" value="F"> ✘ 錯誤</label></div>
+      (c) 壓力測試是假設按息上升 3% 後，供款與入息比率不得超過 60%。
+      <div class="choice row" id="q7c"><label><input type="radio" name="q7c" value="T"> ✔ 正確</label><label><input type="radio" name="q7c" value="F"> ✘ 錯誤</label></div></div>
+    <div class="q"><b>8.</b> 樓價 $4,880,000，承造七成按揭，年期 30 年，按息為 P − 2.5%（P = 5.25%）。(a) 貸款額 $<input class="ans" id="q8a">　(b) 實際按息 <input class="ans sm" id="q8b"> %　(c) 每月供款（$0.01）$<input class="ans" id="q8c">　(d) 總利息 $<input class="ans" id="q8d"></div>
+    <div class="q"><b>9.</b> 樓價 $7,000,000，承造七成按揭，年期 30 年。計劃 A：P − 1.25%（P = 5.25%）；計劃 B：H + 1.25%（H = 2.5%）。<br>(a) 實際按息：A <input class="ans sm" id="q9a"> %，B <input class="ans sm" id="q9b"> %　(b) 每月供款：A $<input class="ans" id="q9c">，B $<input class="ans" id="q9d">　(c) 30 年總還款額相差 $<input class="ans" id="q9e"></div>
+    <div class="q"><b>10.</b> 樓價 $12,000,000，承造七成按揭，年期 30 年，按息為 P − 2.25%（P = 5%）。每月供款 $<input class="ans" id="q10"></div>
+    <button class="btn" onclick="chk5()">✔ 檢查練習 5</button><span class="msg" id="m5"></span>
+    <div class="hint">💡 Q4–Q10 先寫三行：貸款額 = ？、實際按息 = ？、查表數值 = ？。Q9：先求每月相差，再 × 360。Q6：入息以 $30,000 計算。</div>
+  </div>
+</section>
+
+<!-- ===== 出口票 ===== -->
+<section id="exit">
+  <div class="card">
+    <h2>🎫 出口票（Exit Ticket）</h2>
+<p style="margin:10px 0">班別：<input id="et-class" style="width:70px;padding:6px;text-align:center;border:2px solid #cbd5e1;border-radius:6px" placeholder="CS1">　姓名：<input id="et-name" style="width:140px;padding:6px;border:2px solid #cbd5e1;border-radius:6px" placeholder="陳大文"></p>
+    <p><b>(1)</b> 信用卡只還最低還款額，餘下結欠會：
+      <div class="choice" id="xq1"><label><input type="radio" name="xq1" value="A"> A　繼續享有免息期</label><label><input type="radio" name="xq1" value="B"> B　由簽賬日起按日計息</label><label><input type="radio" name="xq1" value="C"> C　只在下個到期日後才計息</label></div></p>
+    <p style="margin-top:8px"><b>(2)</b> 查表：30 年、3% → 每 $10,000 供 $42.16。貸款 $5,000,000 的每月供款 = $<input class="ans" id="x2"></p>
+    <p style="margin-top:8px"><b>(3)</b> P = 5.5%，P − 2.5% 的實際按息 = <input class="ans sm" id="x3"> %</p>
+    <p style="margin-top:8px"><b>(4)</b> 月入 $40,000，加息 3% 後每月供款 $25,000，比率 = <input class="ans sm" id="x4"> %，壓力測試：
+      <div class="choice row" id="xq4"><label><input type="radio" name="xq4" value="Y"> ✅ 通過</label><label><input type="radio" name="xq4" value="N"> ❌ 不通過</label></div></p>
+    <p style="margin-top:8px"><b>(5)</b> 我今天最不明白的地方是：</p>
+    <textarea placeholder="請寫下你的疑問……"></textarea>
+    <br>
+<button class="btn" id="exit-btn" onclick="chkExit()">✔ 提交</button> <span class="msg" id="exit-msg"></span>
+  </div>
+  <div class="card">
+    <h2>📌 總結</h2>
+    <p>1️⃣ <b>信用卡</b>：全數清還免息；否則按日計息（I = 結欠 × 年利率 × 日數 ÷ 365），年利率可達 30%–40%；只還最低還款額會形成「債務雪球」</p>
+    <p>2️⃣ <b>按揭名詞</b>：貸款額 = 樓價 × 按揭成數；首期 = 樓價 − 貸款額；總利息 = 每月供款 × 期數 − 貸款額</p>
+    <p>3️⃣ <b>P 按／H 按</b>：P − x%；H + y%（有鎖息上限）——先算出實際按息才查表</p>
+    <p>4️⃣ <b>查表三步曲</b>：實際按息 → 找「利率 × 年期」數值 → × (貸款額 ÷ 10,000)</p>
+    <p>5️⃣ <b>兩個比率</b>：供款與入息比率 ≤ 50%；加息 3% 後 ≤ 60%，兩項都通過才獲批</p>
+  </div>
+</section>
+
+<!-- ===== 教師區 ===== -->
+<section id="teacher">
+  <div class="card">
+    <h2>👩‍🏫 答案參考（須輸入密碼）</h2>
+    <div class="lock" id="lockbox">
+      🔒 請輸入教師密碼：<input type="password" id="pw" placeholder="密碼" onkeydown="if(event.key==='Enter')unlock()">
+      <button class="btn" onclick="unlock()">解鎖</button><span class="msg" id="mpw"></span>
+    </div>
+    <div class="answer" id="ans">
+      <p style="text-align:right"><button class="btn danger" onclick="lock()">🔒 重新鎖上</button></p>
+      <p><b>例 5.01：</b>(a) $172.60 (b) 手續費 $200、利息 $143.84、總成本 $343.84　<b>例 5.02：</b>第 1 月 $600 / $1,000 / $19,600；第 2 月 $588 / $980 / $19,208（模擬器：只還最低還款額約 91 個月 ≈ 7.6 年，總利息約 $14,700）</p>
+      <p style="margin-top:8px"><b>P 按／H 按提問：</b>3%、4.8%、3.25%（受上限限制）　<b>例 5.03：</b>(a) $18,968 (b) $17,944 (c) $19,492</p>
+      <p style="margin-top:8px"><b>例 5.04：</b>(a) $2,970,000 (b) $6,930,000 (c) 3%，$32,862.06 (d) 43.24% ✓ (e) 6% → $44,649.99，58.75% ✓ (f) 能通過</p>
+      <p style="margin-top:8px"><b>練習 5：</b><br>1. $160　2. (a) $750 (b) $14,250 (c) $421.64　3. (a) $2,400,000 (b) $3,600,000 (c) $16,164 (d) $2,219,040<br>
+      4. (a) 首期 $1,140,000 (b) 3.75%，20 年 → $59.29；266 × 59.29 = $15,771.14 (c) × 240 = $3,785,073.6<br>
+      5. 貸款 $1,540,000；20 年 3.5% → $58.00；154 × 58 = $8,932 ≤ $10,000 ✓；加息 → 6.5% → $74.56；$11,482.24 ≤ $12,000（60%）✓<br>
+      6. (a) $2,240,000 (b) 30 年 2.5% → $39.51；224 × 39.51 = $8,850.24 (c)(1) 8,850.24 ÷ 30,000 = 29.5% ≤ 50% ✓ (2) 5.5% → $56.78；$12,718.72 ≤ $18,000 ✓ 通過<br>
+      7. (a) 正確 (b) 錯誤（H 升時可能高於 P 按，故設鎖息上限）(c) 正確<br>
+      8. (a) $3,416,000 (b) 2.75% (c) 341.6 × 40.82 = $13,944.11 (d) 13,944.112 × 360 − 3,416,000 = $1,603,880.32<br>
+      9. (a) A 4%，B 3.75% (b) A：490 × 47.74 = $23,392.6；B：490 × 46.31 = $22,691.9 (c) 相差 $700.7 × 360 = $252,252<br>
+      10. $8,400,000；2.75%；30 年 → $40.82；840 × 40.82 = $34,288.8</p>
+      <p style="margin-top:8px"><b>出口票：</b>(1) B (2) $21,080 (3) 3% (4) 62.5%，不通過</p>
+      <p style="margin-top:8px;color:#92400e"><small>※ 原稿文字缺漏：Q1–Q3、Q7 為按主題補編；例 5.04（$9,900,000）的按揭成數、年期、利率及入息（$76,000）為補設；Q6 原答案以 $30,000 計算入息，故題目補入「銀行只計算基本薪金 $30,000」；Q8、Q9 年期按答案反推為 30 年。請老師按原書核對。<br>※ 金管局於 2024 年 2 月 28 日宣布暫停按揭壓力測試要求，教學時可補充時事背景。</small></p>
+    </div>
+  </div>
+  <div class="card">
+    <h2>常見錯誤及應對</h2>
+    <table>
+      <tr><th style="width:40%">常見錯誤</th><th>教師回應策略</th></tr>
+      <tr><td class="l">信用卡利息用「月」或「年」而非「日」計算</td><td class="l">強調信用卡「按日計息」：× 日數 ÷ 365</td></tr>
+      <tr><td class="l">以為「免息分期」完全沒有成本</td><td class="l">用延伸例子：手續費以全額本金計算 → 實際年利率約為名義的兩倍</td></tr>
+      <tr><td class="l">貸款額與首期混淆（七成按揭用 30% 計貸款）</td><td class="l">口訣：「借七成，付三成」；貸款額 = 樓價 × 成數</td></tr>
+      <tr><td class="l">查表前忘記計算實際按息（直接用 P 或 H 查表）</td><td class="l">規定先寫「按息 = P − x% = ？」一行</td></tr>
+      <tr><td class="l">H 按忽略鎖息上限（例 5.03c）</td><td class="l">「H + y% 與上限比較，取較小者」</td></tr>
+      <tr><td class="l">查表後忘記 ÷ 10,000（直接 × 貸款額）</td><td class="l">強調表格標題「每 $10,000 貸款」；檢查答案合理性（每月供款不會是千萬元）</td></tr>
+      <tr><td class="l">總利息 = 每月供款 × 期數（忘記減貸款額）</td><td class="l">總還款額 − 貸款額 = 總利息</td></tr>
+      <tr><td class="l">壓力測試仍用 50% 門檻，或忘記加 3%</td><td class="l">兩條門檻並列：「現息 50%、加息 60%」</td></tr>
+      <tr><td class="l">其他債務未計入供款與入息比率</td><td class="l">分子 =（按揭供款 + 其他每月債務還款）</td></tr>
+    </table>
+  </div>
+  <div class="card">
+    <h2>分層支援</h2>
+    <p><span class="badge">基礎組</span>Q1–Q4、Q10（直接查表）；用「供款表＋計算機」頁核對；壓力測試檢查器先輸入數字觀察結果再手算。</p>
+    <p style="margin-top:8px"><span class="badge">進階組</span>Q5、Q6（兩層測試完整判斷）、Q9（兩計劃比較）；用公式計算器驗證供款表數值（例如 3%、25 年 → 47.42）；探討「年期 25 年 vs 30 年」的總利息差額。</p>
+    <p style="margin-top:8px"><span class="badge">延伸</span>GeoGebra 模型；推導每月供款公式 M = L·i/[1 − (1+i)⁻ᴺ]（等比數列求和）；比較「只還最低還款額」與「每月固定還款」的總利息差距，製作海報提醒同學理財。</p>
+  </div>
+</section>
+
+</main>
+<footer>單元二｜第 5 節 借貸：信用卡貸款、樓宇按揭及壓力測試｜練習 5｜互動教學網站</footer>
+
+<script>
+function go(id,btn){document.querySelectorAll('section').forEach(s=>s.classList.remove('active'));document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));document.getElementById(id).classList.add('active');btn.classList.add('active');window.scrollTo({top:0,behavior:'smooth'});}
+/* 計時器 60 分鐘 */
+let secs=3600,tm=null;
+function render(){document.getElementById('clock').textContent=String(Math.floor(secs/60)).padStart(2,'0')+':'+String(secs%60).padStart(2,'0');}
+function toggleTimer(){const b=document.getElementById('tbtn');if(tm){clearInterval(tm);tm=null;b.textContent='繼續';return;}b.textContent='暫停';tm=setInterval(()=>{if(secs>0){secs--;render();}else{clearInterval(tm);tm=null;alert('⏰ 60 分鐘已結束！');}},1000);}
+function resetTimer(){clearInterval(tm);tm=null;secs=3600;render();document.getElementById('tbtn').textContent='開始';}
+/* 檢查工具 */
+function num(v){v=String(v).replace(/[,\s$%元]/g,'').replace(/[−–]/g,'-');if(v.includes('/')){const [a,b]=v.split('/');return Number(a)/Number(b);}return Number(v);}
+function near(v,a,tol){const n=num(v);return !isNaN(n)&&Math.abs(n-a)<=(tol===undefined?0.005:tol);}
+function mark(i,ok){i.classList.remove('ok','bad');i.classList.add(ok?'ok':'bad');}
+function setMsg(mid,ok,t1,t2){const m=document.getElementById(mid);if(ok===null){m.textContent='';return;}m.textContent=ok?t1:t2;m.style.color=ok?'var(--ok)':'var(--bad)';}
+function chkMany(list,mid){let all=true;list.forEach(([id,a,tol])=>{const i=document.getElementById(id);const ok=i.value.trim()!==''&&near(i.value,a,tol);mark(i,ok);if(!ok)all=false;});setMsg(mid,all,'🎉 全部正確！','❌ 有錯，紅色格請再試');}
+function tog(id){document.getElementById(id).classList.toggle('show');}
+function chkRadio(name,correct){const box=document.getElementById(name);let ok=false,any=false;box.querySelectorAll('label').forEach(l=>{l.classList.remove('ok','bad');const r=l.querySelector('input');if(r.checked){any=true;if(r.value===correct){l.classList.add('ok');ok=true;}else l.classList.add('bad');}});return any?ok:null;}
+function chkSet(list,radios,mid){let right=0,done=0;list.forEach(([id,a,tol])=>{const i=document.getElementById(id);if(i.value.trim()==='')return;done++;const ok=near(i.value,a,tol);mark(i,ok);if(ok)right++;});radios.forEach(([n,c])=>{const r=chkRadio(n,c);if(r!==null){done++;if(r)right++;}});setMsg(mid,right===done&&done>0,`🎉 已填 ${done} 格全部正確！`,`✔ ${right}/${done} 格正確，紅色格請再試`);}
+function chk5(){chkSet([
+ ['q1',160,0.01],['q2a',750],['q2b',14250],['q2c',421.64,0.02],
+ ['q3a',2400000],['q3b',3600000],['q3c',16164,0.5],['q3d',2219040,1],
+ ['q4a',1140000],['q4b',15771.14,0.05],['q4c',3785073.6,1],
+ ['q5a',1540000],['q5b',8932,0.5],['q5c',11482.24,0.05],
+ ['q6a',2240000],['q6b',8850.24,0.05],['q6c',29.5,0.1],['q6d',12718.72,0.05],
+ ['q8a',3416000],['q8b',2.75],['q8c',13944.11,0.05],['q8d',1603880.32,1],
+ ['q9a',4],['q9b',3.75],['q9c',23392.6,0.1],['q9d',22691.9,0.1],['q9e',252252,1],
+ ['q10',34288.8,0.1]],
+ [['q5r1','Y'],['q5r2','Y'],['q6r','Y'],['q7a','T'],['q7b','F'],['q7c','T']],'m5');}
+function chkExit(){const r1=chkRadio('xq1','B'),r4=chkRadio('xq4','N');let all=(r1===true)&&(r4===true);[['x2',21080,0.5],['x3',3],['x4',62.5,0.1]].forEach(([id,a,tol])=>{const i=document.getElementById(id);const ok=near(i.value,a,tol);mark(i,ok);if(!ok)all=false;});setMsg('mx',all,'🎉 全部正確！','❌ 有錯，請再檢查');}
+function money(n,d){d=d===undefined?2:d;return '$'+Number(n).toLocaleString('en-US',{minimumFractionDigits:d,maximumFractionDigits:d});}
+/* ===== 信用卡模擬器 ===== */
+function runCC(){const B0=Number(document.getElementById('ccB').value),r=Number(document.getElementById('ccR').value),p=Number(document.getElementById('ccP').value),f=Number(document.getElementById('ccF').value),x=Number(document.getElementById('ccX').value);
+ if(!(B0>0)||!(r>=0)){return;}const mr=r/100/12;let B=B0,tI=0,tP=0,m=0,rows=[],stuck=false;
+ while(B>0.005&&m<600){m++;const I=B*mr;let pay=x>0?x:Math.max(B*p/100,f);if(pay>=B+I){pay=B+I;}if(x>0&&x<=I){stuck=true;break;}const nb=B+I-pay;tI+=I;tP+=pay;if(m<=6||nb<=0.005)rows.push([m,B,I,pay,Math.max(nb,0)]);B=nb;}
+ let out='';
+ if(stuck){out=`<span class="fail">⚠ 每月還款 ${money(x)} 不足以支付第 1 月利息 ${money(B*mr)}，債務永遠還不清！</span>`;}
+ else if(m>=600){out=`<span class="fail">⚠ 超過 50 年仍未還清！</span>`;}
+ else{out=`<b>結果：</b>共需 <b>${m} 個月</b>（約 ${(m/12).toFixed(1)} 年）才還清；總利息 <span class="fail">${money(tI)}</span>，總還款 ${money(tP)}（本金 ${money(B0)} 的 ${(tP/B0*100).toFixed(0)}%）`;}
+ document.getElementById('ccOut').innerHTML=`月利率 = ${r}% ÷ 12 = ${(mr*100).toFixed(3)}%<br>${out}`;
+ let tr='';rows.forEach((row,i)=>{if(i>0&&row[0]-rows[i-1][0]>1)tr+=`<tr><td colspan="5">…</td></tr>`;tr+=`<tr><td>${row[0]}</td><td>${money(row[1])}</td><td>${money(row[2])}</td><td>${money(row[3])}</td><td>${money(row[4])}</td></tr>`;});
+ document.getElementById('ccTbl').innerHTML=rows.length?`<table><tr><th>月</th><th>月初結欠</th><th>利息</th><th>還款</th><th>月底結欠</th></tr>${tr}</table>`:'';}
+/* ===== 供款表 ===== */
+const TERMS=[5,10,15,20,25,30];
+const TBL=[[2.50,177.47,94.27,66.68,52.99,44.86,39.51],[2.75,178.58,95.41,67.86,54.22,46.13,40.82],[3.00,179.69,96.56,69.06,55.46,47.42,42.16],[3.25,180.80,97.72,70.27,56.72,48.73,43.52],[3.50,181.92,98.89,71.49,58.00,50.06,44.90],[3.75,183.04,100.06,72.72,59.29,51.41,46.31],[4.00,184.17,101.25,73.97,60.60,52.78,47.74],[4.25,185.30,102.44,75.23,61.92,54.17,49.19],[4.50,186.43,103.64,76.50,63.26,55.58,50.67],[4.75,187.57,104.85,77.78,64.62,57.01,52.16],[5.00,188.71,106.07,79.08,66.00,58.46,53.68],[5.25,189.86,107.29,80.39,67.38,59.92,55.22],[5.50,191.01,108.53,81.71,68.79,61.41,56.78],[5.75,192.17,109.77,83.04,70.21,62.91,58.36],[6.00,193.33,111.02,84.39,71.64,64.43,59.96],[6.25,194.49,112.28,85.74,73.09,65.97,61.57],[6.50,195.66,113.55,87.11,74.56,67.52,63.21],[6.75,196.83,114.82,88.49,76.04,69.09,64.86],[7.00,198.01,116.11,89.88,77.53,70.68,66.53]];
+function buildTable(){const sel=document.getElementById('tR');TBL.forEach((row,i)=>{const o=document.createElement('option');o.value=i;o.textContent=row[0].toFixed(2)+'%';if(row[0]===3)o.selected=true;sel.appendChild(o);});
+ let h='<tr><th>年利率 ＼ 年期</th>'+TERMS.map(t=>`<th>${t} 年</th>`).join('')+'</tr>';
+ TBL.forEach((row,i)=>{h+=`<tr><th>${row[0].toFixed(2)}%</th>`+TERMS.map((t,j)=>`<td data-i="${i}" data-j="${j}" onclick="pick(${i},${j})">$${row[j+1].toFixed(2)}</td>`).join('')+'</tr>';});
+ document.getElementById('mtbl').innerHTML=h;}
+function pick(i,j){document.getElementById('tR').value=i;document.getElementById('tT').value=TERMS[j];lookup();}
+function lookup(){const i=Number(document.getElementById('tR').value),t=Number(document.getElementById('tT').value),j=TERMS.indexOf(t),L=Number(document.getElementById('tL').value);
+ document.querySelectorAll('#mtbl td').forEach(td=>td.classList.remove('hl'));document.querySelectorAll('#mtbl tr').forEach(tr=>tr.classList.remove('hr'));document.querySelectorAll('#mtbl th').forEach(th=>th.classList.remove('hc'));
+ const td=document.querySelector(`#mtbl td[data-i="${i}"][data-j="${j}"]`);if(td){td.classList.add('hl');td.parentElement.classList.add('hr');document.querySelectorAll('#mtbl tr:first-child th')[j+1].classList.add('hc');}
+ const v=TBL[i][j+1],r=TBL[i][0];let s=`查表：<b>${r.toFixed(2)}%</b>、<b>${t} 年</b> → 每 $10,000 貸款每月供款 <b>$${v.toFixed(2)}</b>`;
+ if(L>0){const M=L/10000*v,tot=M*t*12;s+=`<br>貸款 ${money(L,0)}：每月供款 = (${L.toLocaleString()} ÷ 10,000) × ${v.toFixed(2)} = ${(L/10000).toLocaleString()} × ${v.toFixed(2)} = <b>${money(M)}</b><br>總還款額 = ${money(M)} × ${t*12} = ${money(tot)}；總利息 = ${money(tot)} − ${money(L,0)} = <span class="fail">${money(tot-L)}</span>`;}
+ document.getElementById('tOut').innerHTML=s;}
+/* ===== 按揭公式 ===== */
+function pmt(L,r,t){const i=r/100/12,N=t*12;if(i===0)return L/N;return L*i/(1-Math.pow(1+i,-N));}
+function runMort(){const L=Number(document.getElementById('fL').value),r=Number(document.getElementById('fR').value),t=Number(document.getElementById('fT').value);if(!(L>0)||!(r>=0)||!(t>0))return;
+ const i=r/100/12,N=t*12,M=pmt(L,r,t),tot=M*N;
+ let cmp='';const row=TBL.find(x=>Math.abs(x[0]-r)<1e-9),j=TERMS.indexOf(t);if(row&&j>=0){cmp=`<br>核對供款表：每 $10,000 → $${row[j+1].toFixed(2)}；公式每 $10,000 → $${(pmt(10000,r,t)).toFixed(2)} ✓`;}
+ document.getElementById('fOut').innerHTML=`i = ${r}% ÷ 12 = ${(i*100).toFixed(4)}%，N = ${t} × 12 = ${N}<br>M = ${L.toLocaleString()} × ${i.toFixed(6)} ÷ [1 − (1 + ${i.toFixed(6)})<sup>−${N}</sup>] = <b>${money(M)}</b><br>總還款額 = ${money(tot)}；總利息 = <span class="fail">${money(tot-L)}</span>（佔貸款額 ${((tot-L)/L*100).toFixed(1)}%）${cmp}`;
+ let B=L,tr='';for(let m=1;m<=Math.min(N,6);m++){const I=B*i,P=M-I;B-=P;tr+=`<tr><td>${m}</td><td>${money(M)}</td><td>${money(I)}</td><td>${money(P)}</td><td>${money(Math.max(B,0))}</td></tr>`;}
+ document.getElementById('fTbl').innerHTML=`<table><tr><th>月</th><th>每月供款</th><th>其中利息</th><th>其中本金</th><th>餘下貸款</th></tr>${tr}<tr><td colspan="5">…（初期供款大部分是利息，本金慢慢減少）</td></tr></table>`;}
+/* ===== 壓力測試 ===== */
+function runStress(){const I=Number(document.getElementById('sI').value),D=Number(document.getElementById('sD').value)||0,L=Number(document.getElementById('sL').value),r=Number(document.getElementById('sR').value),t=Number(document.getElementById('sT').value),up=Number(document.getElementById('sUp').value);
+ if(!(I>0)||!(L>0)||!(t>0))return;const M1=pmt(L,r,t),M2=pmt(L,r+up,t),r1=(M1+D)/I*100,r2=(M2+D)/I*100,p1=r1<=50,p2=r2<=60;
+ document.getElementById('sOut').innerHTML=`<b>① 現時按息 ${r}%：</b>每月供款 ${money(M1)}${D?` + 其他債務 ${money(D)}`:''} → 比率 = ${money(M1+D)} ÷ ${money(I,0)} = <b>${r1.toFixed(2)}%</b> ${p1?'<span class="pass">≤ 50% ✓ 通過</span>':'<span class="fail">> 50% ✗ 不通過</span>'}<br><b>② 加息 ${up}% → ${(r+up).toFixed(2)}%：</b>每月供款 ${money(M2)}${D?` + ${money(D)}`:''} → 比率 = <b>${r2.toFixed(2)}%</b> ${p2?'<span class="pass">≤ 60% ✓ 通過</span>':'<span class="fail">> 60% ✗ 不通過</span>'}<br><b>結論：</b>${p1&&p2?'<span class="pass">✅ 兩項測試均通過，可獲批按揭</span>':'<span class="fail">❌ 未能通過，銀行不會批出此按揭（可考慮增加首期、延長年期或降低樓價）</span>'}<br><small>最低所需入息：① ${money((M1+D)/0.5,0)}　② ${money((M2+D)/0.6,0)} → 須至少 <b>${money(Math.max((M1+D)/0.5,(M2+D)/0.6),0)}</b></small>`;}
+/* 教師區密碼 */
+const PW='msJohughpw';
+function unlock(){const v=document.getElementById('pw').value;if(v===PW){document.getElementById('ans').classList.add('show');document.getElementById('lockbox').style.display='none';}else{setMsg('mpw',false,'','❌ 密碼錯誤');document.getElementById('pw').value='';}}
+function lock(){document.getElementById('ans').classList.remove('show');document.getElementById('lockbox').style.display='flex';document.getElementById('mpw').textContent='';}
+buildTable();lookup();runMort();runStress();runCC();render();
+const SHEET_URL   = "https://script.google.com/macros/s/AKfycbyXoECMifD_PatOXkd1i579dCAQMS2Q1p3DQ7jFIcZ8aoYzmYVrWxCtcFZy1SD8_FCZ/exec";
+const LESSON_NAME = "5-1 借貸按揭";
+const MC_ANS      = 'B';                 // (1) 選擇題答案
+const NUM_ANS     = [21080, 3, 62.5];    // (2)(3)(4) 計算題答案
+const PASS_ANS    = '不通過';            // (4) 壓力測試判斷
+
+function chkExit(){
+  try{
+    const btn = document.getElementById('exit-btn');
+    const msg = document.getElementById('exit-msg');
+    const cls  = document.getElementById('et-class').value.trim();
+    const name = document.getElementById('et-name').value.trim();
+
+    // 由按鈕向上找到出口票容器
+    let box = btn; while(box && !box.querySelector('#et-class')) box = box.parentElement;
+    const all = [...box.querySelectorAll('input, textarea')].filter(e => e.id!=='et-class' && e.id!=='et-name');
+
+    // --- radio：第 1 組 = (1) A/B/C；第 2 組 = (4) 通過／不通過 ---
+    const radios = all.filter(e => e.type==='radio');
+    const groups = [...new Set(radios.map(r => r.name))];
+    if(groups.length < 2){ alert('只找到 '+groups.length+' 組 radio（需要 2 組：第(1)題 A/B/C 及第(4)題 通過/不通過），請把出口票 HTML 貼給老師助手'); return; }
+    const picked = g => radios.find(x => x.name===g && x.checked);
+    const textOf = r => ((r.value||'') + ' ' + (r.closest('label') ? r.closest('label').textContent : '')).trim();
+
+    const r1 = picked(groups[0]);
+    const mc = r1 ? textOf(r1).replace(/[^A-Za-z]/g,'').charAt(0).toUpperCase() : '';   // 取 "B　由簽賬日起…" 的 B
+    const r4 = picked(groups[1]);
+    const pass = r4 ? (/不通過|不能|✘|❌/.test(textOf(r4)) ? '不通過' : '通過') : '';
+
+    // --- 計算題：出口票內前 3 個文字/數字輸入框 ---
+    const inputs = all.filter(e => e.tagName==='INPUT' && (e.type==='text'||e.type==='number'||!e.type)).slice(0,3);
+    const ta     = all.find(e => e.tagName==='TEXTAREA');
+    if(inputs.length<3){ alert('只找到 '+inputs.length+' 個計算題答案框，請把出口票 HTML 貼給老師助手'); return; }
+
+    if(!cls||!name){ msg.textContent='請先填寫班別和姓名'; msg.style.color='var(--bad)'; return; }
+    const nums = inputs.map(i => i.value.trim());
+    if(mc==='' || pass==='' || nums.some(a=>a==='')){ msg.textContent='請完成第 (1)–(4) 題（包括通過／不通過）'; msg.style.color='var(--bad)'; return; }
+
+    const okMC   = mc===MC_ANS;
+    const okNum  = nums.map((a,k) => Math.abs(Number(a.replace(/[,$%]/g,''))-NUM_ANS[k]) < 0.005);
+    const okPass = pass===PASS_ANS;
+    inputs.forEach((el,k) => {
+      if(typeof mark==='function') mark(el, okNum[k]);
+      else el.style.borderColor = okNum[k] ? '#16a34a' : '#dc2626';
+    });
+    const score = [okMC, ...okNum, okPass].filter(Boolean).length;
+
+    btn.disabled = true; msg.textContent='傳送中…'; msg.style.color='#64748b';
+
+    fetch(SHEET_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain'},
+      body: JSON.stringify({
+        lesson: LESSON_NAME, '班別': cls, '姓名': name,
+        'Q1 最低還款':  mc,      'Q1正確': okMC?'✔':'✘',
+        'Q2 每月供款':  nums[0], 'Q2正確': okNum[0]?'✔':'✘',
+        'Q3 實際按息':  nums[1], 'Q3正確': okNum[1]?'✔':'✘',
+        'Q4 比率%':     nums[2], 'Q4正確': okNum[2]?'✔':'✘',
+        'Q4 判斷':      pass,    'Q4判斷正確': okPass?'✔':'✘',
+        '得分': score+'/5',
+        '不明白的地方': ta ? ta.value.trim() : ''
+      })
+    }).then(()=>{ msg.textContent=`✔ 已提交，謝謝！（${score}/5）`; msg.style.color='var(--ok)'; })
+      .catch(()=>{ msg.textContent='提交失敗，請再按一次'; msg.style.color='var(--bad)'; btn.disabled=false; });
+  }catch(e){ alert('chkExit 錯誤：'+e.message); }
+}
+</script>
+</body>
+</html>
