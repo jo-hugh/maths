@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🗳 課程志願投票｜互動教學</title>
+<style>
+  :root{--main:#7c3aed;--ok:#16a34a;--warn:#f59e0b;--bad:#dc2626;--bg:#f5f3ff;--card:#fff;--line:#e5e7eb;}
+  *{box-sizing:border-box;}
+  body{margin:0;font-family:"Noto Sans TC","Microsoft JhengHei","PingFang TC",sans-serif;background:var(--bg);color:#1f2937;}
+  header{background:linear-gradient(135deg,#4c1d95,#7c3aed);color:#fff;padding:18px 24px;}
+  header h1{margin:0;font-size:1.5rem;}
+  header p{margin:6px 0 0;opacity:.9;font-size:.95rem;}
+  header a{color:#fff;text-decoration:underline;font-size:.9rem;}
+  main{max-width:720px;margin:20px auto;padding:0 16px;}
+  .card{background:var(--card);border-radius:14px;box-shadow:0 2px 8px rgba(0,0,0,.06);padding:18px;margin-bottom:16px;}
+  .card h2{margin:0 0 12px;font-size:1.15rem;border-left:5px solid var(--main);padding-left:10px;}
+  label{display:block;font-weight:600;margin:10px 0 4px;}
+  input[type=text]{width:100%;padding:10px;border:1px solid #cbd5e1;border-radius:8px;font-size:1.05rem;font-family:inherit;}
+  .hint{font-size:.88rem;color:#6b7280;margin-top:6px;}
+  .req{color:var(--bad);}
+  /* 選項 */
+  .opt{display:flex;align-items:center;gap:12px;border:2px solid var(--line);border-radius:12px;padding:14px;margin:10px 0;cursor:pointer;user-select:none;transition:.15s;background:#fff;}
+  .opt:hover{border-color:#c4b5fd;background:#faf5ff;}
+  .opt.ranked{border-color:var(--main);background:#f3e8ff;}
+  .opt .code{width:40px;height:40px;border-radius:50%;background:#ede9fe;color:#5b21b6;font-weight:800;font-size:1.2rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .opt .txt{flex:1;font-size:1.08rem;font-weight:600;}
+  .opt .rank{width:44px;height:44px;border-radius:12px;background:#e5e7eb;color:#9ca3af;font-weight:800;font-size:1.1rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .opt.ranked .rank{background:var(--main);color:#fff;}
+  .opt .ctl{display:flex;flex-direction:column;gap:4px;}
+  .opt .ctl button{border:none;background:#ede9fe;color:#5b21b6;border-radius:6px;width:30px;height:22px;cursor:pointer;font-size:.8rem;}
+  .opt .ctl button:disabled{opacity:.3;cursor:default;}
+  /* 志願摘要 */
+  .summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-top:10px;}
+  .slot{border:2px dashed #c4b5fd;border-radius:10px;padding:10px;text-align:center;min-height:70px;}
+  .slot .n{font-size:.8rem;color:#6b7280;}
+  .slot .v{font-weight:700;color:#4c1d95;margin-top:4px;}
+  .slot.filled{border-style:solid;background:#faf5ff;}
+  .row{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;}
+  .btn{border:none;border-radius:10px;padding:12px 20px;font-size:1.05rem;cursor:pointer;font-weight:700;color:#fff;background:var(--main);}
+  .btn:hover{filter:brightness(1.08);} .btn:disabled{opacity:.45;cursor:not-allowed;}
+  .btn.gray{background:#6b7280;} .btn.green{background:var(--ok);flex:1;}
+  #status{margin-top:10px;font-weight:600;min-height:1.4em;}
+  .ok{color:var(--ok);} .err{color:var(--bad);}
+  .done{text-align:center;padding:30px 10px;}
+  .done .big{font-size:3rem;}
+  footer{text-align:center;color:#94a3b8;font-size:.85rem;padding:20px;}
+</style>
+</head>
+<body>
+<header>
+  <h1>🗳 課程志願投票</h1>
+  <p>請按你的喜好次序點選課程（先點＝第 1 志願），排好後按「送出」　｜　<a href="index.html">⬅ 返回目錄</a></p>
+</header>
+
+<main>
+  <div id="form">
+    <section class="card">
+      <h2>👤 你的資料</h2>
+      <label for="cls">班別 <span class="req">*</span></label>
+      <input type="text" id="cls" placeholder="例：2A">
+      <label for="stu">姓名／學號 <span class="req">*</span></label>
+      <input type="text" id="stu" placeholder="例：陳大文 或 12">
+    </section>
+
+    <section class="card">
+      <h2>📚 課程選項（點選排序）</h2>
+      <div class="hint">依次點選：第一下 = 第 1 志願、第二下 = 第 2 志願……再點一次可取消；亦可用 ▲▼ 調整次序。<b>須排滿全部志願</b>。</div>
+      <div id="opts"></div>
+      <div class="row">
+        <button class="btn gray" onclick="clearRank()">↺ 重新排序</button>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>✅ 我的志願</h2>
+      <div class="summary" id="summary"></div>
+      <div class="row">
+        <button class="btn green" id="sendBtn" onclick="submitVote()">📤 送出投票</button>
+      </div>
+      <div id="status"></div>
+    </section>
+  </div>
+
+  <div id="thanks" class="card done" style="display:none;">
+    <div class="big">🎉</div>
+    <h2 style="border:none;justify-content:center;">已收到你的投票！</h2>
+    <p id="thanksTxt"></p>
+    <div class="hint">如需更改，請通知老師。</div>
+    <div class="row" style="justify-content:center;"><button class="btn gray" onclick="again()">再投一次（另一位同學）</button></div>
+  </div>
+</main>
+<footer>單元教學互動網站｜課程志願投票</footer>
+
+<script>
+/* ========= 老師可在此修改選項 ========= */
+const TITLE   = "課程志願投票";
+const OPTIONS = [
+  { code:"A", text:"生成式AI實務" },
+  { code:"B", text:"AI數位商業策略及營運" },
+  { code:"C", text:"網絡保安實務" },
+  { code:"D", text:"AI智能樓宇及工程" },
+];
+const REQUIRE_ALL = true;   // true = 必須排滿所有志願；false = 至少排 1 個即可
+/* ===================================== */
+
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyXoECMifD_PatOXkd1i579dCAQMS2Q1p3DQ7jFIcZ8aoYzmYVrWxCtcFZy1SD8_FCZ/exec";
+const $ = id => document.getElementById(id);
+let order = [];   // 已排序的 code，例如 ["C","A","D","B"]
+
+function render(){
+  const box = $("opts"); box.innerHTML = "";
+  OPTIONS.forEach(o=>{
+    const r = order.indexOf(o.code);          // -1 = 未排
+    const div = document.createElement("div");
+    div.className = "opt" + (r>=0?" ranked":"");
+    div.onclick = ()=>toggle(o.code);
+    div.innerHTML = `
+      <div class="code">${o.code}</div>
+      <div class="txt">${o.text}</div>
+      <div class="ctl">
+        <button ${r<=0?"disabled":""} onclick="event.stopPropagation();move('${o.code}',-1)">▲</button>
+        <button ${(r<0||r===order.length-1)?"disabled":""} onclick="event.stopPropagation();move('${o.code}',1)">▼</button>
+      </div>
+      <div class="rank">${r>=0? r+1 : "–"}</div>`;
+    box.appendChild(div);
+  });
+  const sm = $("summary"); sm.innerHTML = "";
+  OPTIONS.forEach((_,i)=>{
+    const c = order[i];
+    const o = OPTIONS.find(x=>x.code===c);
+    sm.innerHTML += `<div class="slot ${o?"filled":""}"><div class="n">第 ${i+1} 志願</div><div class="v">${o? o.code+"　"+o.text : "（未選）"}</div></div>`;
+  });
+}
+function toggle(code){
+  const i = order.indexOf(code);
+  if(i>=0) order.splice(i,1); else order.push(code);
+  render();
+}
+function move(code,d){
+  const i = order.indexOf(code), j = i+d;
+  if(i<0||j<0||j>=order.length) return;
+  [order[i],order[j]] = [order[j],order[i]]; render();
+}
+function clearRank(){ order=[]; render(); $("status").textContent=""; }
+
+async function submitVote(){
+  const st = $("status");
+  const cls = $("cls").value.trim(), stu = $("stu").value.trim();
+  if(!cls){ st.className="err"; st.textContent="⚠ 請輸入班別。"; $("cls").focus(); return; }
+  if(!stu){ st.className="err"; st.textContent="⚠ 請輸入姓名／學號。"; $("stu").focus(); return; }
+  if(REQUIRE_ALL && order.length<OPTIONS.length){ st.className="err"; st.textContent=`⚠ 請排滿全部 ${OPTIONS.length} 個志願（目前 ${order.length} 個）。`; return; }
+  if(!order.length){ st.className="err"; st.textContent="⚠ 請至少選一個志願。"; return; }
+
+  const now = new Date(), pad=n=>String(n).padStart(2,"0");
+  const payload = {
+    type: "投票",
+    投票主題: TITLE,
+    班別: cls, 姓名: stu,
+    日期: `${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())}`,
+    時間: `${pad(now.getHours())}:${pad(now.getMinutes())}`,
+    志願排序: order.join(">"),                       // 例：C>A>D>B
+  };
+  OPTIONS.forEach((_,i)=>{
+    const o = OPTIONS.find(x=>x.code===order[i]);
+    payload[`第${i+1}志願`] = o ? `${o.code} ${o.text}` : "";
+  });
+  OPTIONS.forEach(o=>{                                // 每個選項的名次（方便統計）
+    const r = order.indexOf(o.code);
+    payload[`名次_${o.code}`] = r>=0 ? r+1 : "";
+  });
+
+  $("sendBtn").disabled = true; st.className=""; st.textContent="⏳ 送出中…";
+  try{
+    await fetch(SCRIPT_URL,{ method:"POST", mode:"no-cors",
+      headers:{"Content-Type":"text/plain;charset=utf-8"}, body:JSON.stringify(payload) });
+    localStorage.setItem("vote_done_"+TITLE, JSON.stringify({cls,stu,order}));
+    $("thanksTxt").textContent = `${cls}　${stu}　志願：${order.map((c,i)=>`${i+1}.${c}`).join("　")}`;
+    $("form").style.display="none"; $("thanks").style.display="block";
+    window.scrollTo(0,0);
+  }catch(e){
+    st.className="err"; st.textContent="❌ 送出失敗："+e.message; $("sendBtn").disabled=false;
+  }
+}
+function again(){
+  order=[]; $("stu").value=""; $("status").textContent=""; $("sendBtn").disabled=false;
+  $("thanks").style.display="none"; $("form").style.display="block"; render(); $("stu").focus();
+}
+
+// 若網址有 ?cls=STAFF 可自動填班別（老師可派不同連結給各班）
+const q = new URLSearchParams(location.search);
+if(q.get("cls")) $("cls").value = q.get("cls");
+
+render();
+</script>
+</body>
+</html>
