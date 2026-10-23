@@ -8,13 +8,19 @@
   :root{--main:#047857;--main-dark:#064e3b;--ok:#16a34a;--bad:#dc2626;--accent:#f59e0b;--bg:#ecfdf5;--card:#fff;}
   *{box-sizing:border-box;margin:0;padding:0;font-family:"Noto Sans TC","Microsoft JhengHei","PingFang TC",sans-serif;}
   body{background:var(--bg);color:#1e293b;}
-  header{background:linear-gradient(135deg,var(--main-dark),var(--main));color:#fff;padding:14px 24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;position:sticky;top:0;z-index:10;box-shadow:0 2px 8px rgba(0,0,0,.2);}
-  header h1{font-size:1.2rem;} header small{opacity:.85;display:block;font-size:.85rem;}header .src{display:inline-block;margin-top:4px;background:rgba(255,255,255,.18);padding:2px 10px;border-radius:6px;font-size:.8rem;opacity:1;}
-.timer{background:rgba(255,255,255,.15);padding:8px 14px;border-radius:10px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+  
+header{background:linear-gradient(135deg,var(--main-dark),var(--main));color:#fff;padding:14px 24px;
+  display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;
+  position:sticky;top:0;z-index:10;box-shadow:0 2px 8px rgba(0,0,0,.2);}
+header h1{font-size:1.2rem;}
+header small{opacity:.85;display:block;font-size:.85rem;}
+header .src{display:inline-block;margin-top:4px;background:rgba(255,255,255,.18);padding:2px 10px;border-radius:6px;font-size:.8rem;opacity:1;}
+.timer{margin-left:auto;background:rgba(255,255,255,.15);padding:8px 14px;border-radius:10px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
 .timer span#clock{font-size:1.5rem;font-weight:700;font-variant-numeric:tabular-nums;min-width:95px;text-align:center;}
 .timer input{width:62px;padding:5px 6px;border:none;border-radius:6px;font-size:1rem;text-align:center;font-weight:700;color:var(--main-dark);}
 .timer label{font-size:.85rem;opacity:.9;}
-  .timer button{background:#fff;color:var(--main-dark);border:none;padding:6px 12px;border-radius:6px;cursor:pointer;font-weight:600;}
+.timer button{background:#fff;color:var(--main-dark);border:none;padding:6px 12px;border-radius:6px;cursor:pointer;font-weight:600;}
+  
   nav{display:flex;flex-wrap:wrap;gap:6px;padding:10px 24px;background:#fff;border-bottom:1px solid #e2e8f0;position:sticky;top:88px;z-index:9;}
   nav button{border:2px solid var(--main);background:#fff;color:var(--main);padding:6px 12px;border-radius:999px;cursor:pointer;font-weight:600;transition:.2s;font-size:.88rem;}
   nav button.active,nav button:hover{background:var(--main);color:#fff;}
@@ -66,7 +72,7 @@
   <div>
     <h1>💰 第 4 節：單利息、複利息及實際年利率</h1>
     <small>單利息 I = PRT・複利息 A = P(1 + r/n)^(nt)・實際年利率 ER｜單元二 數學｜40 分鐘</small>
-      <small class="src">📚 內容出處：DAE 應用教育文憑數學科 教材</small>
+      <small class="src">📚 內容出處：DAE 應用教育文憑數學科 教材</small> </div>
   <div class="timer">
     <label>⏱ 課堂時間</label>
     <input type="number" id="mins" min="0" max="120" step="1" value="60" onchange="setMins()" oninput="setMins()"> <label>分鐘</label>
