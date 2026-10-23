@@ -71,8 +71,15 @@
   <div>
     <h1>📈 3.2 以固定的率增加的應用題　📉 3.3 以固定的率減少的應用題</h1>
     <small>增長因子 (Growth factor)・衰變因子 (Decay factor)｜單元二 數學｜每節 20 分鐘</small>
+      <small class="src">📚 內容出處：DAE 應用教育文憑數學科 教材</small>
   </div>
-  <div class="timer">⏱ <span id="clock">20:00</span><button onclick="toggleTimer()" id="tbtn">開始</button><button onclick="resetTimer()">重設</button></div>
+<div class="timer">
+    <label>⏱ 課堂時間</label>
+    <input type="number" id="mins" min="0" max="120" step="1" value="60" onchange="setMins()" oninput="setMins()"> <label>分鐘</label>
+    <span id="clock">60:00</span>
+    <button onclick="toggleTimer()" id="tbtn">開始</button>
+    <button onclick="resetTimer()">重設</button>
+  </div>
 </header>
 
 <nav>
