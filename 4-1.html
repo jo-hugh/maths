@@ -64,8 +64,14 @@
   <div>
     <h1>💰 第 4 節：單利息、複利息及實際年利率</h1>
     <small>單利息 I = PRT・複利息 A = P(1 + r/n)^(nt)・實際年利率 ER｜單元二 數學｜40 分鐘</small>
+      <small class="src">📚 內容出處：DAE 應用教育文憑數學科 教材</small>
+  <div class="timer">
+    <label>⏱ 課堂時間</label>
+    <input type="number" id="mins" min="0" max="120" step="1" value="60" onchange="setMins()" oninput="setMins()"> <label>分鐘</label>
+    <span id="clock">60:00</span>
+    <button onclick="toggleTimer()" id="tbtn">開始</button>
+    <button onclick="resetTimer()">重設</button>
   </div>
-  <div class="timer">⏱ <span id="clock">40:00</span><button onclick="toggleTimer()" id="tbtn">開始</button><button onclick="resetTimer()">重設</button></div>
 </header>
 
 <nav>
