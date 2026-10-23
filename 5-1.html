@@ -3,16 +3,19 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>第 5 節｜借貸：信用卡貸款、樓宇按揭及壓力測試 — 互動教學（60 分鐘）</title>
+<title>第 5 節｜借貸：信用卡貸款、樓宇按揭及壓力測試 — 互動教學（DAE 應用教育文憑數學科）</title>
 <style>
   :root{--main:#1d4ed8;--main-dark:#1e3a8a;--ok:#16a34a;--bad:#dc2626;--accent:#f59e0b;--bg:#eff6ff;--card:#fff;}
   *{box-sizing:border-box;margin:0;padding:0;font-family:"Noto Sans TC","Microsoft JhengHei","PingFang TC",sans-serif;}
   body{background:var(--bg);color:#1e293b;}
   header{background:linear-gradient(135deg,var(--main-dark),var(--main));color:#fff;padding:14px 24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;position:sticky;top:0;z-index:10;box-shadow:0 2px 8px rgba(0,0,0,.2);}
   header h1{font-size:1.2rem;} header small{opacity:.85;display:block;font-size:.85rem;}
-  .timer{background:rgba(255,255,255,.15);padding:8px 14px;border-radius:10px;display:flex;align-items:center;gap:10px;}
-  .timer span{font-size:1.5rem;font-weight:700;font-variant-numeric:tabular-nums;}
+  header .src{display:inline-block;margin-top:4px;background:rgba(255,255,255,.18);padding:2px 10px;border-radius:6px;font-size:.8rem;opacity:1;}
+  .timer{background:rgba(255,255,255,.15);padding:8px 14px;border-radius:10px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+  .timer span#clock{font-size:1.5rem;font-weight:700;font-variant-numeric:tabular-nums;min-width:95px;text-align:center;}
   .timer button{background:#fff;color:var(--main-dark);border:none;padding:6px 12px;border-radius:6px;cursor:pointer;font-weight:600;}
+  .timer input{width:62px;padding:5px 6px;border:none;border-radius:6px;font-size:1rem;text-align:center;font-weight:700;color:var(--main-dark);}
+  .timer label{font-size:.85rem;opacity:.9;}
   nav{display:flex;flex-wrap:wrap;gap:6px;padding:10px 24px;background:#fff;border-bottom:1px solid #e2e8f0;position:sticky;top:66px;z-index:9;}
   nav button{border:2px solid var(--main);background:#fff;color:var(--main);padding:6px 12px;border-radius:999px;cursor:pointer;font-weight:600;transition:.2s;font-size:.88rem;}
   nav button.active,nav button:hover{background:var(--main);color:#fff;}
@@ -21,6 +24,7 @@
   @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
   .card{background:var(--card);border-radius:14px;padding:22px;margin-bottom:20px;box-shadow:0 2px 10px rgba(0,0,0,.05);line-height:1.8;}
   .card h2{color:var(--main-dark);margin-bottom:12px;font-size:1.25rem;border-left:5px solid var(--accent);padding-left:10px;line-height:1.4;}
+  .srcbox{background:#f1f5f9;border-left:5px solid var(--main-dark);border-radius:10px;padding:12px 16px;margin-bottom:20px;font-size:.95rem;}
   .badge{display:inline-block;background:#dbeafe;color:#1e3a8a;padding:2px 10px;border-radius:6px;font-size:.85rem;font-weight:600;margin-right:6px;}
   .btn{background:var(--main);color:#fff;border:none;padding:9px 16px;border-radius:8px;cursor:pointer;font-weight:600;font-size:.92rem;margin:6px 4px 4px 0;}
   .btn.secondary{background:#64748b;} .btn.warn{background:var(--accent);} .btn.danger{background:var(--bad);} .btn:hover{filter:brightness(1.1);}
@@ -54,7 +58,7 @@
   .lock{background:#fef2f2;border:2px solid var(--bad);border-radius:10px;padding:14px;display:flex;gap:10px;align-items:center;flex-wrap:wrap;}
   .lock input{padding:8px;border:2px solid #cbd5e1;border-radius:6px;font-size:1rem;width:220px;}
   .wrap{overflow-x:auto;}
-  footer{text-align:center;color:#94a3b8;padding:20px;font-size:.85rem;}
+  footer{text-align:center;color:#94a3b8;padding:20px;font-size:.85rem;line-height:1.8;}
 </style>
 </head>
 <body>
@@ -62,9 +66,16 @@
 <header>
   <div>
     <h1>🏦 第 5 節：借貸 — 信用卡貸款、樓宇按揭及壓力測試</h1>
-    <small>5.1 信用卡貸款・5.2 樓宇按揭（P 按／H 按・每月供款表）・5.3 壓力測試｜單元二 數學｜60 分鐘</small>
+    <small>5.1 信用卡貸款・5.2 樓宇按揭（P 按／H 按・每月供款表）・5.3 壓力測試｜單元二 數學</small>
+    <small class="src">📚 內容出處：DAE 應用教育文憑數學科 教材</small>
   </div>
-  <div class="timer">⏱ <span id="clock">60:00</span><button onclick="toggleTimer()" id="tbtn">開始</button><button onclick="resetTimer()">重設</button></div>
+  <div class="timer">
+    <label>⏱ 課堂時間</label>
+    <input type="number" id="mins" min="0" max="120" step="1" value="60" onchange="setMins()" oninput="setMins()"> <label>分鐘</label>
+    <span id="clock">60:00</span>
+    <button onclick="toggleTimer()" id="tbtn">開始</button>
+    <button onclick="resetTimer()">重設</button>
+  </div>
 </header>
 
 <nav>
@@ -82,6 +93,7 @@
 
 <!-- ===== 流程 ===== -->
 <section id="flow" class="active">
+  <div class="srcbox">📚 <b>內容出處</b>：本互動教材根據「<b>DAE 應用教育文憑數學科</b>」教材 第 5 節（5.1 信用卡貸款、5.2 樓宇按揭、5.3 壓力測試）及練習 5 編製，供課堂教學使用。例題編號、每月供款表及練習題答案均依據原教材。</div>
   <div class="card">
     <h2>學習成果</h2>
     <p>✅ 認識<b>信用卡貸款</b>的運作：免息還款期、年利率（APR）、利息按日計算、最低還款額的「債務雪球」</p>
@@ -90,7 +102,7 @@
     <p>✅ 能進行<b>供款與入息比率</b>（≤ 50%）及<b>壓力測試</b>（利率 + 3% 後 ≤ 60%）的計算並作出判斷</p>
   </div>
   <div class="card">
-    <h2>📅 60 分鐘流程</h2>
+    <h2>📅 建議流程（以 60 分鐘為例，可於頁首自訂課堂時間 0–120 分鐘）</h2>
     <div class="flow">
       <div class="step"><div class="t">0–5 分</div><div><b>引入：借錢要付甚麼代價？</b><br>信用卡、私人貸款、按揭——年利率由 2% 到 36% 以上！誰借得最貴？為甚麼？<div class="mode">💬 全班口答</div></div></div>
       <div class="step"><div class="t">5–15 分</div><div><b>5.1 信用卡貸款：例 5.01（按日計息）、例 5.02（最低還款額）</b><br>用「最低還款額模擬器」看 $20,000 要還多少年。<div class="mode">📝 小白板 ＋ 🖥 模擬器</div></div></div>
@@ -101,6 +113,7 @@
       <div class="step"><div class="t">48–56 分</div><div><b>練習 5 Q4–Q10 配對</b><br>🅰 Q4、Q6、Q8；🅱 Q5、Q9、Q10；Q7 全班搶答 → 互批<div class="mode">👥 配對</div></div></div>
       <div class="step"><div class="t">56–60 分</div><div><b>出口票 + 總結</b><br>查表三步曲、P 按／H 按、兩個比率。<div class="mode">🎫 個人</div></div></div>
     </div>
+    <div class="hint">⏱ 若課堂為 40 分鐘，可略去「免息分期」延伸及 Q8–Q10；若為 80–120 分鐘，可加入公式計算器探究（年期 25 年 vs 30 年）及 GeoGebra 模型。</div>
   </div>
 </section>
 
@@ -236,7 +249,7 @@
     <p>銀行批核按揭時，要確保借款人<b>供得起</b>，即使將來加息也供得起。課本採用以下兩個門檻：</p>
     <div class="formula">① 供款與入息比率 = 每月供款（連其他債務還款）÷ 每月入息 ≤ <b>50%</b><br>② 壓力測試：假設按息<b>上升 3%</b> 後，供款與入息比率 ≤ <b>60%</b></div>
     <table>
-      <tr><th>步驤</th><th>做法</th></tr>
+      <tr><th>步驟</th><th>做法</th></tr>
       <tr><td>1</td><td class="l">以現時按息查表 → 每月供款 M₁ → M₁ ÷ 入息 ≤ 50%？</td></tr>
       <tr><td>2</td><td class="l">以（按息 + 3%）查表 → 每月供款 M₂ → M₂ ÷ 入息 ≤ 60%？</td></tr>
       <tr><td>3</td><td class="l">兩項都通過 → 銀行才會批出按揭</td></tr>
@@ -300,7 +313,6 @@
 <section id="exit">
   <div class="card">
     <h2>🎫 出口票（Exit Ticket）</h2>
-<p style="margin:10px 0">班別：<input id="et-class" style="width:70px;padding:6px;text-align:center;border:2px solid #cbd5e1;border-radius:6px" placeholder="CS1">　姓名：<input id="et-name" style="width:140px;padding:6px;border:2px solid #cbd5e1;border-radius:6px" placeholder="陳大文"></p>
     <p><b>(1)</b> 信用卡只還最低還款額，餘下結欠會：
       <div class="choice" id="xq1"><label><input type="radio" name="xq1" value="A"> A　繼續享有免息期</label><label><input type="radio" name="xq1" value="B"> B　由簽賬日起按日計息</label><label><input type="radio" name="xq1" value="C"> C　只在下個到期日後才計息</label></div></p>
     <p style="margin-top:8px"><b>(2)</b> 查表：30 年、3% → 每 $10,000 供 $42.16。貸款 $5,000,000 的每月供款 = $<input class="ans" id="x2"></p>
@@ -309,8 +321,7 @@
       <div class="choice row" id="xq4"><label><input type="radio" name="xq4" value="Y"> ✅ 通過</label><label><input type="radio" name="xq4" value="N"> ❌ 不通過</label></div></p>
     <p style="margin-top:8px"><b>(5)</b> 我今天最不明白的地方是：</p>
     <textarea placeholder="請寫下你的疑問……"></textarea>
-    <br>
-<button class="btn" id="exit-btn" onclick="chkExit()">✔ 提交</button> <span class="msg" id="exit-msg"></span>
+    <br><button class="btn" onclick="chkExit()">✔ 提交</button><span class="msg" id="mx"></span>
   </div>
   <div class="card">
     <h2>📌 總結</h2>
@@ -344,7 +355,7 @@
       9. (a) A 4%，B 3.75% (b) A：490 × 47.74 = $23,392.6；B：490 × 46.31 = $22,691.9 (c) 相差 $700.7 × 360 = $252,252<br>
       10. $8,400,000；2.75%；30 年 → $40.82；840 × 40.82 = $34,288.8</p>
       <p style="margin-top:8px"><b>出口票：</b>(1) B (2) $21,080 (3) 3% (4) 62.5%，不通過</p>
-      <p style="margin-top:8px;color:#92400e"><small>※ 原稿文字缺漏：Q1–Q3、Q7 為按主題補編；例 5.04（$9,900,000）的按揭成數、年期、利率及入息（$76,000）為補設；Q6 原答案以 $30,000 計算入息，故題目補入「銀行只計算基本薪金 $30,000」；Q8、Q9 年期按答案反推為 30 年。請老師按原書核對。<br>※ 金管局於 2024 年 2 月 28 日宣布暫停按揭壓力測試要求，教學時可補充時事背景。</small></p>
+      <p style="margin-top:8px;color:#92400e"><small>※ 內容出處：DAE 應用教育文憑數學科 教材 第 5 節及練習 5。<br>※ 原稿文字缺漏：Q1–Q3、Q7 為按主題補編；例 5.04（$9,900,000）的按揭成數、年期、利率及入息（$76,000）為補設；Q6 原答案以 $30,000 計算入息，故題目補入「銀行只計算基本薪金 $30,000」；Q8、Q9 年期按答案反推為 30 年。請老師按原書核對。<br>※ 金管局於 2024 年 2 月 28 日宣布暫停按揭壓力測試要求，教學時可補充時事背景。</small></p>
     </div>
   </div>
   <div class="card">
@@ -371,15 +382,21 @@
 </section>
 
 </main>
-<footer>單元二｜第 5 節 借貸：信用卡貸款、樓宇按揭及壓力測試｜練習 5｜互動教學網站</footer>
+<footer>單元二｜第 5 節 借貸：信用卡貸款、樓宇按揭及壓力測試｜練習 5｜互動教學網站<br>📚 內容出處：DAE 應用教育文憑數學科 教材（僅供課堂教學使用）</footer>
 
 <script>
 function go(id,btn){document.querySelectorAll('section').forEach(s=>s.classList.remove('active'));document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));document.getElementById(id).classList.add('active');btn.classList.add('active');window.scrollTo({top:0,behavior:'smooth'});}
-/* 計時器 60 分鐘 */
+/* ===== 計時器（老師自訂 0–120 分鐘）===== */
 let secs=3600,tm=null;
+function readMins(){const el=document.getElementById('mins');let m=Math.round(Number(el.value));if(isNaN(m))m=0;if(m<0)m=0;if(m>120)m=120;el.value=m;return m;}
 function render(){document.getElementById('clock').textContent=String(Math.floor(secs/60)).padStart(2,'0')+':'+String(secs%60).padStart(2,'0');}
-function toggleTimer(){const b=document.getElementById('tbtn');if(tm){clearInterval(tm);tm=null;b.textContent='繼續';return;}b.textContent='暫停';tm=setInterval(()=>{if(secs>0){secs--;render();}else{clearInterval(tm);tm=null;alert('⏰ 60 分鐘已結束！');}},1000);}
-function resetTimer(){clearInterval(tm);tm=null;secs=3600;render();document.getElementById('tbtn').textContent='開始';}
+function setMins(){if(tm)return;/* 計時中不可更改 */secs=readMins()*60;render();document.getElementById('tbtn').textContent='開始';}
+function toggleTimer(){const b=document.getElementById('tbtn'),el=document.getElementById('mins');
+ if(tm){clearInterval(tm);tm=null;b.textContent='繼續';el.disabled=false;return;}
+ if(secs<=0){secs=readMins()*60;render();if(secs<=0){alert('請先輸入課堂時間（1–120 分鐘）');return;}}
+ b.textContent='暫停';el.disabled=true;
+ tm=setInterval(()=>{if(secs>0){secs--;render();}else{clearInterval(tm);tm=null;el.disabled=false;b.textContent='開始';alert('⏰ '+readMins()+' 分鐘已結束！');}},1000);}
+function resetTimer(){clearInterval(tm);tm=null;document.getElementById('mins').disabled=false;secs=readMins()*60;render();document.getElementById('tbtn').textContent='開始';}
 /* 檢查工具 */
 function num(v){v=String(v).replace(/[,\s$%元]/g,'').replace(/[−–]/g,'-');if(v.includes('/')){const [a,b]=v.split('/');return Number(a)/Number(b);}return Number(v);}
 function near(v,a,tol){const n=num(v);return !isNaN(n)&&Math.abs(n-a)<=(tol===undefined?0.005:tol);}
@@ -443,70 +460,6 @@ const PW='msJohughpw';
 function unlock(){const v=document.getElementById('pw').value;if(v===PW){document.getElementById('ans').classList.add('show');document.getElementById('lockbox').style.display='none';}else{setMsg('mpw',false,'','❌ 密碼錯誤');document.getElementById('pw').value='';}}
 function lock(){document.getElementById('ans').classList.remove('show');document.getElementById('lockbox').style.display='flex';document.getElementById('mpw').textContent='';}
 buildTable();lookup();runMort();runStress();runCC();render();
-const SHEET_URL   = "https://script.google.com/macros/s/AKfycbyXoECMifD_PatOXkd1i579dCAQMS2Q1p3DQ7jFIcZ8aoYzmYVrWxCtcFZy1SD8_FCZ/exec";
-const LESSON_NAME = "5-1 借貸按揭";
-const MC_ANS      = 'B';                 // (1) 選擇題答案
-const NUM_ANS     = [21080, 3, 62.5];    // (2)(3)(4) 計算題答案
-const PASS_ANS    = '不通過';            // (4) 壓力測試判斷
-
-function chkExit(){
-  try{
-    const btn = document.getElementById('exit-btn');
-    const msg = document.getElementById('exit-msg');
-    const cls  = document.getElementById('et-class').value.trim();
-    const name = document.getElementById('et-name').value.trim();
-
-    // 由按鈕向上找到出口票容器
-    let box = btn; while(box && !box.querySelector('#et-class')) box = box.parentElement;
-    const all = [...box.querySelectorAll('input, textarea')].filter(e => e.id!=='et-class' && e.id!=='et-name');
-
-    // --- radio：第 1 組 = (1) A/B/C；第 2 組 = (4) 通過／不通過 ---
-    const radios = all.filter(e => e.type==='radio');
-    const groups = [...new Set(radios.map(r => r.name))];
-    if(groups.length < 2){ alert('只找到 '+groups.length+' 組 radio（需要 2 組：第(1)題 A/B/C 及第(4)題 通過/不通過），請把出口票 HTML 貼給老師助手'); return; }
-    const picked = g => radios.find(x => x.name===g && x.checked);
-    const textOf = r => ((r.value||'') + ' ' + (r.closest('label') ? r.closest('label').textContent : '')).trim();
-
-    const r1 = picked(groups[0]);
-    const mc = r1 ? textOf(r1).replace(/[^A-Za-z]/g,'').charAt(0).toUpperCase() : '';   // 取 "B　由簽賬日起…" 的 B
-    const r4 = picked(groups[1]);
-    const pass = r4 ? (/不通過|不能|✘|❌/.test(textOf(r4)) ? '不通過' : '通過') : '';
-
-    // --- 計算題：出口票內前 3 個文字/數字輸入框 ---
-    const inputs = all.filter(e => e.tagName==='INPUT' && (e.type==='text'||e.type==='number'||!e.type)).slice(0,3);
-    const ta     = all.find(e => e.tagName==='TEXTAREA');
-    if(inputs.length<3){ alert('只找到 '+inputs.length+' 個計算題答案框，請把出口票 HTML 貼給老師助手'); return; }
-
-    if(!cls||!name){ msg.textContent='請先填寫班別和姓名'; msg.style.color='var(--bad)'; return; }
-    const nums = inputs.map(i => i.value.trim());
-    if(mc==='' || pass==='' || nums.some(a=>a==='')){ msg.textContent='請完成第 (1)–(4) 題（包括通過／不通過）'; msg.style.color='var(--bad)'; return; }
-
-    const okMC   = mc===MC_ANS;
-    const okNum  = nums.map((a,k) => Math.abs(Number(a.replace(/[,$%]/g,''))-NUM_ANS[k]) < 0.005);
-    const okPass = pass===PASS_ANS;
-    inputs.forEach((el,k) => {
-      if(typeof mark==='function') mark(el, okNum[k]);
-      else el.style.borderColor = okNum[k] ? '#16a34a' : '#dc2626';
-    });
-    const score = [okMC, ...okNum, okPass].filter(Boolean).length;
-
-    btn.disabled = true; msg.textContent='傳送中…'; msg.style.color='#64748b';
-
-    fetch(SHEET_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain'},
-      body: JSON.stringify({
-        lesson: LESSON_NAME, '班別': cls, '姓名': name,
-        'Q1 最低還款':  mc,      'Q1正確': okMC?'✔':'✘',
-        'Q2 每月供款':  nums[0], 'Q2正確': okNum[0]?'✔':'✘',
-        'Q3 實際按息':  nums[1], 'Q3正確': okNum[1]?'✔':'✘',
-        'Q4 比率%':     nums[2], 'Q4正確': okNum[2]?'✔':'✘',
-        'Q4 判斷':      pass,    'Q4判斷正確': okPass?'✔':'✘',
-        '得分': score+'/5',
-        '不明白的地方': ta ? ta.value.trim() : ''
-      })
-    }).then(()=>{ msg.textContent=`✔ 已提交，謝謝！（${score}/5）`; msg.style.color='var(--ok)'; })
-      .catch(()=>{ msg.textContent='提交失敗，請再按一次'; msg.style.color='var(--bad)'; btn.disabled=false; });
-  }catch(e){ alert('chkExit 錯誤：'+e.message); }
-}
 </script>
 </body>
 </html>
