@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>第 6 節｜折舊 — 互動教學（DAE 應用教育文憑數學科）</title>
+<style>
+  :root{--main:#4338ca;--main-dark:#312e81;--ok:#16a34a;--bad:#dc2626;--accent:#f59e0b;--bg:#eef2ff;--card:#fff;--soft:#e0e7ff;}
+  *{box-sizing:border-box;margin:0;padding:0;font-family:"Noto Sans TC","Microsoft JhengHei","PingFang TC",sans-serif;}
+  body{background:var(--bg);color:#1e293b;}
+
+  header{background:linear-gradient(135deg,var(--main-dark),var(--main));color:#fff;padding:14px 24px;
+    display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;
+    position:sticky;top:0;z-index:10;box-shadow:0 2px 8px rgba(0,0,0,.2);}
+  header h1{font-size:1.2rem;}
+  header small{opacity:.85;display:block;font-size:.85rem;}
+  header .src{display:inline-block;margin-top:4px;background:rgba(255,255,255,.18);padding:2px 10px;border-radius:6px;font-size:.8rem;opacity:1;}
+  .timer{margin-left:auto;background:rgba(255,255,255,.15);padding:8px 14px;border-radius:10px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+  .timer span#clock{font-size:1.5rem;font-weight:700;font-variant-numeric:tabular-nums;min-width:95px;text-align:center;}
+  .timer input{width:62px;padding:5px 6px;border:none;border-radius:6px;font-size:1rem;text-align:center;font-weight:700;color:var(--main-dark);}
+  .timer label{font-size:.85rem;opacity:.9;}
+  .timer button{background:#fff;color:var(--main-dark);border:none;padding:6px 12px;border-radius:6px;cursor:pointer;font-weight:600;}
+
+  nav{display:flex;flex-wrap:wrap;gap:6px;padding:10px 24px;background:#fff;border-bottom:1px solid #e2e8f0;position:sticky;top:96px;z-index:9;}
+  nav button{border:2px solid var(--main);background:#fff;color:var(--main);padding:6px 12px;border-radius:999px;cursor:pointer;font-weight:600;transition:.2s;font-size:.88rem;}
+  nav button.active,nav button:hover{background:var(--main);color:#fff;}
+  main{max-width:1000px;margin:0 auto;padding:24px;}
+  section{display:none;animation:fade .3s;} section.active{display:block;}
+  @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  .card{background:var(--card);border-radius:14px;padding:22px;margin-bottom:20px;box-shadow:0 2px 10px rgba(0,0,0,.05);line-height:1.8;}
+  .card h2{color:var(--main-dark);margin-bottom:12px;font-size:1.25rem;border-left:5px solid var(--accent);padding-left:10px;line-height:1.4;}
+  .srcbox{background:#f1f5f9;border-left:5px solid var(--main-dark);border-radius:10px;padding:12px 16px;margin-bottom:20px;font-size:.95rem;}
+  .badge{display:inline-block;background:var(--soft);color:var(--main-dark);padding:2px 10px;border-radius:6px;font-size:.85rem;font-weight:600;margin-right:6px;}
+  .btn{background:var(--main);color:#fff;border:none;padding:9px 16px;border-radius:8px;cursor:pointer;font-weight:600;font-size:.92rem;margin:6px 4px 4px 0;}
+  .btn.secondary{background:#64748b;} .btn.warn{background:var(--accent);} .btn.danger{background:var(--bad);} .btn:hover{filter:brightness(1.1);}
+  .flow{display:grid;gap:10px;}
+  .step{display:grid;grid-template-columns:90px 1fr;gap:12px;background:#f8fafc;border-radius:10px;padding:12px;border-left:5px solid var(--main);line-height:1.6;}
+  .step .t{font-weight:700;color:var(--main-dark);} .step .mode{color:#64748b;font-size:.86rem;margin-top:4px;}
+  .formula{background:var(--soft);border:2px solid var(--main);border-radius:10px;padding:12px 18px;font-size:1.05rem;margin:10px 0;text-align:center;font-weight:600;}
+  .hint{background:#fffbeb;border:1px dashed var(--accent);padding:10px 14px;border-radius:8px;margin:10px 0;}
+  .answer{background:#f0fdf4;border:1px solid var(--ok);padding:12px;border-radius:8px;margin-top:10px;display:none;} .answer.show{display:block;}
+  .msg{font-weight:700;margin-left:8px;}
+  input.ans{width:110px;padding:5px;text-align:center;border:2px solid #cbd5e1;border-radius:6px;font-size:1rem;}
+  input.ans.sm{width:70px;}
+  input.ans.ok{border-color:var(--ok);background:#f0fdf4;} input.ans.bad{border-color:var(--bad);background:#fef2f2;}
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  @media(max-width:700px){.two{grid-template-columns:1fr}.step{grid-template-columns:1fr}}
+  table{width:100%;border-collapse:collapse;margin:12px 0;} th,td{border:1px solid #cbd5e1;padding:8px;text-align:center;} th{background:var(--soft);}
+  td.l{text-align:left;}
+  .sol{display:none;background:#fef2f2;border-left:4px solid var(--bad);padding:12px 16px;border-radius:8px;margin-top:10px;color:#991b1b;line-height:2;} .sol.show{display:block;}
+  .sol .ind{padding-left:1.5em;}
+  .choice{display:grid;gap:8px;margin:8px 0;} .choice label{background:#f1f5f9;padding:8px 14px;border-radius:8px;cursor:pointer;display:flex;align-items:center;gap:10px;}
+  .choice label.ok{background:#dcfce7;} .choice label.bad{background:#fee2e2;}
+  textarea{width:100%;min-height:70px;padding:10px;border:2px solid #cbd5e1;border-radius:8px;font-size:1rem;}
+  .q{margin-top:14px;padding-top:10px;border-top:1px dashed #e2e8f0;}
+  .m{font-family:"Cambria Math","Times New Roman",serif;font-style:italic;}
+  .steps{background:#f8fafc;border-radius:10px;padding:14px;line-height:2.1;font-family:"Cambria Math","Times New Roman",serif;font-size:1.05rem;}
+  select,input.x{padding:6px 10px;border:2px solid #cbd5e1;border-radius:6px;font-size:1rem;}
+  .machine{display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap;margin:14px 0;}
+  .box{background:linear-gradient(135deg,#4338ca,#818cf8);color:#fff;border-radius:16px;padding:18px 22px;text-align:center;min-width:190px;box-shadow:0 4px 12px rgba(0,0,0,.15);}
+  .box.red{background:linear-gradient(135deg,#b91c1c,#f87171);}
+  .box .lab{font-size:.8rem;opacity:.9;} .box .val{font-size:1.3rem;font-weight:800;}
+  .io{background:#fff;border:3px solid var(--main);color:var(--main-dark);border-radius:16px;padding:14px 20px;text-align:center;min-width:140px;}
+  .io .val{font-size:1.3rem;font-weight:800;}
+  .arrow{font-size:2rem;color:var(--main-dark);}
+  .lock{background:#fef2f2;border:2px solid var(--bad);border-radius:10px;padding:14px;display:flex;gap:10px;align-items:center;flex-wrap:wrap;}
+  .lock input{padding:8px;border:2px solid #cbd5e1;border-radius:6px;font-size:1rem;width:220px;}
+  .pA{background:var(--soft);padding:10px;border-radius:10px;} .pB{background:#fef3c7;padding:10px;border-radius:10px;}
+  footer{text-align:center;color:#94a3b8;padding:20px;font-size:.85rem;line-height:1.8;}
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>📉 第 6 節：折舊（Depreciation）</h1>
+    <small>折舊 = 原值 − 新值・折舊率 = 折舊 ÷ 原值・直線折舊・加速折舊 A = P(1 − R%)ⁿ｜單元二 數學</small>
+    <small class="src">📚 內容出處：DAE 應用教育文憑數學科 教材</small>
+  </div>
+  <div class="timer">
+    <label>⏱ 課堂時間</label>
+    <input type="number" id="mins" min="0" max="120" step="1" value="40" onchange="setMins()" oninput="setMins()"> <label>分鐘</label>
+    <span id="clock">40:00</span>
+    <button onclick="toggleTimer()" id="tbtn">開始</button>
+    <button onclick="resetTimer()">重設</button>
+  </div>
+</header>
+
+<nav>
+  <button class="active" onclick="go('flow',this)">📋 流程</button>
+  <button onclick="go('dep',this)">📉 6.1 折舊概念</button>
+  <button onclick="go('sl',this)">📏 直線折舊</button>
+  <button onclick="go('ac',this)">🚀 加速折舊</button>
+  <button onclick="go('cmp',this)">⚖️ 直線 vs 加速</button>
+  <button onclick="go('ex6a',this)">📝 練習 6A</button>
+  <button onclick="go('exit',this)">🎫 出口票</button>
+  <button onclick="go('teacher',this)">👩‍🏫 教師區 🔒</button>
+</nav>
+
+<main>
+
+<!-- ===== 流程 ===== -->
+<section id="flow" class="active">
+  <div class="srcbox">📚 <b>內容出處</b>：本互動教材根據「<b>DAE 應用教育文憑數學科</b>」教材 第 6 節（6.1 折舊、直線折舊、加速折舊）及練習 6A 編製，供課堂教學使用。例題編號及練習題答案均依據原教材。</div>
+  <div class="card">
+    <h2>學習成果</h2>
+    <p>✅ 明白 <b>折舊</b>（Depreciation）及 <b>折舊率</b>（Depreciation rate）：折舊 = 原值 − 新值；折舊率 = 折舊 ÷ 原值 × 100%</p>
+    <p>✅ 能處理 <b>直線折舊</b>（Straight-line depreciation）：每期下跌<b>相同金額</b></p>
+    <p>✅ 能運用 <b>加速折舊</b>（Accelerated depreciation）公式 <span class="m">A = P(1 − R%)<sup>n</sup></span>，求 n 期後價值，並反求原值、折舊率</p>
+    <p>✅ 能分辨直線折舊與加速折舊的分別（線性下跌 vs 指數下跌）</p>
+  </div>
+  <div class="card">
+    <h2>📅 建議流程（以 40 分鐘為例，可於頁首自訂課堂時間 0–120 分鐘）</h2>
+    <div class="flow">
+      <div class="step"><div class="t">0–4 分</div><div><b>引入：手機二手價為何愈來愈低？</b><br>$4,988 → $3,200：折舊 = ？折舊率 = ？<div class="mode">💬 全班口答</div></div></div>
+      <div class="step"><div class="t">4–10 分</div><div><b>直線折舊：例 6.01、6.02 + 直線折舊計算器</b><br>每期下跌固定金額；注意「每半年」→ 兩年 = 4 期；折舊率逐年上升。<div class="mode">📝 小白板</div></div></div>
+      <div class="step"><div class="t">10–18 分</div><div><b>加速折舊：例 6.03（反求原值）→ 6.04（先求百分率再推算）→ 6.05（每年折舊金額）</b><div class="mode">📝 小白板</div></div></div>
+      <div class="step"><div class="t">18–24 分</div><div><b>「直線 vs 加速」比較頁</b><br>拉動年期滑桿觀察直線 vs 曲線 → 情境判斷 4 題搶答 → 快速計算表。<div class="mode">⚡ 搶答</div></div></div>
+      <div class="step"><div class="t">24–33 分</div><div><b>練習 6A 配對練習</b><br>🅰 Q1、Q7、Q12；🅱 Q3、Q8、Q13 → 互批；其餘課後完成（Q14–16 為挑戰題）。<div class="mode">👥 配對</div></div></div>
+      <div class="step"><div class="t">33–37 分</div><div><b>挑戰：練習 6A Q14</b><br>同一組數據，用直線及加速兩種方法求 5 年後價值，比較結果。<div class="mode">⚡ 搶答</div></div></div>
+      <div class="step"><div class="t">37–40 分</div><div><b>出口票 + 總結</b><br>兩條公式、期數對應、「n 期前」要用除法。<div class="mode">🎫 個人</div></div></div>
+    </div>
+    <div class="hint">⏱ 若課堂為 60 分鐘以上，可加入 Q15、Q16（分段折舊率）及「直線折舊何時跌至 $0？加速折舊會否跌至 $0？」探究。</div>
+  </div>
+</section>
+
+<!-- ===== 6.1 折舊概念 ===== -->
+<section id="dep">
+  <div class="card">
+    <h2>📉 6.1 折舊（Depreciation）</h2>
+    <p>把錢存入銀行會<b>賺取利息</b>（價值上升）；但用錢買一部手提電話，它的價值卻會<b>不斷下降</b>——這種情況稱為<b>折舊</b>。</p>
+    <p>舉例：你以 $4,988 買了一部手機，一個月後想二手賣出。全新手機的價格仍是 $4,988，但二手回收價可能只有 $3,200。</p>
+    <div class="formula">折舊（Depreciation）= 原值（Original value）− 新值（New value）<br>折舊率（Depreciation rate）= <span class="m">折舊 ÷ 原值</span> × 100%</div>
+    <p>🗣 提問：$4,988 的手機賣 $3,200，折舊 = $<input class="ans" id="i0a">，折舊率 = <input class="ans sm" id="i0b"> %（2 位小數）
+      <button class="btn" onclick="chkMany([['i0a',1788],['i0b',35.85,0.01]],'mi0')">檢查</button><span class="msg" id="mi0"></span></p>
+    <div class="hint">📌 折舊率的分母是<b>原值</b>（期初價值），不是新值！<br>📌 「減價百分率」、「下跌百分率」與折舊率意思相同，都是 ÷ 原值。</div>
+  </div>
+  <div class="card">
+    <h2>兩種常見的折舊計算方法</h2>
+    <div class="two">
+      <div class="pA"><b>📏 直線折舊（Straight-line depreciation）</b><br>每期折舊<b>金額相同</b>，例如每年下跌 $650。<br><span class="m">新值 = P − d × n</span>（d = 每期折舊金額，n = 期數）</div>
+      <div class="pB"><b>🚀 加速折舊（Accelerated depreciation）</b><br>每期折舊<b>率相同</b>（R%），折舊金額在初期較大、逐期減少。<br><span class="m">A = P(1 − R%)<sup>n</sup></span></div>
+    </div>
+    <div class="formula">原值 $P、每期折舊率 R%、n 期後的新值：<span class="m">A = P (1 − R%)<sup>n</sup></span></div>
+    <div class="hint">🧠 與複利息比較：複利息 A = P(1 + r%)ⁿ 是「加」；加速折舊 A = P(1 − R%)ⁿ 是「減」。結構一模一樣，只是符號相反。</div>
+  </div>
+</section>
+
+<!-- ===== 直線折舊 ===== -->
+<section id="sl">
+  <div class="card">
+    <h2>📏 直線折舊（Straight-line depreciation）</h2>
+    <div class="formula"><span class="m">n 期後價值 = 原值 − 每期折舊金額 × 期數</span>　　每期折舊率 = 該期折舊金額 ÷ 該期期初價值 × 100%</div>
+    <div class="hint">📌 數清楚<b>期數</b>：「每半年下降 $650，兩年後」→ 期數 = 4；「每季下降，一年後」→ 期數 = 4。<br>📌 直線折舊的折舊金額不變，但因期初價值愈來愈小，<b>折舊率會逐期上升</b>（見例 6.02）。</div>
+  </div>
+  <div class="card">
+    <h2>例 6.01　每半年下降固定金額</h2>
+    <p>最新款的四星手提電話「NOTE III」現時的售價為 5,588 元。手機零售店鋪預計「NOTE III」的價值每半年會下降 650 元。按該店鋪預計，「NOTE III」兩年後的價值會是多少？</p>
+    <p>兩年後價值 = $<input class="ans" id="e01"> <button class="btn" onclick="chkMany([['e01',2988]],'m01')">檢查</button><span class="msg" id="m01"></span></p>
+    <button class="btn secondary" onclick="tog('s01')">👁 題解</button>
+    <div class="sol" id="s01">每半年下降一次，兩年共下降四次。<div class="ind">兩年後價值 = 5,588 − 650 × 4 = <b>$2,988</b></div></div>
+  </div>
+  <div class="card">
+    <h2>例 6.02　直線折舊的折舊率</h2>
+    <p>下表列出法利利超級跑車出廠後每年的價值，求該跑車每年的折舊率。（提示：需要計算三次的折舊率）</p>
+    <table>
+      <tr><th>出廠後年期</th><th>0（出廠時）</th><th>1</th><th>2</th><th>3</th></tr>
+      <tr><th>價值（元）</th><td>$2,340,000</td><td>$1,990,000</td><td>$1,640,000</td><td>$1,290,000</td></tr>
+      <tr><th>折舊金額</th><td>／</td><td>$<input class="ans sm" id="e02d1"></td><td>$<input class="ans sm" id="e02d2"></td><td>$<input class="ans sm" id="e02d3"></td></tr>
+      <tr><th>折舊率（2 位小數）</th><td>／</td><td><input class="ans sm" id="e02r1"> %</td><td><input class="ans sm" id="e02r2"> %</td><td><input class="ans sm" id="e02r3"> %</td></tr>
+    </table>
+    <button class="btn" onclick="chkMany([['e02d1',350000],['e02d2',350000],['e02d3',350000],['e02r1',14.96,0.01],['e02r2',17.59,0.01],['e02r3',21.34,0.01]],'m02')">檢查</button><span class="msg" id="m02"></span>
+    <button class="btn secondary" onclick="tog('s02')">👁 題解</button>
+    <div class="sol" id="s02">每年折舊金額 = 2,340,000 − 1,990,000 = <b>$350,000</b>（三年相同 → 直線折舊）<div class="ind">第 1 年折舊率 = 350,000 ÷ 2,340,000 × 100% = <b>14.96%</b><br>第 2 年折舊率 = 350,000 ÷ 1,990,000 × 100% = <b>17.59%</b><br>第 3 年折舊率 = 350,000 ÷ 1,640,000 × 100% = <b>21.34%</b></div>⚠ 分母是「該年期初價值」，所以折舊率逐年上升。</div>
+  </div>
+  <div class="card">
+    <h2>🧮 直線折舊計算器</h2>
+    <p>原值 P = $<input class="x" id="sP" value="5588" style="width:110px" oninput="runSL()">　每期下降 d = $<input class="x" id="sD" value="650" style="width:90px" oninput="runSL()">　
+      結算周期 <select id="sU" onchange="runSL()"><option value="年">每年</option><option value="半年" selected>每半年</option><option value="季">每季</option><option value="月">每月</option></select>　
+      期數 n = <input class="x" id="sN" value="4" style="width:70px" oninput="runSL()"></p>
+    <div class="machine">
+      <div class="io"><div class="lab">原值 P</div><div class="val" id="sIn">$5,588</div></div>
+      <div class="arrow">➜</div>
+      <div class="box"><div class="lab">直線折舊機器</div><div class="val" id="sF">− 650 × 4</div></div>
+      <div class="arrow">➜</div>
+      <div class="io"><div class="lab">n 期後價值</div><div class="val" id="sOut">$2,988</div></div>
+    </div>
+    <div class="steps" id="sSteps"></div>
+    <div id="sTable"></div>
+    <div class="hint">⚡ 搶答：保持 $5,588、每半年 $650，期數改為 9，價值會是多少？再改為 10 呢？（直線折舊最終會跌至 $0 或負數——實際上價值不會低於 $0）</div>
+  </div>
+</section>
+
+<!-- ===== 加速折舊 ===== -->
+<section id="ac">
+  <div class="card">
+    <h2>🚀 加速折舊（Accelerated depreciation）</h2>
+    <div class="formula">原值 $P、每期折舊率 R%、n 期後價值：<span class="m">A = P (1 − R%)<sup>n</sup></span><br><small>反求原值：<span class="m">P = A ÷ (1 − R%)<sup>n</sup></span>　　反求折舊率：<span class="m">(1 − R%)<sup>n</sup> = A ÷ P</span> → 開 n 次方根</small></div>
+    <div class="hint">📌 每期折舊率相同，但折舊<b>金額逐期減少</b>（因期初價值愈來愈小）。<br>📌 求「n 年<b>前</b>」的價值 → 用<b>除法</b>（例 6.03）；求「n 年<b>後</b>」的價值 → 用<b>乘法</b>。</div>
+  </div>
+  <div class="card">
+    <h2>例 6.03　反求 3 年前的價值</h2>
+    <p>一部智慧手提電話的價值每年折舊 15%。若它現時的價值是 $4,913，求它 3 年前的價值。</p>
+    <p>3 年前價值 P = $<input class="ans" id="e03"> <button class="btn" onclick="chkMany([['e03',8000,0.5]],'m03')">檢查</button><span class="msg" id="m03"></span></p>
+    <button class="btn secondary" onclick="tog('s03')">👁 題解</button>
+    <div class="sol" id="s03">設它 3 年前的價值是 $P。<div class="ind">4,913 = P × (1 − 15%)³<br>P = 4,913 ÷ 0.85³ = <b>8,000</b></div>∴ 它 3 年前的價值是 <b>$8,000</b>。</div>
+  </div>
+  <div class="card">
+    <h2>例 6.04　先求減價百分率，再推算未來售價</h2>
+    <p>一款新型號的手提電話於 2020 年開售，數碼店於 2020 年和 2021 年售價分別是 $2,000 和 $1,650。<br>(a) 求 2020 年至 2021 年之間該型號手提電話減價的百分率。<br>(b) 若該型號手提電話往後的折舊率保持不變，求該型號手提電話於 2024 年的售價，準確至最接近的整數。</p>
+    <p>(a) <input class="ans sm" id="e04a"> %　(b) $<input class="ans" id="e04b"> <button class="btn" onclick="chkMany([['e04a',17.5,0.01],['e04b',927,1]],'m04')">檢查</button><span class="msg" id="m04"></span></p>
+    <button class="btn secondary" onclick="tog('s04')">👁 題解</button>
+    <div class="sol" id="s04">(a) 減價百分率 = (2,000 − 1,650) ÷ 2,000 × 100% = <b>17.5%</b><br>(b) 2021 → 2024 共 3 年：<div class="ind">售價 = 1,650 × (1 − 17.5%)³ = 1,650 × 0.825³ ≈ <b>$927</b>（準確至最接近整數）</div></div>
+    <div class="hint">🧠 注意起點：已知 2021 年售價 $1,650，到 2024 年只是 3 期，不是 4 期！</div>
+  </div>
+  <div class="card">
+    <h2>例 6.05　每年折舊金額</h2>
+    <p>現時四星手提電話「NOTE III」的售價為 5,588 元，其每年的折舊率為 20%。(a) 求 3 年後電話的價值。(b) 求每年的折舊金額。（準確至 $0.01）</p>
+    <p>(a) $<input class="ans" id="e05a">　(b) 第 1 年 $<input class="ans sm" id="e05b1">　第 2 年 $<input class="ans sm" id="e05b2">　第 3 年 $<input class="ans sm" id="e05b3">
+      <button class="btn" onclick="chkMany([['e05a',2861.06,0.01],['e05b1',1117.6,0.01],['e05b2',894.08,0.01],['e05b3',715.26,0.01]],'m05')">檢查</button><span class="msg" id="m05"></span></p>
+    <button class="btn secondary" onclick="tog('s05')">👁 題解</button>
+    <div class="sol" id="s05">(a) 3 年後價值 = 5,588 × (1 − 20%)³ = <b>$2,861.06</b><br>(b) 一年後的折舊金額 = 5,588 × 20% = <b>$1,117.6</b><div class="ind">兩年後的折舊金額 = (5,588 − 1,117.6) × 20% = 5,588 × 80% × 20% = <b>$894.08</b><br>三年後的折舊金額 = (5,588 − 1,117.6 − 894.08) × 20% = 5,588 × 80%² × 20% = <b>$715.26</b></div>⚠ 折舊率相同（20%），但折舊金額逐年減少。</div>
+  </div>
+  <div class="card">
+    <h2>🧮 加速折舊計算器</h2>
+    <p>方向 <select id="aDir" onchange="runAC()"><option value="F">已知原值 → 求 n 期後價值</option><option value="B">已知現值 → 求 n 期前原值</option></select>　
+      <span id="aLabP">原值 P</span> = $<input class="x" id="aP" value="5588" style="width:110px" oninput="runAC()">　每期折舊率 R = <input class="x" id="aR" value="20" style="width:70px" oninput="runAC()"> %　
+      結算周期 <select id="aU" onchange="runAC()"><option value="年" selected>每年</option><option value="半年">每半年</option><option value="季">每季</option><option value="月">每月</option></select>　期數 n = <input class="x" id="aN" value="3" style="width:70px" oninput="runAC()"></p>
+    <div class="machine">
+      <div class="io"><div class="lab" id="aInLab">原值 P</div><div class="val" id="aIn">$5,588</div></div>
+      <div class="arrow">➜</div>
+      <div class="box red"><div class="lab">加速折舊機器</div><div class="val" id="aF">× (1 − 20%)³</div></div>
+      <div class="arrow">➜</div>
+      <div class="io"><div class="lab" id="aOutLab">3 期後價值</div><div class="val" id="aOut"></div></div>
+    </div>
+    <div class="steps" id="aSteps"></div>
+    <div id="aTable"></div>
+    <div class="hint">⚡ 搶答：把方向改為「求 n 期前原值」，輸入現值 4,913、15%、3 期，看看是否得出例 6.03 的 $8,000？</div>
+  </div>
+</section>
+
+<!-- ===== 直線 vs 加速 ===== -->
+<section id="cmp">
+  <div class="card">
+    <h2>⚖️ 直線折舊 vs 加速折舊：有甚麼分別？</h2>
+    <table>
+      <tr><th style="width:22%"></th><th>📏 直線折舊</th><th>🚀 加速折舊</th></tr>
+      <tr><td class="l"><b>每期甚麼不變？</b></td><td class="l">折舊<b>金額</b>不變（每期減 $d）</td><td class="l">折舊<b>率</b>不變（每期乘 (1 − R%)）</td></tr>
+      <tr><td class="l"><b>折舊金額</b></td><td class="l">固定</td><td class="l">逐期<b>減少</b>（初期跌得最多）</td></tr>
+      <tr><td class="l"><b>折舊率</b></td><td class="l">逐期<b>上升</b>（分母愈小）</td><td class="l">固定 R%</td></tr>
+      <tr><td class="l"><b>公式</b></td><td class="l"><span class="m">新值 = P − d × n</span></td><td class="l"><span class="m">A = P(1 − R%)<sup>n</sup></span></td></tr>
+      <tr><td class="l"><b>圖像</b></td><td class="l">📏 向下的直線</td><td class="l">📉 向下但漸趨平緩的曲線</td></tr>
+      <tr><td class="l"><b>「期數」位置</b></td><td class="l">n 在<b>乘數</b>位置</td><td class="l">n 在<b>指數</b>位置</td></tr>
+      <tr><td class="l"><b>會跌至 $0 嗎？</b></td><td class="l">會：n = P ÷ d 期後價值為 $0</td><td class="l">永遠不會（只會愈來愈接近 0）</td></tr>
+      <tr><td class="l"><b>兩者何時相等？</b></td><td class="l" colspan="2">若第 1 期折舊金額相同（d = P × R%），<b>第 1 期後價值相等</b>；之後加速折舊的價值<b>較高</b>（因每期折舊金額減少）</td></tr>
+    </table>
+    <div class="formula">直線：每期<b>減相同金額</b>（P → P − d → P − 2d …）　｜　加速：每期<b>乘相同倍數</b>（P → P(1−R%) → P(1−R%)² …）</div>
+  </div>
+
+  <div class="card">
+    <h2>📊 互動折舊圖：直線與曲線怎樣分開？</h2>
+    <p>原值 P = $<input class="x" id="gP" value="10000" style="width:100px" oninput="drawCmp()">　直線：每年下跌 d = $<input class="x" id="gD" value="1500" style="width:80px" oninput="drawCmp()">　
+      加速：每年折舊率 R = <input class="x" id="gR" value="15" style="width:60px" oninput="drawCmp()"> %　<button class="btn warn" onclick="syncD()">令第 1 年折舊相同（d = P × R%）</button><br>
+      年期 t = <input type="range" id="gT" min="1" max="20" value="10" oninput="drawCmp()"> <b id="gTv">10</b> 年</p>
+    <canvas id="gCanvas" width="900" height="380" style="width:100%;max-width:900px;background:#fff;border:1px solid #cbd5e1;border-radius:10px"></canvas>
+    <div class="steps" id="gSteps"></div>
+    <div class="hint">⚡ 搶答：按「令第 1 年折舊相同」後，兩條線第 1 年重合，之後誰較高？把 t 拉到 20 年，直線會怎樣？曲線會跌到 $0 嗎？</div>
+    <div id="gTable"></div>
+  </div>
+
+  <div class="card">
+    <h2>🧐 情境判斷：直線還是加速？</h2>
+    <div class="q"><b>(1)</b> 手機零售店預計「NOTE III」的價值每半年下降 $650。
+      <div class="choice" id="j1"><label><input type="radio" name="j1" value="S"> 直線折舊</label><label><input type="radio" name="j1" value="C"> 加速折舊</label></div></div>
+    <div class="q"><b>(2)</b> 一輛汽車每年的價值是上一年的 85%。
+      <div class="choice" id="j2"><label><input type="radio" name="j2" value="S"> 直線折舊</label><label><input type="radio" name="j2" value="C"> 加速折舊</label></div></div>
+    <div class="q"><b>(3)</b> 折舊金額：第 1 年 $1,117.6，第 2 年 $894.08，第 3 年 $715.26。
+      <div class="choice" id="j3"><label><input type="radio" name="j3" value="S"> 直線折舊</label><label><input type="radio" name="j3" value="C"> 加速折舊</label></div></div>
+    <div class="q"><b>(4)</b> 折舊率逐年上升（14.96% → 17.59% → 21.34%），但每年折舊金額相同。
+      <div class="choice" id="j4"><label><input type="radio" name="j4" value="S"> 直線折舊</label><label><input type="radio" name="j4" value="C"> 加速折舊</label></div></div>
+  </div>
+
+  <div class="card">
+    <h2>✏️ 快速計算：原值 $10,000，第 1 年折舊皆為 $2,000</h2>
+    <p>直線折舊：每年下跌 $2,000；加速折舊：每年折舊率 20%。</p>
+    <table>
+      <tr><th>年期</th><th>直線折舊後價值</th><th>加速折舊後價值</th><th>相差（加速 − 直線）</th></tr>
+      <tr><td>1 年</td><td>$<input class="ans sm" id="k1s"></td><td>$<input class="ans sm" id="k1c"></td><td>$<input class="ans sm" id="k1d"></td></tr>
+      <tr><td>2 年</td><td>$<input class="ans sm" id="k2s"></td><td>$<input class="ans sm" id="k2c"></td><td>$<input class="ans sm" id="k2d"></td></tr>
+      <tr><td>3 年</td><td>$<input class="ans sm" id="k3s"></td><td>$<input class="ans sm" id="k3c"></td><td>$<input class="ans sm" id="k3d"></td></tr>
+      <tr><td>5 年</td><td>$<input class="ans sm" id="k4s"></td><td>$<input class="ans sm" id="k4c"></td><td>$<input class="ans sm" id="k4d"></td></tr>
+    </table>
+    <p><b>(5)</b> 練習 6A Q14：七人車 $218,000，一年後 $191,840。5 年後價值：直線折舊 $<input class="ans" id="k5s">，加速折舊 $<input class="ans" id="k5c">（$0.01）</p>
+    <button class="btn" onclick="chkCmp()">✔ 檢查本頁</button><span class="msg" id="mcmp"></span>
+    <div class="hint">🧠 結論：第 1 年相同；之後加速折舊的價值<b>較高</b>（因每年折舊金額遞減），直線折舊會在第 5 年跌至 $0，加速折舊則永不為 $0。</div>
+  </div>
+</section>
+
+<!-- ===== 練習 6A ===== -->
+<section id="ex6a">
+  <div class="card">
+    <h2>📝 練習 6A</h2>
+    <div class="two">
+      <div class="pA"><b>🅰 A 同學</b>：第 1、7、12 題</div>
+      <div class="pB"><b>🅱 B 同學</b>：第 3、8、13 題　→ 互相批改；其餘課後完成</div>
+    </div>
+    <p style="margin-top:8px"><small>金額答案可不填「$」及逗號；除特別註明外，準確至最接近的元或依題目要求。</small></p>
+    <div class="q"><b>1.</b> 組合櫃現值 $8,000。若它每年的折舊率是 10%，求該組合櫃在 4 年後的價值。$<input class="ans" id="b1"></div>
+    <div class="q"><b>2.</b> 一台鋼琴的原價是 $48,000，若價值每 2 年會折舊 12%，計算這台鋼琴 6 年後價值，準確至最接近元。$<input class="ans" id="b2"></div>
+    <div class="q"><b>3.</b> 一輛德樂拿電動汽車現值 $320,000。該輛汽車的價值每年下跌 12%。求四年後該輛汽車的價值。（準確至最接近的元）$<input class="ans" id="b3"></div>
+    <div class="q"><b>4.</b> 彩華用 $9,000 買了一部電腦。該部電腦的價值每半年下跌 7.5%。求兩年後該電腦的價值。$<input class="ans" id="b4">（準確至 $0.1）</div>
+    <div class="q"><b>5.</b> 一部單鏡反光相機的價值每半年折舊 8%，而它在 2020 年的價值是 $27,500。求該相機由 2020 年至 2022 年的折舊，準確至最接近的元。$<input class="ans" id="b5"></div>
+    <div class="q"><b>6.</b> 一部平板電腦的現價是 $5,600。該部平板電腦的價格每三個月下跌 3%。求一年後該部平板電腦的價格。（準確至最接近的元）$<input class="ans" id="b6"></div>
+    <div class="q"><b>7.</b> 阿哲三年前用 $3,600 買了一部顯示屏，該顯示屏的價值每年下跌 15%。<br>(a) 現時的價值 $<input class="ans" id="b7a">　(b) 這三年裏減少了的價值 $<input class="ans" id="b7b">（$0.01）</div>
+    <div class="q"><b>8.</b> 家朗四年前購買了一部數碼攝錄機，其價值每年下跌 12%。若該部數碼攝錄機現值 $5,200，家朗購買時付出的金額是多少？（準確至最接近的元）$<input class="ans" id="b8"></div>
+    <div class="q"><b>9.</b> 一輛豐田汽車現時的價值為 $100,000，其價值每年下跌 15%。求四年前它的價值。（準確至最接近的元）$<input class="ans" id="b9"></div>
+    <div class="q"><b>10.</b> 思思環球現在股價是 $19.6。過去三個月，每月均下跌 8%。求三個月前的股價。$<input class="ans sm" id="b10">（$0.01）</div>
+    <div class="q"><b>11.</b> 華華牌平板電腦現時售價為 4,588 元。<br>(a) 假設電腦的價格每半年下降 450 元，兩年半後的價格 $<input class="ans" id="b11a">，這是
+      <div class="choice" id="b11ar"><label><input type="radio" name="b11ar" value="S"> 直線折舊</label><label><input type="radio" name="b11ar" value="C"> 加速折舊</label></div>
+      (b) 若平板電腦的價格每半年下降 15%，兩年半後的價格 $<input class="ans" id="b11b">（$0.01），這是
+      <div class="choice" id="b11br"><label><input type="radio" name="b11br" value="S"> 直線折舊</label><label><input type="radio" name="b11br" value="C"> 加速折舊</label></div></div>
+    <div class="q"><b>12.</b> 一部大力牌手提電腦，三年前的價值為 $6,000，現時的價值則為 $4,374。<br>(a) 若以直線折舊計算，每年的折舊金額 $<input class="ans sm" id="b12a">　(b) 若以加速折舊計算，每年的折舊率 <input class="ans sm" id="b12b"> %</div>
+    <div class="q"><b>13.</b> 一部開開牌冷氣機，四年前的價值為 $8,000，現時的價值則為 3,276.8 元。<br>(a) 若以直線折舊計算，每年的折舊金額 $<input class="ans sm" id="b13a">　(b) 若以加速折舊計算，每年的折舊率 <input class="ans sm" id="b13b"> %</div>
+    <div class="q"><b>14.</b> ⭐ 一部七人車現時的價值為 $218,000，一年後它的價值為 $191,840。<br>(a) 折舊金額 $<input class="ans" id="b14a">　(b) 折舊率 <input class="ans sm" id="b14b"> %<br>(c) 以直線折舊方法，5 年後價值 $<input class="ans" id="b14c">　(d) 以加速折舊方法，5 年後價值 $<input class="ans" id="b14d">（$0.01）</div>
+    <div class="q"><b>15.</b> ⭐ 一輛電單車現值 $86,000。在未來兩年，它的價值每年將會減少 5%。其後，它的價值每年將會減少 10%。<br>(a) 兩年後價值 $<input class="ans" id="b15a">　(b) 四年後價值 $<input class="ans" id="b15b">（準確至最接近的元）</div>
+    <div class="q"><b>16.</b> ⭐ 一部新新牌手提電腦現值 $16,000。在未來一年，它的價值每三個月減少 6%。其後，它的價值每年減少 8%。<br>(a) 6 個月後價值 $<input class="ans" id="b16a">　(b) 三年後價值 $<input class="ans" id="b16b">（準確至最接近的元）</div>
+    <button class="btn" onclick="chk6a()">✔ 檢查練習 6A</button><span class="msg" id="mb"></span>
+    <div class="hint">💡 先寫下 <b>每期折舊率／金額、期數</b> 再代公式。Q2：每 2 年一期，6 年 = 3 期。Q5：折舊 = 原值 − 新值。Q8–10：「n 期前」用除法。Q12–13：(b) 開 n 次方根。Q15–16：分段折舊率用「接力」，不要重新由現值開始。</div>
+  </div>
+</section>
+
+<!-- ===== 出口票 ===== -->
+<section id="exit">
+  <div class="card">
+    <h2>🎫 出口票（Exit Ticket）</h2>
+    <p style="margin:10px 0">班別：<input id="et-class" style="width:70px;padding:6px;text-align:center;border:2px solid #cbd5e1;border-radius:6px" placeholder="CS1">　姓名：<input id="et-name" style="width:140px;padding:6px;border:2px solid #cbd5e1;border-radius:6px" placeholder="陳大文"></p>
+    <p><b>(1)</b> 一部電腦的價值「每年下跌固定 $500」，這屬於：
+      <div class="choice" id="xq1"><label><input type="radio" name="xq1" value="A"> A　直線折舊</label><label><input type="radio" name="xq1" value="B"> B　加速折舊</label><label><input type="radio" name="xq1" value="C"> C　兩者皆不是</label></div></p>
+    <p><b>(2)</b> 原值 $P，每年折舊率 R%，n 年後價值的公式是：
+      <div class="choice" id="xq2"><label><input type="radio" name="xq2" value="A"> A　P(1 + R%)ⁿ</label><label><input type="radio" name="xq2" value="B"> B　P(1 − R%)ⁿ</label><label><input type="radio" name="xq2" value="C"> C　P − P × R% × n</label></div></p>
+    <p style="margin-top:8px"><b>(3)</b> 一部相機原值 $5,000，一年後新值 $4,200，折舊率 = <input class="ans sm" id="x3"> %</p>
+    <p style="margin-top:8px"><b>(4)</b> 一部單車原值 $12,000，以直線折舊每年下跌 $900，4 年後價值 = $<input class="ans" id="x4"></p>
+    <p style="margin-top:8px"><b>(5)</b> 一部電視原值 $10,000，每年折舊率 20%（加速折舊），2 年後價值 = $<input class="ans" id="x5"></p>
+    <p style="margin-top:8px"><b>(6)</b> 一部手機現值 $7,290，每年折舊率 10%，3 年前的價值 = $<input class="ans" id="x6"></p>
+    <p style="margin-top:8px"><b>(7)</b> 我今天最不明白的地方是：</p>
+    <textarea id="et-note" placeholder="請寫下你的疑問……"></textarea>
+    <br><button class="btn" id="exit-btn" onclick="chkExit()">✔ 提交</button> <span class="msg" id="exit-msg"></span>
+  </div>
+  <div class="card">
+    <h2>📌 總結</h2>
+    <p>1️⃣ <b>折舊</b> = 原值 − 新值；<b>折舊率</b> = 折舊 ÷ <b>原值</b> × 100%</p>
+    <p>2️⃣ <b>直線折舊</b>：每期減相同金額，新值 = P − d × n；折舊率逐期上升；最終會跌至 $0</p>
+    <p>3️⃣ <b>加速折舊</b>：每期折舊率相同，A = P(1 − R%)ⁿ；折舊金額逐期減少；永不跌至 $0</p>
+    <p>4️⃣ <b>期數</b>：每半年 → 一年 2 期；每季 → 一年 4 期；每月 → 一年 12 期；每 2 年 → 6 年 3 期</p>
+    <p>5️⃣ <b>反求</b>：求 n 期前原值 → 除以 (1 − R%)ⁿ；求 R% → 開 n 次方根</p>
+    <p>6️⃣ <b>分段折舊率</b>：前段結果 × 後段因子（接力），不要重新開始</p>
+  </div>
+</section>
+
+<!-- ===== 教師區 ===== -->
+<section id="teacher">
+  <div class="card">
+    <h2>👩‍🏫 答案參考（須輸入密碼）</h2>
+    <div class="lock" id="lockbox">
+      🔒 請輸入教師密碼：<input type="password" id="pw" placeholder="密碼" onkeydown="if(event.key==='Enter')unlock()">
+      <button class="btn" onclick="unlock()">解鎖</button><span class="msg" id="mpw"></span>
+    </div>
+    <div class="answer" id="ans">
+      <p style="text-align:right"><button class="btn danger" onclick="lock()">🔒 重新鎖上</button></p>
+      <p><b>引入提問：</b>折舊 $1,788，折舊率 35.85%　<b>例 6.01：</b>$2,988　<b>例 6.02：</b>每年 $350,000；14.96%、17.59%、21.34%　<b>例 6.03：</b>$8,000　<b>例 6.04：</b>(a) 17.5% (b) $927　<b>例 6.05：</b>(a) $2,861.06 (b) $1,117.6、$894.08、$715.26</p>
+      <p style="margin-top:8px"><b>直線 vs 加速 頁：</b>情境 (1) 直線 (2) 加速 (3) 加速 (4) 直線；快速計算：1 年 $8,000 / $8,000 / $0；2 年 $6,000 / $6,400 / $400；3 年 $4,000 / $5,120 / $1,120；5 年 $0 / $3,276.8 / $3,276.8；(5) 直線 $87,200、加速 $115,045.56</p>
+      <p style="margin-top:8px"><b>練習 6A：</b>1. $5,248.8　2. $32,711　3. $191,903　4. $6,588.8　5. $7,799　6. $4,958　7. (a) $2,210.85 (b) $1,389.15　8. $8,671　9. $191,569　10. $25.17　11. (a) $2,338 直線 (b) $2,035.72 加速　12. (a) $542 (b) 10%　13. (a) $1,180.8 (b) 20%　14. (a) $26,160 (b) 12% (c) $87,200 (d) $115,045.56　15. (a) $77,615 (b) $62,868　16. (a) $14,137.6 (b) $10,573</p>
+      <p style="margin-top:8px"><b>出口票：</b>(1) A (2) B (3) 16% (4) $8,400 (5) $6,400 (6) $10,000</p>
+      <p style="margin-top:8px;color:#92400e"><small>※ 內容出處：DAE 應用教育文憑數學科 教材 第 6 節及練習 6A。<br>※ 練習 6A 第 4 題課本答案 $6,588.8（實際 6,588.85），本頁容許 ±0.1。</small></p>
+    </div>
+  </div>
+  <div class="card">
+    <h2>常見錯誤及應對</h2>
+    <table>
+      <tr><th style="width:40%">常見錯誤</th><th>教師回應策略</th></tr>
+      <tr><td class="l">折舊率用「新值」作分母</td><td class="l">口訣：「折舊率 ÷ 原值（期初）」；用例 6.02 示範三年分母不同</td></tr>
+      <tr><td class="l">加速折舊寫成 P(1 + R%)ⁿ</td><td class="l">與複利息對照：價值<b>下跌</b>用 1 − R%</td></tr>
+      <tr><td class="l">期數錯：每半年、每季、每 2 年</td><td class="l">規定先寫「一期 = ？」、「共 ？ 期」（Q2：6 年 ÷ 2 = 3 期；Q11：兩年半 = 5 期）</td></tr>
+      <tr><td class="l">求「n 年前」價值時乘 (1 − R%)ⁿ</td><td class="l">用加速折舊計算器「求 n 期前原值」示範是除法（例 6.03、Q8–10）</td></tr>
+      <tr><td class="l">以為直線折舊的折舊率不變</td><td class="l">例 6.02：金額不變但分母減少 → 折舊率上升</td></tr>
+      <tr><td class="l">例 6.04 (b) 用 4 期而非 3 期</td><td class="l">強調起點是 2021 年的 $1,650，2021 → 2024 只有 3 年</td></tr>
+      <tr><td class="l">分段折舊率（Q15、16）由現值重新計算</td><td class="l">強調「接力」：前段結果 × 後段因子</td></tr>
+      <tr><td class="l">直線折舊計算出負值</td><td class="l">用計算器示範：價值最低為 $0；比較加速折舊永不為 0</td></tr>
+      <tr><td class="l">反求折舊率時忘記開 n 次方根（Q12、13）</td><td class="l">(1 − R%)ⁿ = A ÷ P → 計算機 ˣ√ 或 ^(1/n)</td></tr>
+    </table>
+  </div>
+  <div class="card">
+    <h2>分層支援</h2>
+    <p><span class="badge">基礎組</span>練習 6A Q1、Q3、Q4、Q6（直接代公式）、Q7、Q11（直線 vs 加速），可用兩個計算器核對。</p>
+    <p style="margin-top:8px"><span class="badge">進階組</span>Q8–Q10（反求原值）、Q12–Q13（反求折舊率）、Q14（兩種方法比較）、Q15–Q16（分段折舊率）。</p>
+    <p style="margin-top:8px"><span class="badge">延伸</span>探究：直線折舊 d = P × R% 時，為何之後加速折舊的價值必較高？加速折舊的價值跌至原值一半需要多少年？（與第 4 節「翻倍年期」對照）</p>
+  </div>
+</section>
+
+</main>
+<footer>單元二｜第 6 節 折舊｜練習 6A｜互動教學網站<br>📚 內容出處：DAE 應用教育文憑數學科 教材（僅供課堂教學使用）</footer>
+
+<script>
+/* ===== 導航 ===== */
+function go(id,btn){document.querySelectorAll('section').forEach(s=>s.classList.remove('active'));document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));document.getElementById(id).classList.add('active');btn.classList.add('active');window.scrollTo({top:0,behavior:'smooth'});if(id==='cmp')drawCmp();}
+function fixNav(){document.querySelector('nav').style.top=document.querySelector('header').offsetHeight+'px';}
+window.addEventListener('resize',fixNav);
+
+/* ===== 計時器（老師自訂 0–120 分鐘）===== */
+let secs=0,tm=null;
+function readMins(){const el=document.getElementById('mins');let m=Math.round(Number(el.value));if(isNaN(m))m=0;if(m<0)m=0;if(m>120)m=120;el.value=m;return m;}
+function render(){document.getElementById('clock').textContent=String(Math.floor(secs/60)).padStart(2,'0')+':'+String(secs%60).padStart(2,'0');}
+function setMins(){if(tm)return;secs=readMins()*60;render();document.getElementById('tbtn').textContent='開始';}
+function toggleTimer(){const b=document.getElementById('tbtn'),el=document.getElementById('mins');
+ if(tm){clearInterval(tm);tm=null;b.textContent='繼續';el.disabled=false;return;}
+ if(secs<=0){secs=readMins()*60;render();if(secs<=0){alert('請先輸入課堂時間（1–120 分鐘）');return;}}
+ b.textContent='暫停';el.disabled=true;
+ tm=setInterval(()=>{if(secs>0){secs--;render();}else{clearInterval(tm);tm=null;el.disabled=false;b.textContent='開始';alert('⏰ '+readMins()+' 分鐘已結束！');}},1000);}
+function resetTimer(){clearInterval(tm);tm=null;document.getElementById('mins').disabled=false;secs=readMins()*60;render();document.getElementById('tbtn').textContent='開始';}
+
+/* ===== 檢查工具 ===== */
+function num(v){v=String(v).replace(/[,\s$%元]/g,'').replace(/[−–]/g,'-');if(v.includes('/')){const [a,b]=v.split('/');return Number(a)/Number(b);}return Number(v);}
+function near(v,a,tol){const n=num(v);return !isNaN(n)&&Math.abs(n-a)<=(tol===undefined?0.005:tol);}
+function mark(i,ok){i.classList.remove('ok','bad');i.classList.add(ok?'ok':'bad');}
+function setMsg(mid,ok,t1,t2){const m=document.getElementById(mid);if(ok===null){m.textContent='';return;}m.textContent=ok?t1:t2;m.style.color=ok?'var(--ok)':'var(--bad)';}
+function chkMany(list,mid){let all=true;list.forEach(([id,a,tol])=>{const i=document.getElementById(id);const ok=i.value.trim()!==''&&near(i.value,a,tol);mark(i,ok);if(!ok)all=false;});setMsg(mid,all,'🎉 全部正確！','❌ 有錯，紅色格請再試');}
+function tog(id){document.getElementById(id).classList.toggle('show');}
+function chkRadio(name,correct){const box=document.getElementById(name);let ok=false,any=false;box.querySelectorAll('label').forEach(l=>{l.classList.remove('ok','bad');const r=l.querySelector('input');if(r.checked){any=true;if(r.value===correct){l.classList.add('ok');ok=true;}else l.classList.add('bad');}});return any?ok:null;}
+function chkSet(list,radios,mid){let right=0,done=0;list.forEach(([id,a,tol])=>{const i=document.getElementById(id);if(i.value.trim()==='')return;done++;const ok=near(i.value,a,tol);mark(i,ok);if(ok)right++;});radios.forEach(([n,c])=>{const r=chkRadio(n,c);if(r!==null){done++;if(r)right++;}});setMsg(mid,right===done&&done>0,`🎉 已填 ${done} 格全部正確！`,`✔ ${right}/${done} 格正確，紅色格請再試`);}
+function chk6a(){chkSet([['b1',5248.8,0.05],['b2',32711,1],['b3',191903,1],['b4',6588.8,0.1],['b5',7799,1],['b6',4958,1],['b7a',2210.85,0.01],['b7b',1389.15,0.01],['b8',8671,1],['b9',191569,1],['b10',25.17,0.01],['b11a',2338,0.5],['b11b',2035.72,0.02],['b12a',542,0.5],['b12b',10,0.01],['b13a',1180.8,0.05],['b13b',20,0.01],['b14a',26160,0.5],['b14b',12,0.01],['b14c',87200,0.5],['b14d',115045.56,0.05],['b15a',77615,0.5],['b15b',62868,1],['b16a',14137.6,0.05],['b16b',10573,1]],[['b11ar','S'],['b11br','C']],'mb');}
+function chkCmp(){chkSet([['k1s',8000],['k1c',8000],['k1d',0],['k2s',6000],['k2c',6400],['k2d',400],['k3s',4000],['k3c',5120],['k3d',1120],['k4s',0],['k4c',3276.8,0.05],['k4d',3276.8,0.05],['k5s',87200,0.5],['k5c',115045.56,0.05]],[['j1','S'],['j2','C'],['j3','C'],['j4','S']],'mcmp');}
+
+/* ===== 格式 ===== */
+function money(n){return '$'+Number(n).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});}
+function money0(n){return '$'+Number(n).toLocaleString('en-US',{maximumFractionDigits:2});}
+
+/* ===== 直線折舊計算器 ===== */
+function runSL(){const P=Number(document.getElementById('sP').value),d=Number(document.getElementById('sD').value),u=document.getElementById('sU').value,n=Math.max(0,Math.floor(Number(document.getElementById('sN').value)));
+ if(!(P>0)||!(d>=0)||isNaN(n))return;
+ const raw=P-d*n,A=Math.max(raw,0);
+ document.getElementById('sIn').textContent=money0(P);document.getElementById('sF').textContent=`− ${d.toLocaleString()} × ${n}`;document.getElementById('sOut').textContent=money0(A);
+ let s=`<b>步驟：</b><br>每${u}下降 ${money0(d)}，共 ${n} 期<br>${n} 期後價值 = ${P.toLocaleString()} − ${d.toLocaleString()} × ${n} = <b>${money0(raw)}</b>`;
+ if(raw<0)s+=`<br><span style="color:#dc2626">⚠ 計算結果為負，實際價值已跌至 $0（第 ${Math.ceil(P/d)} 期後）</span>`;
+ if(d>0)s+=`<br>總折舊 = ${money0(P-A)}；跌至 $0 需 ${(P/d).toFixed(2)} 期`;
+ document.getElementById('sSteps').innerHTML=s;
+ let rows='';const show=Math.min(n,12);let v=P;
+ for(let k=1;k<=show;k++){const start=v,dep=Math.min(d,start),end=start-dep,rate=start>0?dep/start*100:0;rows+=`<tr><td>${k}</td><td>${money0(start)}</td><td>${money0(dep)}</td><td>${money0(end)}</td><td>${rate.toFixed(2)}%</td></tr>`;v=end;}
+ document.getElementById('sTable').innerHTML=show>0?`<table><tr><th>期</th><th>期初價值</th><th>折舊金額（固定）</th><th>期末價值</th><th>該期折舊率（上升）</th></tr>${rows}</table>${n>12?'<small>（只顯示首 12 期）</small>':''}`:'';}
+
+/* ===== 加速折舊計算器 ===== */
+function runAC(){const dir=document.getElementById('aDir').value,V=Number(document.getElementById('aP').value),r=Number(document.getElementById('aR').value),u=document.getElementById('aU').value,n=Math.max(0,Math.floor(Number(document.getElementById('aN').value)));
+ if(!(V>0)||isNaN(r)||r>=100||isNaN(n))return;
+ const f=Math.pow(1-r/100,n);let P,A;
+ if(dir==='F'){P=V;A=V*f;document.getElementById('aLabP').textContent='原值 P';document.getElementById('aInLab').textContent='原值 P';document.getElementById('aOutLab').textContent=`${n} 期後價值 A`;document.getElementById('aF').textContent=`× (1 − ${r}%)^${n}`;
+  document.getElementById('aSteps').innerHTML=`<b>步驟：</b><br>每${u}折舊 ${r}%，共 ${n} 期<br>A = ${P.toLocaleString()} × (1 − ${r}%)<sup>${n}</sup> = ${P.toLocaleString()} × ${(1-r/100).toFixed(4).replace(/0+$/,'')}<sup>${n}</sup> = <b>${money(A)}</b><br>總折舊 = ${money(P-A)}　｜　同期直線折舊（每期 ${money(P*r/100)}）後價值 = ${money(Math.max(P-P*r/100*n,0))}`;}
+ else{A=V;P=V/f;document.getElementById('aLabP').textContent='現值 A';document.getElementById('aInLab').textContent='現值 A';document.getElementById('aOutLab').textContent=`${n} 期前原值 P`;document.getElementById('aF').textContent=`÷ (1 − ${r}%)^${n}`;
+  document.getElementById('aSteps').innerHTML=`<b>步驤：</b>設 ${n} 期前原值為 $P<br>${A.toLocaleString()} = P × (1 − ${r}%)<sup>${n}</sup><br>P = ${A.toLocaleString()} ÷ ${(1-r/100).toFixed(4).replace(/0+$/,'')}<sup>${n}</sup> = <b>${money(P)}</b><br>總折舊 = ${money(P-A)}`;}
+ document.getElementById('aIn').textContent=money(V);document.getElementById('aOut').textContent=money(dir==='F'?A:P);
+ let rows='';const show=Math.min(n,12);let v=P;
+ for(let k=1;k<=show;k++){const start=v,dep=start*r/100,end=start-dep;rows+=`<tr><td>${k}</td><td>${money(start)}</td><td>${money(dep)}</td><td>${money(end)}</td><td>${r}%</td></tr>`;v=end;}
+ document.getElementById('aTable').innerHTML=show>0?`<table><tr><th>期</th><th>期初價值</th><th>折舊金額（遞減）</th><th>期末價值</th><th>折舊率（固定）</th></tr>${rows}</table>${n>12?'<small>（只顯示首 12 期）</small>':''}`:'';}
+
+/* ===== 直線 vs 加速 圖表 ===== */
+function syncD(){const P=Number(document.getElementById('gP').value),r=Number(document.getElementById('gR').value);document.getElementById('gD').value=+(P*r/100).toFixed(2);drawCmp();}
+function drawCmp(){
+ const P=Number(document.getElementById('gP').value),d=Number(document.getElementById('gD').value),r=Number(document.getElementById('gR').value),T=Number(document.getElementById('gT').value);
+ if(!(P>0)||!(d>=0)||!(r>=0)||r>=100||!(T>0))return;
+ document.getElementById('gTv').textContent=T;
+ const cv=document.getElementById('gCanvas'),c=cv.getContext('2d'),W=cv.width,H=cv.height,L=80,R=30,Tp=30,B=50;
+ c.clearRect(0,0,W,H);
+ const sl=t=>Math.max(P-d*t,0),ac=t=>P*Math.pow(1-r/100,t);
+ const maxY=P*1.05;
+ const X=t=>L+(W-L-R)*t/T,Y=v=>H-B-(H-Tp-B)*v/maxY;
+ c.strokeStyle='#e2e8f0';c.lineWidth=1;c.font='12px sans-serif';c.fillStyle='#64748b';
+ for(let i=0;i<=5;i++){const v=maxY*i/5,y=Y(v);c.beginPath();c.moveTo(L,y);c.lineTo(W-R,y);c.stroke();c.fillText('$'+Math.round(v).toLocaleString(),4,y+4);}
+ const step=T<=10?1:2;
+ for(let t=0;t<=T;t+=step){const x=X(t);c.beginPath();c.moveTo(x,Tp);c.lineTo(x,H-B);c.stroke();c.fillText(t,x-4,H-B+16);}
+ c.fillText('年',W-R-10,H-B+32);
+ c.strokeStyle='#1e293b';c.lineWidth=2;c.beginPath();c.moveTo(L,Tp);c.lineTo(L,H-B);c.lineTo(W-R,H-B);c.stroke();
+ /* 直線 */
+ c.strokeStyle='#2563eb';c.lineWidth=3;c.beginPath();for(let i=0;i<=200;i++){const t=T*i/200;i?c.lineTo(X(t),Y(sl(t))):c.moveTo(X(t),Y(sl(t)));}c.stroke();
+ /* 加速 */
+ c.strokeStyle='#dc2626';c.beginPath();for(let i=0;i<=200;i++){const t=T*i/200;i?c.lineTo(X(t),Y(ac(t))):c.moveTo(X(t),Y(ac(t)));}c.stroke();
+ const yS=Y(sl(T)),yC=Y(ac(T)),xE=X(T);
+ c.setLineDash([5,4]);c.strokeStyle='#f59e0b';c.lineWidth=2;c.beginPath();c.moveTo(xE,yS);c.lineTo(xE,yC);c.stroke();c.setLineDash([]);
+ c.fillStyle='#2563eb';c.beginPath();c.arc(xE,yS,5,0,7);c.fill();
+ c.fillStyle='#dc2626';c.beginPath();c.arc(xE,yC,5,0,7);c.fill();
+ c.font='bold 13px sans-serif';c.fillStyle='#2563eb';c.fillRect(W-R-250,Tp+6,18,4);c.fillText(`直線折舊：每年 − $${d.toLocaleString()}`,W-R-226,Tp+12);
+ c.fillStyle='#dc2626';c.fillRect(W-R-250,Tp+26,18,4);c.fillText(`加速折舊：每年 × (1 − ${r}%)`,W-R-226,Tp+32);
+ const vS=sl(T),vC=ac(T);
+ let s=`<b>${T} 年後：</b><br>直線折舊價值 = ${P.toLocaleString()} − ${d.toLocaleString()} × ${T} = <span style="color:#2563eb"><b>${money(vS)}</b></span>${P-d*T<0?'（已跌至 $0）':''}<br>加速折舊價值 = ${P.toLocaleString()} × (1 − ${r}%)<sup>${T}</sup> = <span style="color:#dc2626"><b>${money(vC)}</b></span><br>相差（加速 − 直線）= <span style="color:#b45309"><b>${money(vC-vS)}</b></span>`;
+ if(d>0)s+=`<br>直線折舊於第 ${(P/d).toFixed(1)} 年跌至 $0；加速折舊永不為 $0`;
+ if(Math.abs(d-P*r/100)<0.01)s+=`<br>✅ 第 1 年折舊相同（${money(d)}）→ 第 1 年後兩者價值相等，之後加速折舊價值較高`;
+ document.getElementById('gSteps').innerHTML=s;
+ let rows='';const show=[1,2,3,5,10,15,20].filter(y=>y<=T);if(!show.includes(T))show.push(T);
+ show.forEach(y=>{rows+=`<tr><td>${y}</td><td>${money(sl(y))}</td><td>${money(ac(y))}</td><td style="color:#b45309"><b>${money(ac(y)-sl(y))}</b></td></tr>`;});
+ document.getElementById('gTable').innerHTML=`<table><tr><th>年</th><th>直線折舊後價值</th><th>加速折舊後價值</th><th>相差（加速 − 直線）</th></tr>${rows}</table>`;
+}
+
+/* ===== 教師區密碼 ===== */
+const PW='msJohughpw';
+function unlock(){const v=document.getElementById('pw').value;if(v===PW){document.getElementById('ans').classList.add('show');document.getElementById('lockbox').style.display='none';}else{setMsg('mpw',false,'','❌ 密碼錯誤');document.getElementById('pw').value='';}}
+function lock(){document.getElementById('ans').classList.remove('show');document.getElementById('lockbox').style.display='flex';document.getElementById('mpw').textContent='';}
+
+/* ===== 出口票：批改 + 傳送至 Google Sheet ===== */
+const SHEET_URL   = "https://script.google.com/macros/s/AKfycbyXoECMifD_PatOXkd1i579dCAQMS2Q1p3DQ7jFIcZ8aoYzmYVrWxCtcFZy1SD8_FCZ/exec";
+const LESSON_NAME = "6-1 折舊";
+const MC_IDS  = ['xq1','xq2'];           const MC_ANS  = ['A','B'];
+const NUM_IDS = ['x3','x4','x5','x6'];   const NUM_ANS = [[16,0.01],[8400,0.5],[6400,0.5],[10000,0.5]];
+
+function chkExit(){
+  try{
+    const btn=document.getElementById('exit-btn'),msg=document.getElementById('exit-msg');
+    const cls=document.getElementById('et-class').value.trim(),name=document.getElementById('et-name').value.trim();
+    if(!cls||!name){msg.textContent='請先填寫班別和姓名';msg.style.color='var(--bad)';return;}
+    const mc=MC_IDS.map(id=>{const r=document.querySelector(`input[name="${id}"]:checked`);return r?r.value:'';});
+    const nums=NUM_IDS.map(id=>document.getElementById(id).value.trim());
+    if(mc.some(a=>a==='')||nums.some(a=>a==='')){msg.textContent='請完成第 (1)–(6) 題';msg.style.color='var(--bad)';return;}
+    const okMC=mc.map((a,k)=>a===MC_ANS[k]);
+    const okNum=nums.map((a,k)=>near(a,NUM_ANS[k][0],NUM_ANS[k][1]));
+    MC_IDS.forEach((id,k)=>chkRadio(id,MC_ANS[k]));
+    NUM_IDS.forEach((id,k)=>mark(document.getElementById(id),okNum[k]));
+    const score=[...okMC,...okNum].filter(Boolean).length;
+    const note=document.getElementById('et-note').value.trim();
+    btn.disabled=true;msg.textContent='傳送中…';msg.style.color='#64748b';
+    fetch(SHEET_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain'},
+      body:JSON.stringify({
+        lesson:LESSON_NAME,'班別':cls,'姓名':name,
+        'Q1 直線/加速':mc[0],'Q1正確':okMC[0]?'✔':'✘',
+        'Q2 公式':mc[1],'Q2正確':okMC[1]?'✔':'✘',
+        'Q3 折舊率':nums[0],'Q3正確':okNum[0]?'✔':'✘',
+        'Q4 直線價值':nums[1],'Q4正確':okNum[1]?'✔':'✘',
+        'Q5 加速價值':nums[2],'Q5正確':okNum[2]?'✔':'✘',
+        'Q6 反求原值':nums[3],'Q6正確':okNum[3]?'✔':'✘',
+        '得分':score+'/6','不明白的地方':note})
+    }).then(()=>{msg.textContent=`✔ 已提交，謝謝！（${score}/6）`;msg.style.color='var(--ok)';})
+      .catch(()=>{msg.textContent='提交失敗，請再按一次';msg.style.color='var(--bad)';btn.disabled=false;});
+  }catch(e){alert('chkExit 錯誤：'+e.message);}
+}
+
+/* ===== 初始化 ===== */
+runSL();runAC();drawCmp();setMins();fixNav();
+</script>
+</body>
+</html>
