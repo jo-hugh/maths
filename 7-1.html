@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>第 7 節｜薪俸稅 — 互動教學（DAE 應用教育文憑數學科）</title>
+<style>
+  :root{--main:#0f766e;--main-dark:#134e4a;--ok:#16a34a;--bad:#dc2626;--accent:#f59e0b;--bg:#ecfdf5;--card:#fff;--soft:#ccfbf1;}
+  *{box-sizing:border-box;margin:0;padding:0;font-family:"Noto Sans TC","Microsoft JhengHei","PingFang TC",sans-serif;}
+  body{background:var(--bg);color:#1e293b;}
+  header{background:linear-gradient(135deg,var(--main-dark),var(--main));color:#fff;padding:14px 24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;position:sticky;top:0;z-index:10;box-shadow:0 2px 8px rgba(0,0,0,.2);}
+  header h1{font-size:1.2rem;} header small{opacity:.85;display:block;font-size:.85rem;}
+  header .src{display:inline-block;margin-top:4px;background:rgba(255,255,255,.18);padding:2px 10px;border-radius:6px;font-size:.8rem;opacity:1;}
+  .timer{margin-left:auto;background:rgba(255,255,255,.15);padding:8px 14px;border-radius:10px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+  .timer span#clock{font-size:1.5rem;font-weight:700;font-variant-numeric:tabular-nums;min-width:95px;text-align:center;}
+  .timer input{width:62px;padding:5px 6px;border:none;border-radius:6px;font-size:1rem;text-align:center;font-weight:700;color:var(--main-dark);}
+  .timer label{font-size:.85rem;opacity:.9;} .timer button{background:#fff;color:var(--main-dark);border:none;padding:6px 12px;border-radius:6px;cursor:pointer;font-weight:600;}
+  nav{display:flex;flex-wrap:wrap;gap:6px;padding:10px 24px;background:#fff;border-bottom:1px solid #e2e8f0;position:sticky;top:96px;z-index:9;}
+  nav button{border:2px solid var(--main);background:#fff;color:var(--main);padding:6px 12px;border-radius:999px;cursor:pointer;font-weight:600;transition:.2s;font-size:.88rem;}
+  nav button.active,nav button:hover{background:var(--main);color:#fff;}
+  main{max-width:1040px;margin:0 auto;padding:24px;}
+  section{display:none;animation:fade .3s;} section.active{display:block;}
+  @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  .card{background:var(--card);border-radius:14px;padding:22px;margin-bottom:20px;box-shadow:0 2px 10px rgba(0,0,0,.05);line-height:1.8;}
+  .card h2{color:var(--main-dark);margin-bottom:12px;font-size:1.25rem;border-left:5px solid var(--accent);padding-left:10px;line-height:1.4;}
+  .card h3{color:var(--main);margin:12px 0 6px;font-size:1.05rem;}
+  .srcbox{background:#f1f5f9;border-left:5px solid var(--main-dark);border-radius:10px;padding:12px 16px;margin-bottom:20px;font-size:.95rem;}
+  .badge{display:inline-block;background:var(--soft);color:var(--main-dark);padding:2px 10px;border-radius:6px;font-size:.85rem;font-weight:600;margin-right:6px;}
+  .btn{background:var(--main);color:#fff;border:none;padding:9px 16px;border-radius:8px;cursor:pointer;font-weight:600;font-size:.92rem;margin:6px 4px 4px 0;}
+  .btn.secondary{background:#64748b;} .btn.warn{background:var(--accent);} .btn.danger{background:var(--bad);} .btn:hover{filter:brightness(1.1);}
+  .formula{background:var(--soft);border:2px solid var(--main);border-radius:10px;padding:12px 18px;font-size:1.02rem;margin:10px 0;font-weight:600;line-height:2;}
+  .hint{background:#fffbeb;border:1px dashed var(--accent);padding:10px 14px;border-radius:8px;margin:10px 0;}
+  .answer{background:#f0fdf4;border:1px solid var(--ok);padding:12px;border-radius:8px;margin-top:10px;display:none;} .answer.show{display:block;}
+  .msg{font-weight:700;margin-left:8px;}
+  input.ans{width:120px;padding:5px;text-align:center;border:2px solid #cbd5e1;border-radius:6px;font-size:1rem;}
+  input.ans.sm{width:80px;}
+  input.ans.ok{border-color:var(--ok);background:#f0fdf4;} input.ans.bad{border-color:var(--bad);background:#fef2f2;}
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:14px;} .three{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;}
+  @media(max-width:720px){.two,.three{grid-template-columns:1fr}}
+  table{width:100%;border-collapse:collapse;margin:12px 0;} th,td{border:1px solid #cbd5e1;padding:7px 8px;text-align:center;} th{background:var(--soft);}
+  td.l,th.l{text-align:left;} td.r{text-align:right;} tr.sub th{background:#e2e8f0;text-align:left;} tr.tot td{font-weight:700;background:#f8fafc;}
+  .sol{display:none;background:#fef2f2;border-left:4px solid var(--bad);padding:12px 16px;border-radius:8px;margin-top:10px;color:#991b1b;line-height:2;} .sol.show{display:block;}
+  .sol .ind{padding-left:1.5em;}
+  .choice{display:grid;gap:8px;margin:8px 0;} .choice label{background:#f1f5f9;padding:8px 14px;border-radius:8px;cursor:pointer;display:flex;align-items:center;gap:10px;}
+  .choice label.ok{background:#dcfce7;} .choice label.bad{background:#fee2e2;}
+  .tf{display:flex;gap:8px;flex-wrap:wrap;align-items:center;} .tf label{background:#f1f5f9;padding:6px 14px;border-radius:8px;cursor:pointer;} .tf label.ok{background:#dcfce7;} .tf label.bad{background:#fee2e2;}
+  .why{display:none;color:#92400e;font-size:.92rem;margin-top:4px;} .why.show{display:block;}
+  textarea{width:100%;min-height:70px;padding:10px;border:2px solid #cbd5e1;border-radius:8px;font-size:1rem;}
+  .q{margin-top:14px;padding-top:10px;border-top:1px dashed #e2e8f0;}
+  .steps{background:#f8fafc;border-radius:10px;padding:14px;line-height:2;font-size:1rem;}
+  select,input.x{padding:6px 10px;border:2px solid #cbd5e1;border-radius:6px;font-size:1rem;}
+  input.x{width:110px;} input.x.sm{width:64px;}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:8px 16px;}
+  .grid label{display:flex;justify-content:space-between;align-items:center;gap:8px;background:#f8fafc;padding:6px 10px;border-radius:8px;}
+  .result{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin:12px 0;}
+  .rbox{border-radius:14px;padding:14px;text-align:center;color:#fff;background:linear-gradient(135deg,#0f766e,#14b8a6);box-shadow:0 4px 12px rgba(0,0,0,.15);}
+  .rbox.gold{background:linear-gradient(135deg,#b45309,#f59e0b);} .rbox.red{background:linear-gradient(135deg,#b91c1c,#f87171);} .rbox.blue{background:linear-gradient(135deg,#1e40af,#3b82f6);}
+  .rbox .lab{font-size:.82rem;opacity:.92;} .rbox .val{font-size:1.35rem;font-weight:800;}
+  .lock{background:#fef2f2;border:2px solid var(--bad);border-radius:10px;padding:14px;display:flex;gap:10px;align-items:center;flex-wrap:wrap;}
+  .lock input{padding:8px;border:2px solid #cbd5e1;border-radius:6px;font-size:1rem;width:220px;}
+  .pA{background:var(--soft);padding:10px;border-radius:10px;} .pB{background:#fef3c7;padding:10px;border-radius:10px;}
+  .qbox{background:#f8fafc;border-left:5px solid var(--main);border-radius:10px;padding:12px 16px;margin-bottom:10px;}
+  footer{text-align:center;color:#94a3b8;padding:20px;font-size:.85rem;line-height:1.8;}
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>🧾 第 7 節：薪俸稅（Salaries Tax）</h1>
+    <small>強積金・免稅額・扣除額・應課稅入息實額・累進稅率・標準稅率・暫繳稅｜單元二 數學</small>
+    <small class="src">📚 內容出處：DAE 應用教育文憑數學科 教材（課稅年度 2026/2027）</small>
+  </div>
+  <div class="timer">
+    <label>⏱ 課堂時間</label>
+    <input type="number" id="mins" min="0" max="120" step="1" value="40" onchange="setMins()" oninput="setMins()"> <label>分鐘</label>
+    <span id="clock">40:00</span>
+    <button onclick="toggleTimer()" id="tbtn">開始</button>
+    <button onclick="resetTimer()">重設</button>
+  </div>
+</header>
+
+<nav>
+  <button class="active" onclick="go('flow',this)">📋 流程</button>
+  <button onclick="go('tf',this)">✅ 熱身題</button>
+  <button onclick="go('teach',this)">📖 課題教學</button>
+  <button onclick="go('fill',this)">✍️ 免稅額填充</button>
+  <button onclick="go('calc',this)">🧮 薪俸稅計算器</button>
+  <button onclick="go('taxcalc',this)">📊 稅款計算器</button>
+  <button onclick="go('exit',this)">🎫 出口票</button>
+  <button onclick="go('teacher',this)">👩‍🏫 教師區 🔒</button>
+</nav>
+
+<main>
+
+<!-- ===== 流程：學習成果 + 公式 ===== -->
+<section id="flow" class="active">
+  <div class="srcbox">📚 <b>內容出處</b>：本互動教材根據「<b>DAE 應用教育文憑數學科</b>」教材 第 7 節（7.1 課稅年度、7.2 強積金、7.3 薪俸稅）及附表一（免稅額）、附表二（扣除額）、附表三（稅率）編製。免稅額、扣除額及稅率以教材所載 <b>2026/2027 課稅年度</b> 為準。</div>
+  <div class="card">
+    <h2>學習成果</h2>
+    <p>✅ 認識香港的<b>課稅年度</b>（4 月 1 日至翌年 3 月 31 日）及<b>強積金</b>供款規則（5%、下限 $7,100、上限 $30,000）</p>
+    <p>✅ 分辨<b>免稅額</b>（Allowances）與<b>扣除額</b>（Deductions），並按個人情況正確選取及填寫金額</p>
+    <p>✅ 計算<b>總收入</b>、<b>應課稅入息實額</b>（Net chargeable income）</p>
+    <p>✅ 運用<b>累進稅率</b>（Progressive tax rate）及<b>標準稅率</b>（Standard rate）計算應繳薪俸稅，並取其較低者</p>
+    <p>✅ 計算<b>應繳稅款（連暫繳稅）</b>及處理退稅情況</p>
+  </div>
+
+  <div class="card">
+    <h2>📐 所有有用公式</h2>
+    <div class="formula">
+      ① 總收入 = 基本薪金（Basic salary）× 支薪月數 + 佣金（Commission）+ 花紅／獎金（Bonus）<br>
+      ② 強積金供款（每年）= 月薪 × 5% × 12　　<small>月薪 &lt; $7,100 → 僱員免供；月薪 &gt; $30,000 → 以 $1,500／月計；<b>可扣除上限 $18,000</b></small><br>
+      ③ 入息實額 = 總收入 − 扣除額<br>
+      ④ 應課稅入息實額（Net chargeable income）= 總收入 − 免稅額 − 扣除額<br>
+      ⑤ 累進稅 = 按附表三逐級計算（首 $50,000 × 2%、次 $50,000 × 6%、次 $50,000 × 10%、次 $50,000 × 14%、餘額 × 17%）<br>
+      ⑥ 標準稅 = 入息實額 × 15%　<small>（2024/25 起首 $5,000,000 按 15%，餘額按 16%）</small><br>
+      ⑦ 應繳稅款（不連暫繳稅）= 累進稅 與 標準稅 兩者中<b>較低者</b><br>
+      ⑧ 應繳稅款（連暫繳稅）= 本年度稅款 × 2 − 去年已繳暫繳稅　<small>（負數 → 稅務局退回差額）</small>
+    </div>
+    <div class="hint">🧠 累進稅快速口訣：<b>$100,000 → $4,000；$150,000 → $9,000；$200,000 → $16,000</b>，超過 $200,000 的部分 × 17%。</div>
+  </div>
+
+  <div class="two">
+    <div class="card">
+      <h2>附表一　免稅額（2026/2027）</h2>
+      <table>
+        <tr><th class="l">項目</th><th>HK$</th></tr>
+        <tr><td class="l">基本免稅額</td><td>145,000</td></tr>
+        <tr><td class="l">已婚人士免稅額</td><td>290,000</td></tr>
+        <tr><td class="l">子女免稅額（每名）</td><td>140,000</td></tr>
+        <tr><td class="l">　子女出生年度額外免稅額（每名）</td><td>140,000</td></tr>
+        <tr><td class="l">供養兄弟姊妹免稅額（每名）</td><td>37,500</td></tr>
+        <tr><td class="l">供養父母／祖父母／外祖父母（每名）60 歲或以上</td><td>55,000</td></tr>
+        <tr><td class="l">　　55 至 59 歲</td><td>27,500</td></tr>
+        <tr><td class="l">額外供養父母／祖父母（<b>全年同住</b>，每名）60 歲或以上</td><td>55,000</td></tr>
+        <tr><td class="l">　　55 至 59 歲</td><td>27,500</td></tr>
+        <tr><td class="l">單親免稅額</td><td>145,000</td></tr>
+        <tr><td class="l">傷殘受養人免稅額（每名）</td><td>75,000</td></tr>
+        <tr><td class="l">傷殘人士免稅額</td><td>75,000</td></tr>
+      </table>
+      <div class="hint">📌 「同住」父母 = 基本 + 額外，即 60 歲以上 <b>$110,000</b>、55–59 歲 <b>$55,000</b>。</div>
+    </div>
+    <div class="card">
+      <h2>附表二　扣除額（上限）</h2>
+      <table>
+        <tr><th class="l">項目</th><th>HK$</th></tr>
+        <tr><td class="l">個人進修開支</td><td>100,000</td></tr>
+        <tr><td class="l">強積金強制性供款</td><td>18,000</td></tr>
+        <tr><td class="l">自願醫保計劃保費（每名受保人）</td><td>8,000</td></tr>
+        <tr><td class="l">合資格年金保費及可扣稅強積金自願性供款</td><td>60,000</td></tr>
+        <tr><td class="l">居所貸款利息</td><td>100,000</td></tr>
+        <tr><td class="l">住宅租金</td><td>100,000</td></tr>
+        <tr><td class="l">長者住宿照顧開支</td><td>100,000</td></tr>
+        <tr><td class="l">輔助生育服務開支</td><td>100,000</td></tr>
+        <tr><td class="l">認可慈善捐款</td><td>最少 $100，最多入息 35%</td></tr>
+      </table>
+      <h2 style="margin-top:14px">附表三　累進稅率（2026/2027 及其後）</h2>
+      <table>
+        <tr><th>應課稅入息實額 $</th><th>稅率</th><th>稅款 $</th><th>累計 $</th></tr>
+        <tr><td>最初的 50,000</td><td>2%</td><td>1,000</td><td>1,000</td></tr>
+        <tr><td>其次的 50,000</td><td>6%</td><td>3,000</td><td>4,000</td></tr>
+        <tr><td>其次的 50,000</td><td>10%</td><td>5,000</td><td>9,000</td></tr>
+        <tr><td>其次的 50,000</td><td>14%</td><td>7,000</td><td>16,000</td></tr>
+        <tr><td>餘額</td><td>17%</td><td>—</td><td>—</td></tr>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 熱身是非 ===== -->
+<section id="tf">
+  <div class="card">
+    <h2>✅ 熱身是非題（10 題）</h2>
+    <p>先憑常識判斷，答錯也不要緊——這正是今課要學的內容！</p>
+    <div id="tfbox"></div>
+    <button class="btn" onclick="chkTF()">✔ 檢查</button><span class="msg" id="mtf"></span>
+    <button class="btn secondary" onclick="document.querySelectorAll('.why').forEach(w=>w.classList.add('show'))">👁 顯示全部解釋</button>
+  </div>
+</section>
+
+<!-- ===== 課題教學 ===== -->
+<section id="teach">
+  <div class="card">
+    <h2>7.1 課稅年度 &amp; 7.2 強積金（MPF）</h2>
+    <p>📅 香港的<b>課稅年度</b>由每年 <b>4 月 1 日</b>至翌年 <b>3 月 31 日</b>，例如 2026/2027 課稅年度即 2026 年 4 月 1 日至 2027 年 3 月 31 日。</p>
+    <p>💼 <b>強積金</b>（Mandatory Provident Fund，2000 年 12 月 1 日實施）：僱員及僱主各供有關入息的 <b>5%</b>。</p>
+    <table>
+      <tr><th>每月有關入息</th><th>僱員供款</th><th>僱主供款</th></tr>
+      <tr><td>少於 $7,100</td><td>毋須供款</td><td>入息 × 5%</td></tr>
+      <tr><td>$7,100 至 $30,000</td><td>入息 × 5%</td><td>入息 × 5%</td></tr>
+      <tr><td>多於 $30,000</td><td>$1,500</td><td>$1,500</td></tr>
+    </table>
+    <p>🗣 口答：月薪 $28,000 → 每年供款 $<input class="ans sm" id="t1a">；月薪 $44,000 → 每年供款 $<input class="ans sm" id="t1b">；月薪 $7,000 → 每年供款 $<input class="ans sm" id="t1c">
+      <button class="btn" onclick="chkMany([['t1a',16800],['t1b',18000],['t1c',0]],'mt1')">檢查</button><span class="msg" id="mt1"></span></p>
+    <div class="hint">📌 其他扣除項目：可扣稅自願性供款（TVC）及合資格年金保費合共上限 $60,000；自願醫保（VHIS）每名受保人上限 $8,000。</div>
+  </div>
+
+  <div class="card">
+    <h2>7.3 薪俸稅（Salaries tax）—— 計算步驟</h2>
+    <div class="formula">
+      步驟 1　總收入 = 基本薪金 + 佣金 + 花紅<br>
+      步驟 2　應課稅入息實額 = 總收入 − 免稅額 − 扣除額<br>
+      步驟 3　以累進稅率計算稅款（並與標準稅率比較，取較低者）<br>
+      步驟 4　應繳稅款（連暫繳稅）= 本年度稅款 × 2 − 去年已繳暫繳稅
+    </div>
+    <div class="two">
+      <div class="pA"><b>免稅額（Allowances）</b>：按<b>身份</b>給予——基本／已婚、子女、供養父母、兄弟姊妹、單親、傷殘。金額固定，不用「交單」。</div>
+      <div class="pB"><b>扣除額（Deductions）</b>：按<b>實際支出</b>扣除——強積金、進修開支、自願醫保、居所貸款利息／租金、慈善捐款等。各有<b>上限</b>。</div>
+    </div>
+    <div class="hint">⚠ 暫繳稅（Provisional tax）：稅務局在評稅時，會假設下年度收入相同而<b>預收</b>一年稅款，故本年度須繳付「本年度稅款 + 下年度暫繳稅」，再扣減去年已預繳的款額。</div>
+  </div>
+
+  <div class="card">
+    <h2>例 7.01　總收入與應課稅入息實額</h2>
+    <p>某人每月薪金 $44,000，全年支取 13 個月薪金，已婚並育有一名子女，有認可慈善捐款 $20,000，強積金供款 $18,000。求 (a) 總收入 (b) 免稅額 (c) 應課稅入息實額。</p>
+    <p>(a) $<input class="ans" id="e01a">　(b) $<input class="ans" id="e01b">　(c) $<input class="ans" id="e01c">
+      <button class="btn" onclick="chkMany([['e01a',572000],['e01b',430000],['e01c',104000]],'m01')">檢查</button><span class="msg" id="m01"></span></p>
+    <button class="btn secondary" onclick="tog('s01')">👁 題解</button>
+    <div class="sol" id="s01">(a) 總收入 = $44,000 × 13 = <b>$572,000</b><br>(b) 已婚人士免稅額 $290,000 + 子女免稅額 $140,000 = <b>$430,000</b><br>(c) 應課稅入息實額 = $572,000 − $430,000 − $20,000 − $18,000 = <b>$104,000</b></div>
+  </div>
+
+  <div class="card">
+    <h2>例 7.02　供養同住父母、累進稅、連暫繳稅</h2>
+    <p>某人未婚，每月薪金 $28,000，供養一名 64 歲同住父親，強積金供款按 5% 計。求應課稅入息實額及應繳稅款（連暫繳稅，去年沒有暫繳稅）。</p>
+    <p>應課稅入息實額 $<input class="ans" id="e02a">　稅款（不連暫繳）$<input class="ans sm" id="e02b">　稅款（連暫繳）$<input class="ans sm" id="e02c">
+      <button class="btn" onclick="chkMany([['e02a',64200],['e02b',1852],['e02c',3704]],'m02')">檢查</button><span class="msg" id="m02"></span></p>
+    <button class="btn secondary" onclick="tog('s02')">👁 題解</button>
+    <div class="sol" id="s02">總收入 = $28,000 × 12 = $336,000<div class="ind">應課稅入息實額 = $336,000 − $145,000 − $55,000 − $55,000 − $28,000 × 5% × 12 = <b>$64,200</b><br>首 $50,000 × 2% = $1,000；其餘 $14,200 × 6% = $852 → 稅款 = $1,852<br>應繳稅款（連暫繳稅）= ($1,000 + $852) × 2 = <b>$3,704</b></div></div>
+  </div>
+
+  <div class="card">
+    <h2>例 7.03　供養兄弟姊妹及兩名同住父母</h2>
+    <p>某人未婚，每月薪金 $40,000，供養一名 19 歲全日制就學的弟弟，以及 57 歲及 61 歲的同住父母，強積金供款 $18,000。求應課稅入息實額及應繳稅款（連暫繳稅，去年沒有暫繳稅）。</p>
+    <p>應課稅入息實額 $<input class="ans" id="e03a">　稅款（連暫繳）$<input class="ans sm" id="e03b">
+      <button class="btn" onclick="chkMany([['e03a',114500],['e03b',10900]],'m03')">檢查</button><span class="msg" id="m03"></span></p>
+    <button class="btn secondary" onclick="tog('s03')">👁 題解</button>
+    <div class="sol" id="s03">總收入 = $40,000 × 12 = $480,000<div class="ind">應課稅入息實額 = $480,000 − $145,000 − $37,500 − $27,500 × 2 − $55,000 × 2 − $18,000 = <b>$114,500</b><br>首 $100,000 → $4,000；其餘 $14,500 × 10% = $1,450 → 稅款 = $5,450<br>應繳稅款（連暫繳稅）= $5,450 × 2 = <b>$10,900</b></div>📌 57 歲同住 → $27,500 × 2；61 歲同住 → $55,000 × 2。</div>
+  </div>
+
+  <div class="card">
+    <h2>例 7.04　夫婦合併評稅、去年有暫繳稅（退稅）</h2>
+    <p>丈夫每月薪金 $44,000，年終獎金 $63,000；妻子每月薪金 $28,000。育有兩名子女，供養兩名 63 歲同住父母。丈夫強積金供款 $18,000，妻子按 5% 計。去年已繳暫繳稅 $10,000。求應繳稅款（連暫繳稅）。</p>
+    <p>應課稅入息實額 $<input class="ans" id="e04a">　稅款（不連暫繳）$<input class="ans sm" id="e04b">　連暫繳稅後 <select id="e04s"><option value="">請選</option><option value="pay">須繳付</option><option value="refund">可退回</option></select> $<input class="ans sm" id="e04c">
+      <button class="btn" onclick="chkMany([['e04a',102200],['e04b',4220],['e04c',1560]],'m04');chkSel('e04s','refund')">檢查</button><span class="msg" id="m04"></span></p>
+    <button class="btn secondary" onclick="tog('s04')">👁 題解</button>
+    <div class="sol" id="s04">總收入 = $44,000 × 12 + $63,000 + $28,000 × 12 = $927,000<div class="ind">應課稅入息實額 = $927,000 − $290,000 − $140,000 × 2 − $55,000 × 2 × 2 − $18,000 − $28,000 × 5% × 12 = <b>$102,200</b><br>稅款 = $4,000 + $2,200 × 10% = $4,220<br>應繳稅款（連暫繳稅）= $4,220 × 2 − $10,000 = <b>−$1,560</b> → 稅務局<b>退回 $1,560</b></div></div>
+  </div>
+
+  <div class="card">
+    <h2>例 7.05　標準稅率何時更低？</h2>
+    <p>某人未婚，供養一名 70 歲不同住父母，強積金供款 $18,000。(a) 全年收入達多少時，以標準稅率計算的稅款會低於累進稅率？(b) 若全年收入 $3,000,000，求應繳稅款（連暫繳稅，去年沒有暫繳稅）。</p>
+    <button class="btn secondary" onclick="tog('s05')">👁 題解</button>
+    <div class="sol" id="s05">(a) 免稅額 + 扣除額 = $145,000 + $55,000 + $18,000 = $218,000。設全年收入為 $x：<div class="ind">累進稅 = $16,000 + (x − 218,000 − 200,000) × 0.17<br>標準稅 = 0.15 (x − 18,000)<br>16,000 + 0.17x − 71,060 ≤ 0.15x − 2,700 → 0.02x ≥ 52,360 → x ≥ <b>2,618,000</b></div>∴ 全年收入達 <b>$2,618,000</b> 以上，標準稅率較低。<br>(b) 稅款 = ($3,000,000 − $18,000) × 15% × 2 = <b>$894,600</b></div>
+    <div class="hint">🧠 標準稅率只扣<b>扣除額</b>，不扣免稅額！高收入者才會用到標準稅率。</div>
+  </div>
+</section>
+
+<!-- ===== 免稅額填充 ===== -->
+<section id="fill">
+  <div class="card">
+    <h2>✍️ 判斷 + 填充：免稅額及扣除額</h2>
+    <p>閱讀題目，<b>判斷</b>每個項目是否適用：適用的填寫<b>金額</b>，不適用的填 <b>0</b>。然後完成餘下計算。（金額可不填「$」及逗號）</p>
+  </div>
+
+  <div class="card">
+    <h2>第 17 題　嘉能和美紀（夫婦合併評稅）</h2>
+    <div class="qbox">嘉能和美紀於 2026/2027 課稅年度的每月薪金分別為 <b>59,800 元</b>及 <b>27,600 元</b>。他們育有<b>兩名子女</b>，其中<b>幼子是本課稅年度出生</b>，他們需供養<b>不同住</b>的 <b>66 歲母親</b>和 <b>68 歲父親</b>，嘉能於晚間修讀香江大學會計碩士課程，本年度<b>學費為 88,000 元</b>。去年預繳稅款 <b>$4,800</b>。</div>
+    <table>
+      <tr><th class="l" style="width:55%">項目</th><th>金額 $</th><th>判斷理由（檢查後顯示）</th></tr>
+      <tr class="sub"><th colspan="3">(a) 收入</th></tr>
+      <tr><td class="l">全年總收入</td><td><input class="ans" id="a17inc"></td><td class="why" id="w17inc">(59,800 + 27,600) × 12</td></tr>
+      <tr class="sub"><th colspan="3">免稅額（判斷適用與否）</th></tr>
+      <tr><td class="l">基本免稅額</td><td><input class="ans" id="a17basic" placeholder="0 若不適用"></td><td class="why">已婚合併評稅 → 改用已婚人士免稅額，不是基本免稅額</td></tr>
+      <tr><td class="l">已婚人士免稅額</td><td><input class="ans" id="a17mar"></td><td class="why">夫婦合併評稅 $290,000</td></tr>
+      <tr><td class="l">子女免稅額</td><td><input class="ans" id="a17child"></td><td class="why">2 名 × $140,000</td></tr>
+      <tr><td class="l">子女出生年度額外免稅額</td><td><input class="ans" id="a17new"></td><td class="why">幼子本年度出生 → 額外 $140,000 × 1</td></tr>
+      <tr><td class="l">供養父母免稅額（60 歲或以上）</td><td><input class="ans" id="a17par"></td><td class="why">66 歲及 68 歲 → 2 × $55,000</td></tr>
+      <tr><td class="l">額外供養父母免稅額（同住）</td><td><input class="ans" id="a17parx" placeholder="0 若不適用"></td><td class="why">「不同住」→ 沒有額外免稅額</td></tr>
+      <tr><td class="l">供養兄弟姊妹免稅額</td><td><input class="ans" id="a17sib" placeholder="0 若不適用"></td><td class="why">題目沒有兄弟姊妹</td></tr>
+      <tr class="tot"><td class="l">免稅額總額</td><td><input class="ans" id="a17allow"></td><td class="why">290,000 + 280,000 + 140,000 + 110,000</td></tr>
+      <tr class="sub"><th colspan="3">扣除額</th></tr>
+      <tr><td class="l">(b) 嘉能強積金供款</td><td><input class="ans" id="a17mpf1"></td><td class="why">59,800 &gt; 30,000 → $1,500 × 12 = $18,000（上限）</td></tr>
+      <tr><td class="l">(b) 美紀強積金供款</td><td><input class="ans" id="a17mpf2"></td><td class="why">27,600 × 5% × 12 = $16,560</td></tr>
+      <tr><td class="l">個人進修開支</td><td><input class="ans" id="a17edu"></td><td class="why">$88,000（未超上限 $100,000）</td></tr>
+      <tr class="tot"><td class="l">扣除總額</td><td><input class="ans" id="a17ded"></td><td class="why">18,000 + 16,560 + 88,000</td></tr>
+      <tr class="tot"><td class="l">(c) 免稅額及扣除總額</td><td><input class="ans" id="a17tot"></td><td class="why">820,000 + 122,560</td></tr>
+      <tr class="sub"><th colspan="3">稅款</th></tr>
+      <tr><td class="l">(d) 應課稅入息實額</td><td><input class="ans" id="a17nci"></td><td class="why">1,048,800 − 942,560</td></tr>
+      <tr><td class="l">(e) 應繳薪俸稅款（不連暫繳稅）</td><td><input class="ans" id="a17tax"></td><td class="why">4,000 + 6,240 × 10%</td></tr>
+      <tr><td class="l">(f) 應繳薪俸稅款（連暫繳稅）</td><td><input class="ans" id="a17fin"></td><td class="why">4,624 × 2 − 4,800</td></tr>
+    </table>
+    <button class="btn" onclick="chkFill17()">✔ 檢查第 17 題</button><span class="msg" id="m17"></span>
+    <button class="btn secondary" onclick="tog('s17')">👁 完整題解</button>
+    <div class="sol" id="s17">(a) 總收入 = (59,800 + 27,600) × 12 = <b>$1,048,800</b><br>(b) 嘉能：$1,500 × 12 = <b>$18,000</b>（上限）；美紀：27,600 × 5% × 12 = <b>$16,560</b><br>(c) 免稅額 = 290,000 + 140,000 × 2 + 140,000 + 55,000 × 2 = 820,000；扣除額 = 18,000 + 16,560 + 88,000 = 122,560；合共 <b>$942,560</b><br>(d) 1,048,800 − 942,560 = <b>$106,240</b><br>(e) 4,000 + 6,240 × 10% = <b>$4,624</b><br>(f) 4,624 × 2 − 4,800 = <b>$4,448</b></div>
+  </div>
+
+  <div class="card">
+    <h2>第 13 題　美欣（未婚）</h2>
+    <div class="qbox">美欣<b>未婚</b>，每月薪金為 <b>62,000 元</b>，全年支取 <b>13 個月</b>薪金，另外獲得額外 <b>80,000 元</b>作為獎金。她需供養<b>同住</b>的 <b>62 歲父親</b>及 <b>59 歲母親</b>及正在唸大學的 <b>21 歲弟弟</b>。此外，她利用工餘時間進修，每年繳付 <b>98,000 元</b>學費。去年暫繳稅款 <b>50,000 元</b>。（本題須考慮強積金供款作為扣除額的一部份。）</div>
+    <table>
+      <tr><th class="l" style="width:55%">項目</th><th>金額 $</th><th>判斷理由（檢查後顯示）</th></tr>
+      <tr class="sub"><th colspan="3">(a) 收入</th></tr>
+      <tr><td class="l">本課稅年度總收入</td><td><input class="ans" id="a13inc"></td><td class="why">62,000 × 13 + 80,000</td></tr>
+      <tr class="sub"><th colspan="3">(b) 免稅額（判斷適用與否）</th></tr>
+      <tr><td class="l">基本免稅額</td><td><input class="ans" id="a13basic"></td><td class="why">未婚 → $145,000</td></tr>
+      <tr><td class="l">已婚人士免稅額</td><td><input class="ans" id="a13mar" placeholder="0 若不適用"></td><td class="why">未婚 → 不適用</td></tr>
+      <tr><td class="l">子女免稅額</td><td><input class="ans" id="a13child" placeholder="0 若不適用"></td><td class="why">沒有子女</td></tr>
+      <tr><td class="l">供養父母免稅額 —— 父親（62 歲）</td><td><input class="ans" id="a13f"></td><td class="why">60 歲或以上 → $55,000</td></tr>
+      <tr><td class="l">額外供養父母免稅額 —— 父親（同住）</td><td><input class="ans" id="a13fx"></td><td class="why">同住 + 60 歲或以上 → 額外 $55,000</td></tr>
+      <tr><td class="l">供養父母免稅額 —— 母親（59 歲）</td><td><input class="ans" id="a13m"></td><td class="why">55–59 歲 → $27,500</td></tr>
+      <tr><td class="l">額外供養父母免稅額 —— 母親（同住）</td><td><input class="ans" id="a13mx"></td><td class="why">同住 + 55–59 歲 → 額外 $27,500</td></tr>
+      <tr><td class="l">供養兄弟姊妹免稅額（21 歲弟弟）</td><td><input class="ans" id="a13sib"></td><td class="why">25 歲以下接受全日制教育 → $37,500</td></tr>
+      <tr class="tot"><td class="l">免稅額總額</td><td><input class="ans" id="a13allow"></td><td class="why">145,000 + 110,000 + 55,000 + 37,500</td></tr>
+      <tr class="sub"><th colspan="3">(b) 扣除額</th></tr>
+      <tr><td class="l">強積金供款</td><td><input class="ans" id="a13mpf"></td><td class="why">62,000 &gt; 30,000 → $1,500 × 12 = $18,000（上限，不是 62,000 × 5% × 12 = 37,200！）</td></tr>
+      <tr><td class="l">個人進修開支</td><td><input class="ans" id="a13edu"></td><td class="why">$98,000（未超上限 $100,000）</td></tr>
+      <tr class="tot"><td class="l">扣除總額</td><td><input class="ans" id="a13ded"></td><td class="why">18,000 + 98,000</td></tr>
+      <tr class="tot"><td class="l">免稅額及扣除額合計</td><td><input class="ans" id="a13tot"></td><td class="why">347,500 + 116,000</td></tr>
+      <tr class="sub"><th colspan="3">稅款</th></tr>
+      <tr><td class="l">(c) 應課稅入息實額</td><td><input class="ans" id="a13nci"></td><td class="why">886,000 − 463,500</td></tr>
+      <tr><td class="l">(d) 稅款（不連暫繳稅）</td><td><input class="ans" id="a13tax"></td><td class="why">16,000 + (422,500 − 200,000) × 17%；標準稅 (886,000 − 116,000) × 15% = 115,500 較高，不採用</td></tr>
+      <tr><td class="l">(e) 應繳稅款（連暫繳稅）</td><td><input class="ans" id="a13fin"></td><td class="why">53,825 × 2 − 50,000</td></tr>
+    </table>
+    <button class="btn" onclick="chkFill13()">✔ 檢查第 13 題</button><span class="msg" id="m13"></span>
+    <button class="btn secondary" onclick="tog('s13')">👁 完整題解</button>
+    <div class="sol" id="s13">(a) 總收入 = 62,000 × 13 + 80,000 = <b>$886,000</b><br>(b) 免稅額 = 145,000 + (55,000 + 55,000) + (27,500 + 27,500) + 37,500 = <b>$347,500</b>；扣除額 = 18,000 + 98,000 = <b>$116,000</b><br>(c) 應課稅入息實額 = 886,000 − 347,500 − 116,000 = <b>$422,500</b><br>(d) 累進稅 = 16,000 + 222,500 × 17% = <b>$53,825</b>（標準稅 $115,500 較高，故採用累進稅）<br>(e) 53,825 × 2 − 50,000 = <b>$57,650</b></div>
+  </div>
+</section>
+
+<!-- ===== 薪俸稅計算器 ===== -->
+<section id="calc">
+  <div class="card">
+    <h2>🧮 薪俸稅計算器（2026/2027）</h2>
+    <p>快速帶入：<button class="btn warn" onclick="preset('e702')">例 7.02</button><button class="btn warn" onclick="preset('q17')">第 17 題</button><button class="btn warn" onclick="preset('q13')">第 13 題</button><button class="btn secondary" onclick="preset('clear')">清除</button></p>
+    <h3>① 收入</h3>
+    <div class="grid">
+      <label>本人每月薪金 $<input class="x" id="cSal" value="28000" oninput="runCalc()"></label>
+      <label>支薪月數 <input class="x sm" id="cMon" value="12" oninput="runCalc()"></label>
+      <label>本人花紅／佣金 $<input class="x" id="cBon" value="0" oninput="runCalc()"></label>
+      <label>婚姻狀況 <select id="cMar" onchange="runCalc()"><option value="S">未婚</option><option value="M">已婚（合併評稅）</option></select></label>
+      <label>配偶每月薪金 $<input class="x" id="cSSal" value="0" oninput="runCalc()"></label>
+      <label>配偶支薪月數 <input class="x sm" id="cSMon" value="12" oninput="runCalc()"></label>
+      <label>配偶花紅 $<input class="x" id="cSBon" value="0" oninput="runCalc()"></label>
+    </div>
+    <h3>② 免稅額資料</h3>
+    <div class="grid">
+      <label>子女人數 <input class="x sm" id="cCh" value="0" oninput="runCalc()"></label>
+      <label>其中本年度出生 <input class="x sm" id="cNew" value="0" oninput="runCalc()"></label>
+      <label>供養父母 60 歲+（不同住）<input class="x sm" id="cP60n" value="0" oninput="runCalc()"></label>
+      <label>供養父母 60 歲+（同住）<input class="x sm" id="cP60y" value="1" oninput="runCalc()"></label>
+      <label>供養父母 55–59 歲（不同住）<input class="x sm" id="cP55n" value="0" oninput="runCalc()"></label>
+      <label>供養父母 55–59 歲（同住）<input class="x sm" id="cP55y" value="0" oninput="runCalc()"></label>
+      <label>供養兄弟姊妹人數 <input class="x sm" id="cSib" value="0" oninput="runCalc()"></label>
+      <label>傷殘受養人人數 <input class="x sm" id="cDis" value="0" oninput="runCalc()"></label>
+      <label>單親免稅額 <input type="checkbox" id="cSingle" onchange="runCalc()"></label>
+      <label>本人傷殘免稅額 <input type="checkbox" id="cSelfDis" onchange="runCalc()"></label>
+    </div>
+    <h3>③ 扣除額資料（強積金自動計算）</h3>
+    <div class="grid">
+      <label>個人進修開支 $<input class="x" id="cEdu" value="0" oninput="runCalc()"></label>
+      <label>自願醫保保費 $<input class="x" id="cVhis" value="0" oninput="runCalc()"></label>
+      <label>　受保人數 <input class="x sm" id="cVn" value="1" oninput="runCalc()"></label>
+      <label>居所貸款利息／住宅租金 $<input class="x" id="cLoan" value="0" oninput="runCalc()"></label>
+      <label>認可慈善捐款 $<input class="x" id="cDon" value="0" oninput="runCalc()"></label>
+      <label>年金保費／TVC $<input class="x" id="cAnn" value="0" oninput="runCalc()"></label>
+      <label>長者住宿照顧開支 $<input class="x" id="cEld" value="0" oninput="runCalc()"></label>
+    </div>
+    <h3>④ 暫繳稅</h3>
+    <div class="grid"><label>去年已繳暫繳稅 $<input class="x" id="cProv" value="0" oninput="runCalc()"></label></div>
+    <div class="result">
+      <div class="rbox blue"><div class="lab">總收入</div><div class="val" id="rInc"></div></div>
+      <div class="rbox"><div class="lab">應課稅入息實額</div><div class="val" id="rNci"></div></div>
+      <div class="rbox gold"><div class="lab">應繳稅款（不連暫繳稅）</div><div class="val" id="rTax"></div></div>
+      <div class="rbox red"><div class="lab">應繳稅款（連暫繳稅）</div><div class="val" id="rFin"></div></div>
+    </div>
+    <div class="steps" id="cSteps"></div>
+    <div class="hint">📌 強積金按「月薪 × 5% × 12」計算，月薪少於 $7,100 免供、多於 $30,000 以 $1,500/月計，可扣除上限 $18,000（與教材一致，花紅不計入）。慈善捐款以總收入 35% 為上限。</div>
+  </div>
+</section>
+
+<!-- ===== 稅款計算器（NCI → 稅款） ===== -->
+<section id="taxcalc">
+  <div class="card">
+    <h2>📊 稅款計算器：應課稅入息實額 → 應繳稅款（連／不連暫繳稅）</h2>
+    <p>應課稅入息實額 $<input class="x" id="nNci" value="106240" oninput="runNci()">　
+      <input type="range" id="nSlide" min="0" max="600000" step="1000" value="106240" oninput="document.getElementById('nNci').value=this.value;runNci()" style="width:260px;vertical-align:middle">　
+      去年已繳暫繳稅 $<input class="x" id="nProv" value="4800" oninput="runNci()">　
+      入息實額（選填，用作比較標準稅率）$<input class="x" id="nNet" value="" placeholder="留空則不比較" oninput="runNci()"></p>
+    <p>常用數值：<button class="btn secondary" onclick="setN(64200,0)">例 7.02（64,200）</button><button class="btn secondary" onclick="setN(114500,0)">例 7.03（114,500）</button><button class="btn secondary" onclick="setN(102200,10000)">例 7.04（102,200）</button><button class="btn secondary" onclick="setN(106240,4800)">Q17（106,240）</button><button class="btn secondary" onclick="setN(422500,50000)">Q13（422,500）</button></p>
+    <div id="nBand"></div>
+    <div class="result">
+      <div class="rbox gold"><div class="lab">應繳稅款（不連暫繳稅）</div><div class="val" id="nTax"></div></div>
+      <div class="rbox blue"><div class="lab">× 2（本年度 + 下年度暫繳）</div><div class="val" id="nDouble"></div></div>
+      <div class="rbox red"><div class="lab">應繳稅款（連暫繳稅）</div><div class="val" id="nFin"></div></div>
+    </div>
+    <div class="steps" id="nSteps"></div>
+  </div>
+  <div class="card">
+    <h2>📋 不同應課稅入息實額的稅款一覽</h2>
+    <p>以下表格用上方輸入的「去年已繳暫繳稅」計算「連暫繳稅」一欄。可修改表內任何一格的入息實額。</p>
+    <div id="nTable"></div>
+    <div class="hint">⚡ 搶答：為何由 $100,000 增至 $150,000（多 $50,000），稅款只多 $5,000，而由 $200,000 增至 $250,000 卻多 $8,500？</div>
+  </div>
+</section>
+
+<!-- ===== 出口票 ===== -->
+<section id="exit">
+  <div class="card">
+    <h2>🎫 出口票（Exit Ticket）</h2>
+    <p style="margin:10px 0">班別：<input id="et-class" style="width:70px;padding:6px;text-align:center;border:2px solid #cbd5e1;border-radius:6px" placeholder="CS1">　姓名：<input id="et-name" style="width:140px;padding:6px;border:2px solid #cbd5e1;border-radius:6px" placeholder="陳大文"></p>
+    <p><b>(1)</b> 下列哪一項屬於「扣除額」而<b>不是</b>「免稅額」？
+      <div class="choice" id="xq1"><label><input type="radio" name="xq1" value="A"> A　基本免稅額</label><label><input type="radio" name="xq1" value="B"> B　個人進修開支</label><label><input type="radio" name="xq1" value="C"> C　子女免稅額</label><label><input type="radio" name="xq1" value="D"> D　供養父母免稅額</label></div></p>
+    <p><b>(2)</b> 應課稅入息實額 =
+      <div class="choice" id="xq2"><label><input type="radio" name="xq2" value="A"> A　總收入 − 免稅額</label><label><input type="radio" name="xq2" value="B"> B　總收入 − 扣除額</label><label><input type="radio" name="xq2" value="C"> C　總收入 − 免稅額 − 扣除額</label><label><input type="radio" name="xq2" value="D"> D　總收入 × 稅率</label></div></p>
+    <p><b>(3)</b> 應繳稅款（連暫繳稅）=
+      <div class="choice" id="xq3"><label><input type="radio" name="xq3" value="A"> A　本年度稅款 − 去年暫繳稅</label><label><input type="radio" name="xq3" value="B"> B　本年度稅款 × 2 − 去年暫繳稅</label><label><input type="radio" name="xq3" value="C"> C　本年度稅款 + 去年暫繳稅</label><label><input type="radio" name="xq3" value="D"> D　本年度稅款 × 2</label></div></p>
+    <p style="margin-top:8px"><b>(4)</b> 某人月薪 $40,000，其每年可扣除的強積金強制性供款 = $<input class="ans" id="x4"></p>
+    <p style="margin-top:8px"><b>(5)</b> 應課稅入息實額為 $120,000，按累進稅率計算的稅款 = $<input class="ans" id="x5"></p>
+    <p style="margin-top:8px"><b>(6)</b> 本年度稅款 $6,000，去年已繳暫繳稅 $5,000，應繳稅款（連暫繳稅）= $<input class="ans" id="x6"></p>
+    <p style="margin-top:8px"><b>(7)</b> 我今天最不明白的地方是：</p>
+    <textarea id="et-note" placeholder="請寫下你的疑問……"></textarea>
+    <br><button class="btn" id="exit-btn" onclick="chkExit()">✔ 提交</button> <span class="msg" id="exit-msg"></span>
+  </div>
+  <div class="card">
+    <h2>📌 總結</h2>
+    <p>1️⃣ 免稅額看<b>身份</b>（固定金額）；扣除額看<b>支出</b>（有上限）</p>
+    <p>2️⃣ 同住父母 = 基本 + 額外（60+：$110,000；55–59：$55,000）；本年度出生子女 = $140,000 × 2</p>
+    <p>3️⃣ 強積金可扣除上限 $18,000（月薪 ≥ $30,000 即達上限）</p>
+    <p>4️⃣ 累進稅：$100,000 → $4,000；$150,000 → $9,000；$200,000 → $16,000；餘額 × 17%</p>
+    <p>5️⃣ 連暫繳稅 = 本年度稅款 × 2 − 去年暫繳稅；負數即退稅</p>
+  </div>
+</section>
+
+<!-- ===== 教師區 ===== -->
+<section id="teacher">
+  <div class="card">
+    <h2>👩‍🏫 答案參考（須輸入密碼）</h2>
+    <div class="lock" id="lockbox">🔒 請輸入教師密碼：<input type="password" id="pw" placeholder="密碼" onkeydown="if(event.key==='Enter')unlock()"><button class="btn" onclick="unlock()">解鎖</button><span class="msg" id="mpw"></span></div>
+    <div class="answer" id="ans">
+      <p style="text-align:right"><button class="btn danger" onclick="lock()">🔒 重新鎖上</button></p>
+      <p><b>熱身是非：</b>1 ✔　2 ✔　3 ✘　4 ✔　5 ✘　6 ✔　7 ✔　8 ✘　9 ✔　10 ✘</p>
+      <p style="margin-top:8px"><b>教學頁：</b>強積金口答 $16,800／$18,000／$0；例 7.01 $572,000／$430,000／$104,000；例 7.02 $64,200／$1,852／$3,704；例 7.03 $114,500／$10,900；例 7.04 $102,200／$4,220／退回 $1,560</p>
+      <p style="margin-top:8px"><b>第 17 題：</b>(a) $1,048,800 (b) $18,000、$16,560 (c) 免稅額 $820,000 + 扣除額 $122,560 = $942,560 (d) $106,240 (e) $4,624 (f) $4,448</p>
+      <p style="margin-top:8px"><b>第 13 題：</b>(a) $886,000 (b) 免稅額 $347,500（145,000 + 55,000 + 55,000 + 27,500 + 27,500 + 37,500）+ 扣除額 $116,000（18,000 + 98,000）= $463,500 (c) $422,500 (d) $53,825 (e) $57,650</p>
+      <p style="margin-top:8px"><b>出口票：</b>(1) B (2) C (3) B (4) $18,000 (5) $6,000 (6) $7,000</p>
+      <p style="margin-top:8px;color:#92400e"><small>※ 內容出處：DAE 應用教育文憑數學科 教材 第 7 節。<br>※ 教材未提及稅款寬減，本網站所有計算均不包括寬減。</small></p>
+    </div>
+  </div>
+  <div class="card">
+    <h2>常見錯誤及應對</h2>
+    <table>
+      <tr><th style="width:42%">常見錯誤</th><th>教師回應策略</th></tr>
+      <tr><td class="l">強積金直接用「月薪 × 5% × 12」，忘記上限 $18,000（Q13：62,000 × 5% × 12 = 37,200 ✘）</td><td class="l">口訣：「月薪三萬，供款頂到頭 $1,500」；用計算器輸入 62,000 示範</td></tr>
+      <tr><td class="l">已婚人士同時填基本免稅額 $145,000 和已婚免稅額 $290,000</td><td class="l">強調 $290,000 已是兩人份（145,000 × 2），二選一</td></tr>
+      <tr><td class="l">同住父母忘記「額外」免稅額；或不同住也加額外</td><td class="l">填充頁第 17 題（不同住）與第 13 題（同住）對照</td></tr>
+      <tr><td class="l">本年度出生子女只給 $140,000</td><td class="l">出生年度 = 基本 + 額外 = $280,000</td></tr>
+      <tr><td class="l">累進稅用整筆 × 單一稅率（如 106,240 × 10%）</td><td class="l">用「稅款計算器」分級表示範；背口訣 4,000／9,000／16,000</td></tr>
+      <tr><td class="l">連暫繳稅忘記 × 2，或把去年暫繳稅加上去</td><td class="l">解釋暫繳稅是「預交下年」，去年已預交的要扣回；例 7.04 退稅</td></tr>
+      <tr><td class="l">標準稅率誤減免稅額</td><td class="l">標準稅只扣扣除額；例 7.05 示範 $2,618,000 分界</td></tr>
+      <tr><td class="l">13 個月薪金只乘 12</td><td class="l">規定先寫「總收入 = 月薪 × 月數 + 獎金」</td></tr>
+    </table>
+  </div>
+  <div class="card">
+    <h2>分層支援</h2>
+    <p><span class="badge">基礎組</span>先完成熱身是非及例 7.01–7.02；填充頁只做第 17 題，可開啟「判斷理由」提示。</p>
+    <p style="margin-top:8px"><span class="badge">進階組</span>第 13 題（三代供養 + 強積金上限）、例 7.04 退稅、例 7.05 標準稅率分界。</p>
+    <p style="margin-top:8px"><span class="badge">延伸</span>用薪俸稅計算器探究：月薪多少才需要繳稅？（未婚、無供養、只有強積金扣除 → 總收入 &gt; $163,000）</p>
+  </div>
+</section>
+
+</main>
+<footer>單元二｜第 7 節 薪俸稅｜互動教學網站<br>📚 內容出處：DAE 應用教育文憑數學科 教材（僅供課堂教學使用）</footer>
+
+<script>
+/* ===== 導航 ===== */
+function go(id,btn){document.querySelectorAll('section').forEach(s=>s.classList.remove('active'));document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));document.getElementById(id).classList.add('active');btn.classList.add('active');window.scrollTo({top:0,behavior:'smooth'});}
+function fixNav(){document.querySelector('nav').style.top=document.querySelector('header').offsetHeight+'px';}
+window.addEventListener('resize',fixNav);
+
+/* ===== 計時器 ===== */
+let secs=0,tm=null;
+function readMins(){const el=document.getElementById('mins');let m=Math.round(Number(el.value));if(isNaN(m))m=0;if(m<0)m=0;if(m>120)m=120;el.value=m;return m;}
+function render(){document.getElementById('clock').textContent=String(Math.floor(secs/60)).padStart(2,'0')+':'+String(secs%60).padStart(2,'0');}
+function setMins(){if(tm)return;secs=readMins()*60;render();document.getElementById('tbtn').textContent='開始';}
+function toggleTimer(){const b=document.getElementById('tbtn'),el=document.getElementById('mins');
+ if(tm){clearInterval(tm);tm=null;b.textContent='繼續';el.disabled=false;return;}
+ if(secs<=0){secs=readMins()*60;render();if(secs<=0){alert('請先輸入課堂時間（1–120 分鐘）');return;}}
+ b.textContent='暫停';el.disabled=true;
+ tm=setInterval(()=>{if(secs>0){secs--;render();}else{clearInterval(tm);tm=null;el.disabled=false;b.textContent='開始';alert('⏰ '+readMins()+' 分鐘已結束！');}},1000);}
+function resetTimer(){clearInterval(tm);tm=null;document.getElementById('mins').disabled=false;secs=readMins()*60;render();document.getElementById('tbtn').textContent='開始';}
+
+/* ===== 檢查工具 ===== */
+function num(v){v=String(v).replace(/[,\s$%元]/g,'').replace(/[−–]/g,'-');return Number(v);}
+function near(v,a,tol){const n=num(v);return !isNaN(n)&&Math.abs(n-a)<=(tol===undefined?0.5:tol);}
+function mark(i,ok){i.classList.remove('ok','bad');i.classList.add(ok?'ok':'bad');}
+function setMsg(mid,ok,t1,t2){const m=document.getElementById(mid);m.textContent=ok?t1:t2;m.style.color=ok?'var(--ok)':'var(--bad)';}
+function chkMany(list,mid){let all=true;list.forEach(([id,a,tol])=>{const i=document.getElementById(id);const ok=i.value.trim()!==''&&near(i.value,a,tol);mark(i,ok);if(!ok)all=false;});setMsg(mid,all,'🎉 全部正確！','❌ 有錯，紅色格請再試');}
+function chkSel(id,c){const s=document.getElementById(id);s.style.borderColor=s.value===c?'var(--ok)':'var(--bad)';}
+function tog(id){document.getElementById(id).classList.toggle('show');}
+function chkRadio(name,correct){const box=document.getElementById(name);let ok=false,any=false;box.querySelectorAll('label').forEach(l=>{l.classList.remove('ok','bad');const r=l.querySelector('input');if(r.checked){any=true;if(r.value===correct){l.classList.add('ok');ok=true;}else l.classList.add('bad');}});return any?ok:null;}
+function chkSet(list,mid,showWhy){let right=0,done=0;list.forEach(([id,a,tol])=>{const i=document.getElementById(id);if(i.value.trim()==='')return;done++;const ok=near(i.value,a,tol);mark(i,ok);if(ok)right++;});
+ if(showWhy)document.querySelectorAll('#'+showWhy+' .why').forEach(w=>w.classList.add('show'));
+ setMsg(mid,right===done&&done>0,`🎉 已填 ${done} 格全部正確！`,`✔ ${right}/${done} 格正確，紅色格請再試`);}
+function money(n){const s='$'+Math.abs(n).toLocaleString('en-US',{maximumFractionDigits:2});return n<0?'−'+s:s;}
+
+/* ===== 熱身是非 ===== */
+const TF=[
+ ['香港的課稅年度由每年 4 月 1 日至翌年 3 月 31 日。','T','例如 2026/2027 課稅年度 = 2026-4-1 至 2027-3-31。'],
+ ['強積金僱員強制性供款一般為有關入息的 5%。','T','僱員及僱主各供 5%。'],
+ ['月薪 $7,000 的僱員必須作強積金供款。','F','月薪少於 $7,100 的僱員毋須供款（僱主仍須供 5%）。'],
+ ['強積金強制性供款可扣除的上限為每年 $18,000。','T','$30,000 × 5% × 12 = $18,000。'],
+ ['強積金強制性供款屬於「免稅額」。','F','屬於「扣除額」。免稅額按身份給予，扣除額按實際支出。'],
+ ['已婚人士免稅額（$290,000）是基本免稅額（$145,000）的兩倍。','T','合併評稅時兩人共用 $290,000。'],
+ ['供養一名 60 歲或以上全年同住的父母，可獲免稅額共 $110,000。','T','基本 $55,000 + 額外（同住）$55,000。'],
+ ['薪俸稅只按累進稅率計算，不會以標準稅率計算。','F','稅款取「累進稅」與「標準稅（15%）」中較低者；高收入者可能用標準稅率。'],
+ ['累進稅率中，應課稅入息實額最初的 $50,000 稅率是 2%。','T','2% → 6% → 10% → 14% → 餘額 17%。'],
+ ['應繳稅款（連暫繳稅）一定比不連暫繳稅的稅款多。','F','若去年已繳暫繳稅較多，可能出現退稅（例 7.04 退回 $1,560）。']
+];
+(function buildTF(){let h='';TF.forEach((q,k)=>{h+=`<div class="q"><b>(${k+1})</b> ${q[0]}<div class="tf" id="tf${k}"><label><input type="radio" name="tf${k}" value="T"> ✔ 正確</label><label><input type="radio" name="tf${k}" value="F"> ✘ 錯誤</label></div><div class="why" id="wtf${k}">💡 ${q[2]}</div></div>`;});document.getElementById('tfbox').innerHTML=h;})();
+function chkTF(){let right=0,done=0;TF.forEach((q,k)=>{const r=chkRadio('tf'+k,q[1]);if(r!==null){done++;if(r)right++;document.getElementById('wtf'+k).classList.add('show');}});setMsg('mtf',right===done&&done===10,`🎉 10 題全對！`,`✔ ${right}/${done} 題正確（共 10 題）`);}
+
+/* ===== 填充檢查 ===== */
+function chkFill17(){chkSet([['a17inc',1048800],['a17basic',0],['a17mar',290000],['a17child',280000],['a17new',140000],['a17par',110000],['a17parx',0],['a17sib',0],['a17allow',820000],['a17mpf1',18000],['a17mpf2',16560],['a17edu',88000],['a17ded',122560],['a17tot',942560],['a17nci',106240],['a17tax',4624],['a17fin',4448]],'m17','fill');}
+function chkFill13(){chkSet([['a13inc',886000],['a13basic',145000],['a13mar',0],['a13child',0],['a13f',55000],['a13fx',55000],['a13m',27500],['a13mx',27500],['a13sib',37500],['a13allow',347500],['a13mpf',18000],['a13edu',98000],['a13ded',116000],['a13tot',463500],['a13nci',422500],['a13tax',53825],['a13fin',57650]],'m13','fill');}
+
+/* ===== 稅務核心函數 ===== */
+const BANDS=[[50000,.02],[50000,.06],[50000,.10],[50000,.14]];
+function progTax(x){if(x<=0)return 0;let t=0,rem=x;for(const [w,r] of BANDS){const take=Math.min(rem,w);t+=take*r;rem-=take;if(rem<=0)break;}if(rem>0)t+=rem*.17;return t;}
+function progRows(x){const rows=[];let rem=Math.max(x,0),cum=0;for(const [w,r] of BANDS){if(rem<=0)break;const take=Math.min(rem,w);cum+=take*r;rows.push([take,r,take*r]);rem-=take;}if(rem>0)rows.push([rem,.17,rem*.17]);return rows;}
+function stdTax(net){if(net<=0)return 0;return Math.min(net,5e6)*.15+Math.max(net-5e6,0)*.16;}
+function mpf(sal){if(sal<7100)return 0;return Math.min(sal,30000)*.05*12;}
+const v=id=>{const n=Number(document.getElementById(id).value);return isNaN(n)?0:n;};
+
+/* ===== 薪俸稅計算器 ===== */
+function runCalc(){
+ const sal=v('cSal'),mon=v('cMon'),bon=v('cBon'),mar=document.getElementById('cMar').value==='M',sSal=v('cSSal'),sMon=v('cSMon'),sBon=v('cSBon');
+ const inc=sal*mon+bon+(mar?sSal*sMon+sBon:0);
+ const al=[];
+ al.push([mar?'已婚人士免稅額':'基本免稅額',mar?290000:145000]);
+ const ch=v('cCh'),nw=Math.min(v('cNew'),ch);if(ch)al.push([`子女免稅額 ${ch} × 140,000`,ch*140000]);if(nw)al.push([`子女出生年度額外免稅額 ${nw} × 140,000`,nw*140000]);
+ const p60n=v('cP60n'),p60y=v('cP60y'),p55n=v('cP55n'),p55y=v('cP55y');
+ if(p60n)al.push([`供養父母 60 歲+（不同住）${p60n} × 55,000`,p60n*55000]);
+ if(p60y)al.push([`供養父母 60 歲+（同住）${p60y} × (55,000 + 55,000)`,p60y*110000]);
+ if(p55n)al.push([`供養父母 55–59 歲（不同住）${p55n} × 27,500`,p55n*27500]);
+ if(p55y)al.push([`供養父母 55–59 歲（同住）${p55y} × (27,500 + 27,500)`,p55y*55000]);
+ const sib=v('cSib');if(sib)al.push([`供養兄弟姊妹 ${sib} × 37,500`,sib*37500]);
+ if(document.getElementById('cSingle').checked)al.push(['單親免稅額',145000]);
+ const dis=v('cDis');if(dis)al.push([`傷殘受養人 ${dis} × 75,000`,dis*75000]);
+ if(document.getElementById('cSelfDis').checked)al.push(['傷殘人士免稅額',75000]);
+ const allow=al.reduce((s,a)=>s+a[1],0);
+ const de=[];
+ const m1=Math.min(mpf(sal),18000);de.push([`強積金供款（本人）${sal<7100?'月薪 < 7,100 免供':sal>30000?'1,500 × 12（上限）':sal.toLocaleString()+' × 5% × 12'}`,m1]);
+ if(mar&&sSal>0){const m2=Math.min(mpf(sSal),18000);de.push([`強積金供款（配偶）${sSal<7100?'免供':sSal>30000?'1,500 × 12（上限）':sSal.toLocaleString()+' × 5% × 12'}`,m2]);}
+ const edu=Math.min(v('cEdu'),100000);if(edu)de.push(['個人進修開支（上限 100,000）',edu]);
+ const vh=Math.min(v('cVhis'),8000*Math.max(v('cVn'),0));if(vh)de.push(['自願醫保保費（每人上限 8,000）',vh]);
+ const ln=Math.min(v('cLoan'),100000);if(ln)de.push(['居所貸款利息／住宅租金（上限 100,000）',ln]);
+ const dn0=v('cDon'),dn=dn0<100?0:Math.min(dn0,inc*.35);if(dn0)de.push([`認可慈善捐款${dn0<100?'（少於 $100 不可扣）':'（上限總收入 35%）'}`,dn]);
+ const an=Math.min(v('cAnn'),60000);if(an)de.push(['年金保費／TVC（上限 60,000）',an]);
+ const el=Math.min(v('cEld'),100000);if(el)de.push(['長者住宿照顧開支（上限 100,000）',el]);
+ const ded=de.reduce((s,a)=>s+a[1],0);
+ const nci=Math.max(inc-allow-ded,0),net=Math.max(inc-ded,0);
+ const pt=progTax(nci),st=stdTax(net),tax=Math.min(pt,st),useStd=st<pt;
+ const prov=v('cProv'),fin=tax*2-prov;
+ document.getElementById('rInc').textContent=money(inc);document.getElementById('rNci').textContent=money(nci);document.getElementById('rTax').textContent=money(tax);
+ document.getElementById('rFin').textContent=fin<0?`退回 ${money(-fin)}`:money(fin);
+ let s=`<b>步驟 1　總收入</b> = ${sal.toLocaleString()} × ${mon}${bon?' + '+bon.toLocaleString():''}${mar&&(sSal||sBon)?' + '+sSal.toLocaleString()+' × '+sMon+(sBon?' + '+sBon.toLocaleString():''):''} = <b>${money(inc)}</b><br>`;
+ s+=`<b>步驟 2　免稅額</b>：`+al.map(a=>`${a[0]} = ${money(a[1])}`).join('；')+` → 合共 <b>${money(allow)}</b><br>`;
+ s+=`<b>步驟 3　扣除額</b>：`+de.map(a=>`${a[0]} = ${money(a[1])}`).join('；')+` → 合共 <b>${money(ded)}</b><br>`;
+ s+=`<b>步驟 4　應課稅入息實額</b> = ${money(inc)} − ${money(allow)} − ${money(ded)} = <b>${money(nci)}</b><br>`;
+ s+=`<b>步驟 5　累進稅</b>：`+progRows(nci).map(r=>`${r[0].toLocaleString()} × ${Math.round(r[1]*100)}% = ${money(r[2])}`).join(' + ')+` = <b>${money(pt)}</b><br>`;
+ s+=`<b>步驟 6　標準稅</b> = 入息實額 ${money(net)} × 15%${net>5e6?'（餘額 16%）':''} = ${money(st)} → ${useStd?'<span style="color:#dc2626">標準稅較低，採用標準稅</span>':'累進稅較低，採用累進稅'}<br>`;
+ s+=`<b>步驟 7　應繳稅款（不連暫繳稅）</b> = <b>${money(tax)}</b><br>`;
+ s+=`<b>步驟 8　應繳稅款（連暫繳稅）</b> = ${money(tax)} × 2 − ${money(prov)} = <b>${fin<0?money(fin)+'（稅務局退回 '+money(-fin)+'）':money(fin)}</b>`;
+ document.getElementById('cSteps').innerHTML=s;
+}
+const PRESETS={
+ e702:{cSal:28000,cMon:12,cBon:0,cMar:'S',cSSal:0,cSMon:12,cSBon:0,cCh:0,cNew:0,cP60n:0,cP60y:1,cP55n:0,cP55y:0,cSib:0,cDis:0,cEdu:0,cVhis:0,cVn:1,cLoan:0,cDon:0,cAnn:0,cEld:0,cProv:0},
+ q17:{cSal:59800,cMon:12,cBon:0,cMar:'M',cSSal:27600,cSMon:12,cSBon:0,cCh:2,cNew:1,cP60n:2,cP60y:0,cP55n:0,cP55y:0,cSib:0,cDis:0,cEdu:88000,cVhis:0,cVn:1,cLoan:0,cDon:0,cAnn:0,cEld:0,cProv:4800},
+ q13:{cSal:62000,cMon:13,cBon:80000,cMar:'S',cSSal:0,cSMon:12,cSBon:0,cCh:0,cNew:0,cP60n:0,cP60y:1,cP55n:0,cP55y:1,cSib:1,cDis:0,cEdu:98000,cVhis:0,cVn:1,cLoan:0,cDon:0,cAnn:0,cEld:0,cProv:50000},
+ clear:{cSal:0,cMon:12,cBon:0,cMar:'S',cSSal:0,cSMon:12,cSBon:0,cCh:0,cNew:0,cP60n:0,cP60y:0,cP55n:0,cP55y:0,cSib:0,cDis:0,cEdu:0,cVhis:0,cVn:1,cLoan:0,cDon:0,cAnn:0,cEld:0,cProv:0}};
+function preset(k){const p=PRESETS[k];for(const id in p)document.getElementById(id).value=p[id];document.getElementById('cSingle').checked=false;document.getElementById('cSelfDis').checked=false;runCalc();}
+
+/* ===== 稅款計算器（NCI） ===== */
+const NLIST=[50000,64200,100000,114500,150000,200000,250000,300000,422500,500000];
+function setN(n,p){document.getElementById('nNci').value=n;document.getElementById('nProv').value=p;document.getElementById('nSlide').value=Math.min(n,600000);runNci();}
+function runNci(){
+ const nci=Math.max(v('nNci'),0),prov=v('nProv'),netStr=document.getElementById('nNet').value.trim(),net=netStr===''?null:num(netStr);
+ document.getElementById('nSlide').value=Math.min(nci,600000);
+ const rows=progRows(nci),pt=progTax(nci);
+ let cum=0,h='<table><tr><th>應課稅入息實額 $</th><th>稅率</th><th>稅款 $</th><th>累計 $</th></tr>';
+ rows.forEach((r,k)=>{cum+=r[2];h+=`<tr><td>${k===0?'最初的':k===rows.length-1&&k===4?'餘額':'其次的'} ${r[0].toLocaleString()}</td><td>${Math.round(r[1]*100)}%</td><td>${r[2].toLocaleString()}</td><td>${cum.toLocaleString()}</td></tr>`;});
+ if(!rows.length)h+='<tr><td colspan="4">應課稅入息實額為 $0，毋須繳稅</td></tr>';
+ h+='</table>';document.getElementById('nBand').innerHTML=h;
+ let tax=pt,note='';
+ if(net!==null&&!isNaN(net)){const st=stdTax(net);note=`<br>標準稅 = ${money(net)} × 15% = ${money(st)}；${st<pt?'<span style="color:#dc2626">標準稅較低 → 採用標準稅</span>':'累進稅較低 → 採用累進稅'}`;tax=Math.min(pt,st);}
+ const fin=tax*2-prov;
+ document.getElementById('nTax').textContent=money(tax);document.getElementById('nDouble').textContent=money(tax*2);document.getElementById('nFin').textContent=fin<0?`退回 ${money(-fin)}`:money(fin);
+ document.getElementById('nSteps').innerHTML=`累進稅 = `+(rows.length?rows.map(r=>`${r[0].toLocaleString()} × ${Math.round(r[1]*100)}%`).join(' + '):'0')+` = <b>${money(pt)}</b>${note}<br>應繳稅款（不連暫繳稅）= <b>${money(tax)}</b><br>應繳稅款（連暫繳稅）= ${money(tax)} × 2 − ${money(prov)} = <b>${fin<0?money(fin)+'（退回 '+money(-fin)+'）':money(fin)}</b>`;
+ let t='<table><tr><th>應課稅入息實額 $</th><th>累進稅計算</th><th>應繳稅款（不連暫繳稅）</th><th>× 2</th><th>連暫繳稅（去年暫繳 '+money(prov)+'）</th></tr>';
+ NLIST.forEach((n,k)=>{const cur=document.getElementById('nl'+k);const val=cur?Math.max(num(cur.value)||0,0):n;const tx=progTax(val),f=tx*2-prov;const hi=Math.abs(val-nci)<0.5?' style="background:#fef3c7"':'';
+  t+=`<tr${hi}><td><input class="x" id="nl${k}" value="${val}" oninput="runNci()" style="width:120px"></td><td style="font-size:.9rem">${progRows(val).map(r=>`${r[0].toLocaleString()}×${Math.round(r[1]*100)}%`).join(' + ')||'—'}</td><td><b>${money(tx)}</b></td><td>${money(tx*2)}</td><td>${f<0?'退回 '+money(-f):money(f)}</td></tr>`;});
+ t+='</table>';
+ const focus=document.activeElement&&document.activeElement.id&&document.activeElement.id.startsWith('nl')?document.activeElement.id:null;
+ document.getElementById('nTable').innerHTML=t;
+ if(focus){const e=document.getElementById(focus);e.focus();e.setSelectionRange(e.value.length,e.value.length);}
+}
+
+/* ===== 教師區密碼 ===== */
+const PW='msJohughpw';
+function unlock(){const val=document.getElementById('pw').value;if(val===PW){document.getElementById('ans').classList.add('show');document.getElementById('lockbox').style.display='none';}else{setMsg('mpw',false,'','❌ 密碼錯誤');document.getElementById('pw').value='';}}
+function lock(){document.getElementById('ans').classList.remove('show');document.getElementById('lockbox').style.display='flex';document.getElementById('mpw').textContent='';}
+
+/* ===== 出口票：批改 + 傳送至 Google Sheet ===== */
+const SHEET_URL   = "https://script.google.com/macros/s/AKfycbyXoECMifD_PatOXkd1i579dCAQMS2Q1p3DQ7jFIcZ8aoYzmYVrWxCtcFZy1SD8_FCZ/exec";
+const LESSON_NAME = "7 薪俸稅";
+const MC_IDS=['xq1','xq2','xq3'];const MC_ANS=['B','C','B'];
+const NUM_IDS=['x4','x5','x6'];const NUM_ANS=[[18000,0.5],[6000,0.5],[7000,0.5]];
+function chkExit(){
+  try{
+    const btn=document.getElementById('exit-btn'),msg=document.getElementById('exit-msg');
+    const cls=document.getElementById('et-class').value.trim(),name=document.getElementById('et-name').value.trim();
+    if(!cls||!name){msg.textContent='請先填寫班別和姓名';msg.style.color='var(--bad)';return;}
+    const mc=MC_IDS.map(id=>{const r=document.querySelector(`input[name="${id}"]:checked`);return r?r.value:'';});
+    const nums=NUM_IDS.map(id=>document.getElementById(id).value.trim());
+    if(mc.some(a=>a==='')||nums.some(a=>a==='')){msg.textContent='請完成第 (1)–(6) 題';msg.style.color='var(--bad)';return;}
+    const okMC=mc.map((a,k)=>a===MC_ANS[k]);const okNum=nums.map((a,k)=>near(a,NUM_ANS[k][0],NUM_ANS[k][1]));
+    MC_IDS.forEach((id,k)=>chkRadio(id,MC_ANS[k]));NUM_IDS.forEach((id,k)=>mark(document.getElementById(id),okNum[k]));
+    const score=[...okMC,...okNum].filter(Boolean).length;const note=document.getElementById('et-note').value.trim();
+    btn.disabled=true;msg.textContent='傳送中…';msg.style.color='#64748b';
+    fetch(SHEET_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain'},
+      body:JSON.stringify({lesson:LESSON_NAME,'班別':cls,'姓名':name,
+        'Q1 扣除額':mc[0],'Q1正確':okMC[0]?'✔':'✘','Q2 應課稅入息實額':mc[1],'Q2正確':okMC[1]?'✔':'✘','Q3 連暫繳稅公式':mc[2],'Q3正確':okMC[2]?'✔':'✘',
+        'Q4 強積金':nums[0],'Q4正確':okNum[0]?'✔':'✘','Q5 累進稅':nums[1],'Q5正確':okNum[1]?'✔':'✘','Q6 連暫繳稅':nums[2],'Q6正確':okNum[2]?'✔':'✘',
+        '得分':score+'/6','不明白的地方':note})
+    }).then(()=>{msg.textContent=`✔ 已提交，謝謝！（${score}/6）`;msg.style.color='var(--ok)';})
+      .catch(()=>{msg.textContent='提交失敗，請再按一次';msg.style.color='var(--bad)';btn.disabled=false;});
+  }catch(e){alert('chkExit 錯誤：'+e.message);}
+}
+
+/* ===== 初始化 ===== */
+runCalc();runNci();setMins();fixNav();
+</script>
+</body>
+</html>
