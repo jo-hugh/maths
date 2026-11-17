@@ -61,15 +61,40 @@
   .pA{background:var(--soft);padding:10px;border-radius:10px;} .pB{background:#fef3c7;padding:10px;border-radius:10px;}
   .qbox{background:#f8fafc;border-left:5px solid var(--main);border-radius:10px;padding:12px 16px;margin-bottom:10px;}
   footer{text-align:center;color:#94a3b8;padding:20px;font-size:.85rem;line-height:1.8;}
+  /* ===== 手機版：壓縮頂部空間 ===== */
+.tmob{display:none;}
+@media(max-width:720px){
+  header{position:static;padding:8px 12px;gap:6px;}
+  header h1{font-size:1rem;line-height:1.3;display:inline;}
+  header small{display:none;}                 /* 隱藏副標題及出處（流程頁仍有出處） */
+  .tmob{display:inline-block;background:rgba(255,255,255,.2);color:#fff;border:none;border-radius:8px;padding:4px 10px;font-size:.9rem;cursor:pointer;margin-left:auto;}
+  .timer{display:none;width:100%;margin:0;padding:6px 10px;gap:6px;justify-content:space-between;}
+  .timer.show{display:flex;}
+  .timer label{display:none;}
+  .timer input{width:48px;padding:3px;font-size:.9rem;}
+  .timer span#clock{font-size:1.1rem;min-width:60px;}
+  .timer button{padding:4px 8px;font-size:.85rem;}
+  nav{top:0!important;flex-wrap:nowrap;overflow-x:auto;padding:6px 10px;gap:5px;scrollbar-width:none;-webkit-overflow-scrolling:touch;}
+  nav::-webkit-scrollbar{display:none;}
+  nav button{flex:0 0 auto;padding:5px 10px;font-size:.82rem;white-space:nowrap;}
+  main{padding:12px;}
+  .card{padding:14px;margin-bottom:12px;border-radius:10px;}
+  .card h2{font-size:1.05rem;}
+  .srcbox{padding:8px 12px;font-size:.88rem;}
+  .result{gap:8px;} .rbox{padding:10px;} .rbox .val{font-size:1.15rem;}
+}
 </style>
 </head>
 <body>
 
 <header>
-  <div>
-    <h1>🧾 第 7 節：薪俸稅（Salaries Tax）</h1>
-    <small>強積金・免稅額・扣除額・應課稅入息實額・累進稅率・標準稅率・暫繳稅｜單元二 數學</small>
-    <small class="src">📚 內容出處：DAE 應用教育文憑數學科 教材（課稅年度 2026/2027）</small>
+ <div style="display:flex;align-items:center;flex-wrap:wrap;gap:8px;flex:1">
+    <div>
+      <h1>🧾 第 7 節：薪俸稅（Salaries Tax）</h1>
+      <small>強積金・免稅額・扣除額・應課稅入息實額・累進稅率・標準稅率・暫繳稅｜單元二 數學</small>
+      <small class="src">📚 內容出處：DAE 應用教育文憑數學科 教材（課稅年度 2026/2027）</small>
+    </div>
+    <button class="tmob" onclick="document.querySelector('.timer').classList.toggle('show')">⏱</button>
   </div>
   <div class="timer">
     <label>⏱ 課堂時間</label>
@@ -472,9 +497,9 @@
 <footer>單元二｜第 7 節 薪俸稅｜互動教學網站<br>📚 內容出處：DAE 應用教育文憑數學科 教材（僅供課堂教學使用）</footer>
 
 <script>
-/* ===== 導航 ===== */
-function go(id,btn){document.querySelectorAll('section').forEach(s=>s.classList.remove('active'));document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));document.getElementById(id).classList.add('active');btn.classList.add('active');window.scrollTo({top:0,behavior:'smooth'});}
-function fixNav(){document.querySelector('nav').style.top=document.querySelector('header').offsetHeight+'px';}
+  /* ===== 導航 ===== */
+function go(id,btn){document.querySelectorAll('section').forEach(s=>s.classList.remove('active'));document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));document.getElementById(id).classList.add('active');btn.classList.add('active');btn.scrollIntoView({inline:'center',block:'nearest',behavior:'smooth'});window.scrollTo({top:0,behavior:'smooth'});}
+function fixNav(){document.querySelector('nav').style.top=window.innerWidth<=720?'0px':document.querySelector('header').offsetHeight+'px';}
 window.addEventListener('resize',fixNav);
 
 /* ===== 計時器 ===== */
