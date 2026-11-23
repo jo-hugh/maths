@@ -466,7 +466,8 @@ const TF=[
  ['自住物業不用繳付差餉及地租。',false,'差餉及地租按物業徵收，自住或出租<b>都要交</b>。'],
  ['住宅物業租值超過 $550,000 的部分，差餉以較高的累進徵收率計算。',true,'其次 $250,000 徵 8%，餘額徵 12%（2024/25 起）。']
 ];
-(function(){const w=document.getElementById('tfList');TF.forEach((q,i)=>{w.insertAdjacentHTML('beforeend',`<div class="tf" id="tf${i}"><div class="mark" id="m${i}">${i+1}.</div><div class="q">${q[0]}</div><div class="opt"><label><input type="radio" name="tf${i}" value="1"><span>✔</span></label><label><input type="radio" name="tf${i}" value="0"><span>✘</span></label></div><div class="exp" id="x${i}">💡 ${q[2]}</div></div>`);});})();
+(function(){const w=document.getElementById('tfList');TF.forEach((q,i)=>{w.insertAdjacentHTML('beforeend',`<div class="tf" id="tf${i}"><div class="mark" id="m${i}">${i+1}.</div><div class="q">${q[0]}</div><div class="opt"><label><input type="radio" name="tf${i}" value="1"><span>✔</span></label><label><input type="radio" name="tf${i}" value="0"><span>✘</span></label></div>
+<div class="exp" id="tfexp${i}">💡 ${q[2]}</div></div>`);});})();
 function checkTF(){let sc=0;TF.forEach((q,i)=>{const r=document.querySelector(`input[name=tf${i}]:checked`);const row=document.getElementById('tf'+i);row.classList.remove('right','wrong');if(!r)return;const ok=(r.value==='1')===q[1];row.classList.add(ok?'right':'wrong');if(ok)sc++;});document.getElementById('tfScore').textContent=`得分：${sc} / 10`;}
 function showExp(){document.querySelectorAll('.tf .exp').forEach(e=>e.classList.add('show'));}
 
