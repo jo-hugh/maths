@@ -37,11 +37,12 @@ tr.sub th{background:#eef3f9;font-weight:bold;color:var(--p)}
 .formula b{color:var(--p)}
 .ex{border:1px solid var(--line);border-radius:8px;padding:14px 16px;margin:14px 0;background:#fafcff}
 .ex h4{margin:0 0 8px;color:var(--p)}
-input[type=number],input[type=text],select{padding:5px 8px;border:1px solid #9fb0c3;border-radius:5px;font-size:1em;max-width:100%}
+input[type=number],input[type=text],input[type=password],select{padding:5px 8px;border:1px solid #9fb0c3;border-radius:5px;font-size:1em;max-width:100%}
 input.ansbox{width:130px}
 input.ok{border-color:var(--ok);background:#eaf7ee}
 input.bad{border-color:var(--bad);background:#fdecea}
 .btn{display:inline-block;background:var(--p2);color:#fff;border:none;padding:7px 16px;border-radius:5px;cursor:pointer;font-size:.95em;text-decoration:none;margin:4px 4px 4px 0}
+.btn:disabled{opacity:.55;cursor:not-allowed}
 .btn.sec{background:#fff;color:var(--p);border:1px solid var(--p)}
 .btn.gold{background:var(--acc);color:#222}
 .btn.red{background:var(--bad)}
@@ -70,8 +71,6 @@ input.bad{border-color:var(--bad);background:#fdecea}
 .reason.show{visibility:visible}
 .lock{background:#fff8e1;border:1px dashed var(--acc);padding:14px;border-radius:8px}
 #teacherBody{display:none}
-.qr{display:flex;gap:16px;align-items:center;flex-wrap:wrap;margin:10px 0}
-.qr img{border:1px solid var(--line);border-radius:6px}
 footer{text-align:center;font-size:.85em;color:#666;padding:20px}
 @media(max-width:720px){.card{padding:14px}.tf{grid-template-columns:30px 1fr}.tf .opt{grid-column:2}.tf .exp{grid-column:2}header h1{font-size:1.25em}}
 @media print{header,nav,.timer,.btn{display:none}.panel{display:block!important;page-break-after:always}.sol{display:block}}
@@ -289,12 +288,12 @@ footer{text-align:center;font-size:.85em;color:#666;padding:20px}
 <div class="card">
   <h2>🧮 差餉地租計算器（2026/2027）</h2>
   <p>快速帶入：
-    <button class="btn sec" onclick="preset(182400,'n',0,0)">例 8.01</button>
-    <button class="btn sec" onclick="preset(168000,'n',13500,0)">例 8.04</button>
-    <button class="btn sec" onclick="preset(900000,'d',0,0)">例 8.05</button>
+    <button class="btn sec" onclick="preset(182400,'n','','')">例 8.01</button>
+    <button class="btn sec" onclick="preset(168000,'n',13500,'')">例 8.04</button>
+    <button class="btn sec" onclick="preset(900000,'d','','')">例 8.05</button>
     <button class="btn sec" onclick="preset(420000,'n',38000,4)">填充一</button>
-    <button class="btn sec" onclick="preset(720000,'d',0,0)">填充二</button>
-    <button class="btn red" onclick="preset('', 'n','','')">清除</button>
+    <button class="btn sec" onclick="preset(720000,'d','','')">填充二</button>
+    <button class="btn red" onclick="preset('','n','','')">清除</button>
   </p>
   <div class="calc">
     <label>應課差餉租值 $<input type="number" id="cRV" oninput="calc()"></label>
@@ -342,7 +341,7 @@ footer{text-align:center;font-size:.85em;color:#666;padding:20px}
     <div><span>全年地租</span><b id="rG">—</b></div>
     <div><span>每季差餉及地租合計</span><b id="rT">—</b></div>
   </div>
-  <div class="note" id="rNote">📌 倒推步驟：先把每季款額 × 4 變回全年，再 ÷ 徵收率（差餉 5%、地租 3%、合計 8%）。住宅累進時，先判斷全年差餉落在哪一級（$27,500 / $47,500 為分界）。</div>
+  <div class="note">📌 倒推步驗：先把每季款額 × 4 變回全年，再 ÷ 徵收率（差餉 5%、地租 3%、合計 8%）。住宅累進時，先判斷全年差餉落在哪一級（$27,500 / $47,500 為分界）。</div>
 
   <h3>📋 不同應課差餉租值的款額一覽</h3>
   <p>可修改表內任何一格的租值（住宅累進會自動套用）。</p>
@@ -357,32 +356,30 @@ footer{text-align:center;font-size:.85em;color:#666;padding:20px}
 <section id="p6" class="panel">
 <div class="card">
   <h2>🎫 出口票（Exit Ticket）</h2>
-  <p>班別：<input type="text" id="eCls" style="width:80px">　姓名：<input type="text" id="eName" style="width:160px"></p>
+  <p>班別：<input type="text" id="et-class" style="width:80px">　姓名：<input type="text" id="et-name" style="width:160px"></p>
 
   <div class="ex mc"><b>(1)</b> 差餉的徵收率是應課差餉租值的：
-    <label><input type="radio" name="e1" value="A"> A　2%</label>
-    <label><input type="radio" name="e1" value="B"> B　3%</label>
-    <label><input type="radio" name="e1" value="C"> C　5%</label>
-    <label><input type="radio" name="e1" value="D"> D　8%</label></div>
+    <label><input type="radio" name="xq1" value="A"> A　2%</label>
+    <label><input type="radio" name="xq1" value="B"> B　3%</label>
+    <label><input type="radio" name="xq1" value="C"> C　5%</label>
+    <label><input type="radio" name="xq1" value="D"> D　8%</label></div>
   <div class="ex mc"><b>(2)</b> 差餉及地租的繳付安排是：
-    <label><input type="radio" name="e2" value="A"> A　每月繳付</label>
-    <label><input type="radio" name="e2" value="B"> B　每季繳付</label>
-    <label><input type="radio" name="e2" value="C"> C　每年繳付一次</label>
-    <label><input type="radio" name="e2" value="D"> D　只在出售物業時繳付</label></div>
+    <label><input type="radio" name="xq2" value="A"> A　每月繳付</label>
+    <label><input type="radio" name="xq2" value="B"> B　每季繳付</label>
+    <label><input type="radio" name="xq2" value="C"> C　每年繳付一次</label>
+    <label><input type="radio" name="xq2" value="D"> D　只在出售物業時繳付</label></div>
   <div class="ex mc"><b>(3)</b> 「應課差餉租值」是指：
-    <label><input type="radio" name="e3" value="A"> A　物業的售價</label>
-    <label><input type="radio" name="e3" value="B"> B　估計物業一年可收取的租金</label>
-    <label><input type="radio" name="e3" value="C"> C　業主實際收到的每月租金</label>
-    <label><input type="radio" name="e3" value="D"> D　樓價的 5%</label></div>
-  <div class="ex"><b>(4)</b> 某單位應課差餉租值 $240,000，每季差餉 = $<input class="ansbox" id="e4"></div>
-  <div class="ex"><b>(5)</b> 某單位每季差餉及地租合共 $5,000，應課差餉租值 = $<input class="ansbox" id="e5"></div>
-  <div class="ex"><b>(6)</b> 某單位應課差餉租值 $160,000，全年地租 = $<input class="ansbox" id="e6"></div>
-  <div class="ex"><b>(7)</b> 我今天最不明白的地方是：<br><input type="text" id="e7" style="width:100%;margin-top:6px"></div>
+    <label><input type="radio" name="xq3" value="A"> A　物業的售價</label>
+    <label><input type="radio" name="xq3" value="B"> B　估計物業一年可收取的租金</label>
+    <label><input type="radio" name="xq3" value="C"> C　業主實際收到的每月租金</label>
+    <label><input type="radio" name="xq3" value="D"> D　樓價的 5%</label></div>
+  <div class="ex"><b>(4)</b> 某單位應課差餉租值 $240,000，每季差餉 = $<input class="ansbox" id="x4"></div>
+  <div class="ex"><b>(5)</b> 某單位每季差餉及地租合共 $5,000，應課差餉租值 = $<input class="ansbox" id="x5"></div>
+  <div class="ex"><b>(6)</b> 某單位應課差餉租值 $160,000，全年地租 = $<input class="ansbox" id="x6"></div>
+  <div class="ex"><b>(7)</b> 我今天最不明白的地方是：<br><input type="text" id="et-note" style="width:100%;margin-top:6px"></div>
 
-  <button class="btn gold" onclick="submitExit()">✔ 提交（開啟 Google Form）</button>
-  <a class="btn sec" id="gformLink" href="#" target="_blank" rel="noopener">📝 直接開啟 Google Form</a>
-  <div id="exitMsg" class="tip" style="display:none"></div>
-  <div class="qr" id="qrBox" style="display:none"><img id="qrImg" alt="QR" width="140" height="140"><span>📱 手機掃描 QR code 亦可直接開啟出口票表單</span></div>
+  <button class="btn gold" id="exit-btn" onclick="chkExit()">✔ 提交</button>
+  <span id="exit-msg" style="margin-left:10px;font-weight:bold"></span>
 </div>
 
 <div class="card">
@@ -414,7 +411,7 @@ footer{text-align:center;font-size:.85em;color:#666;padding:20px}
     <p>(a) $27,500、$13,600、12% 部分 0、全年 $41,100、每季 $10,275 (b) $21,600、$5,400、合計 $15,675 (c) $36,000、多繳 $5,100</p>
     <h3>出口票：</h3>
     <p>(1) C (2) B (3) B (4) $3,000 (5) $250,000 (6) $4,800</p>
-    <p style="font-size:.9em;color:#555">※ 內容出處：DAE 應用教育文憑數學科 教材 第 8 節。<br>※ 教材未提及差餉寬減，本網站所有計算均不包括寬減。</p>
+    <p style="font-size:.9em;color:#555">※ 內容出處：DAE 應用教育文憑數學科 教材 第 8 節。<br>※ 教材未提及差餉寬減，本網站所有計算均不包括寬減。<br>※ 出口票資料會傳送至 Google Sheet（Apps Script），<code>lesson</code> 欄為「8.1 差餉及地租」。</p>
 
     <h3>常見錯誤及應對</h3>
     <table>
@@ -443,13 +440,8 @@ footer{text-align:center;font-size:.85em;color:#666;padding:20px}
 <footer>單元二｜第 8.1 節 差餉及地租｜互動教學網站<br>📚 內容出處：DAE 應用教育文憑數學科 教材（僅供課堂教學使用）</footer>
 
 <script>
-/* ===================== 設定（請修改） ===================== */
-const CONFIG = {
-  formUrl: 'https://docs.google.com/forms/d/e/XXXXXXXXXXXX/viewform',   // ← Google Form 連結
-  entries: { cls:'', name:'', q1:'', q2:'', q3:'', q4:'', q5:'', q6:'', q7:'' }, // ← 選填：entry.123456 的數字部分
-  teacherPw: 'dae2026'                                                  // ← 教師密碼
-};
-/* ========================================================= */
+/* ===================== 設定 ===================== */
+const CONFIG = { teacherPw: 'dae2026' };   // ← 教師密碑
 
 /* ---- 導航 ---- */
 function go(id,btn){document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));document.getElementById(id).classList.add('active');btn.classList.add('active');btn.scrollIntoView({inline:'center',block:'nearest',behavior:'smooth'});window.scrollTo({top:0,behavior:'smooth'});}
@@ -508,17 +500,43 @@ function rcalc(){const k=document.getElementById('rKind').value,a=num(document.g
 (function(){const t=document.getElementById('rvTable');[100000,160000,240000,400000,550000,720000,900000].forEach(v=>{t.insertAdjacentHTML('beforeend',`<tr><td><input type="number" value="${v}" style="width:120px" oninput="rowCalc(this)"></td><td></td><td></td><td></td><td></td><td></td></tr>`);rowCalc(t.lastElementChild.querySelector('input'));});})();
 function rowCalc(inp){const rv=num(inp.value),tr=inp.closest('tr'),c=tr.children;if(isNaN(rv)){for(let i=1;i<6;i++)c[i].textContent='';return;}const R=annualRates(rv,true),G=rv*0.03;c[1].textContent=money(R);c[2].textContent=money(R/4);c[3].textContent=money(G);c[4].textContent=money(G/4);c[5].textContent=money((R+G)/4);}
 
-/* ---- 出口票 → Google Form ---- */
-const EXIT_KEY={e1:'C',e2:'B',e3:'B',e4:3000,e5:250000,e6:4800};
-function formReady(){return CONFIG.formUrl&&!/XXXX/.test(CONFIG.formUrl);}
-function buildFormUrl(d){let u=CONFIG.formUrl;const e=CONFIG.entries;const parts=[];const add=(k,v)=>{if(e[k]&&v!=null&&v!=='')parts.push('entry.'+e[k]+'='+encodeURIComponent(v));};add('cls',d.cls);add('name',d.name);add('q1',d.e1);add('q2',d.e2);add('q3',d.e3);add('q4',d.e4);add('q5',d.e5);add('q6',d.e6);add('q7',d.e7);if(parts.length)u+=(u.includes('?')?'&':'?')+'usp=pp_url&'+parts.join('&');return u;}
-function submitExit(){const g=n=>{const r=document.querySelector(`input[name=${n}]:checked`);return r?r.value:'';};const d={cls:document.getElementById('eCls').value.trim(),name:document.getElementById('eName').value.trim(),e1:g('e1'),e2:g('e2'),e3:g('e3'),e4:document.getElementById('e4').value,e5:document.getElementById('e5').value,e6:document.getElementById('e6').value,e7:document.getElementById('e7').value.trim()};
- const msg=document.getElementById('exitMsg');msg.style.display='block';
- if(!d.cls||!d.name){msg.className='warn';msg.textContent='請先填寫班別及姓名。';return;}
- let sc=0;['e1','e2','e3'].forEach(k=>{if(d[k]===EXIT_KEY[k])sc++;});['e4','e5','e6'].forEach(k=>{if(Math.abs(num(d[k])-EXIT_KEY[k])<0.51)sc++;});
- msg.className='tip';msg.innerHTML=`✅ ${d.cls} ${d.name} 已完成出口票（客觀題 ${sc}/6）。`+(formReady()?' 正在開啟 Google Form，請按表單上的「提交」完成記錄。':' <b>（教師尚未設定 Google Form 連結：請在 CONFIG.formUrl 填入表單網址）</b>');
- if(formReady())window.open(buildFormUrl(d),'_blank','noopener');}
-(function(){const a=document.getElementById('gformLink');if(formReady()){a.href=CONFIG.formUrl;document.getElementById('qrBox').style.display='flex';document.getElementById('qrImg').src='https://api.qrserver.com/v1/create-qr-code/?size=140x140&data='+encodeURIComponent(CONFIG.formUrl);}else{a.href='#';a.onclick=e=>{e.preventDefault();alert('尚未設定 Google Form 連結（CONFIG.formUrl）。');};}})();
+/* ===== 出口票：批改 + 傳送至 Google Sheet ===== */
+const SHEET_URL   = "https://script.google.com/macros/s/AKfycbyXoECMifD_PatOXkd1i579dCAQMS2Q1p3DQ7jFIcZ8aoYzmYVrWxCtcFZy1SD8_FCZ/exec";
+const LESSON_NAME = "8.1 差餉及地租";
+const MC_IDS=['xq1','xq2','xq3'];const MC_ANS=['C','B','B'];
+const NUM_IDS=['x4','x5','x6'];const NUM_ANS=[[3000,0.5],[250000,0.5],[4800,0.5]];
+
+function near(v,ans,tol){const n=num(v);return !isNaN(n)&&Math.abs(n-ans)<=tol;}
+function mark(el,ok){el.classList.remove('ok','bad');el.classList.add(ok?'ok':'bad');}
+function chkRadio(name,ans){document.querySelectorAll(`input[name="${name}"]`).forEach(r=>{const lab=r.closest('label');lab.style.color='';lab.style.fontWeight='';lab.style.textDecoration='';
+  if(r.value===ans){lab.style.color='var(--ok)';lab.style.fontWeight='bold';}
+  else if(r.checked){lab.style.color='var(--bad)';lab.style.textDecoration='line-through';}});}
+
+function chkExit(){
+  try{
+    const btn=document.getElementById('exit-btn'),msg=document.getElementById('exit-msg');
+    const cls=document.getElementById('et-class').value.trim(),name=document.getElementById('et-name').value.trim();
+    if(!cls||!name){msg.textContent='請先填寫班別和姓名';msg.style.color='var(--bad)';return;}
+    const mc=MC_IDS.map(id=>{const r=document.querySelector(`input[name="${id}"]:checked`);return r?r.value:'';});
+    const nums=NUM_IDS.map(id=>document.getElementById(id).value.trim());
+    if(mc.some(a=>a==='')||nums.some(a=>a==='')){msg.textContent='請完成第 (1)–(6) 題';msg.style.color='var(--bad)';return;}
+    const okMC=mc.map((a,k)=>a===MC_ANS[k]);const okNum=nums.map((a,k)=>near(a,NUM_ANS[k][0],NUM_ANS[k][1]));
+    MC_IDS.forEach((id,k)=>chkRadio(id,MC_ANS[k]));NUM_IDS.forEach((id,k)=>mark(document.getElementById(id),okNum[k]));
+    const score=[...okMC,...okNum].filter(Boolean).length;const note=document.getElementById('et-note').value.trim();
+    btn.disabled=true;msg.textContent='傳送中…';msg.style.color='#64748b';
+    fetch(SHEET_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain'},
+      body:JSON.stringify({lesson:LESSON_NAME,'班別':cls,'姓名':name,
+        'Q1 差餉徵收率':mc[0],'Q1正確':okMC[0]?'✔':'✘',
+        'Q2 繳付安排':mc[1],'Q2正確':okMC[1]?'✔':'✘',
+        'Q3 應課差餉租值定義':mc[2],'Q3正確':okMC[2]?'✔':'✘',
+        'Q4 每季差餉':nums[0],'Q4正確':okNum[0]?'✔':'✘',
+        'Q5 倒推租值':nums[1],'Q5正確':okNum[1]?'✔':'✘',
+        'Q6 全年地租':nums[2],'Q6正確':okNum[2]?'✔':'✘',
+        '得分':score+'/6','不明白的地方':note})
+    }).then(()=>{msg.textContent=`✔ 已提交，謝謝！（${score}/6）`;msg.style.color='var(--ok)';})
+      .catch(()=>{msg.textContent='提交失敗，請再按一次';msg.style.color='var(--bad)';btn.disabled=false;});
+  }catch(e){alert('chkExit 錯誤：'+e.message);}
+}
 
 /* ---- 教師區 ---- */
 function unlock(){if(document.getElementById('pw').value===CONFIG.teacherPw){document.getElementById('teacherBody').style.display='block';document.getElementById('lockBox').style.display='none';}else document.getElementById('pwMsg').textContent='密碼錯誤';}
