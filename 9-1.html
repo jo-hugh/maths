@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>單元 9-1 盈利與虧蝕、股息 — 互動教學</title>
+<style>
+:root{--pri:#1d4ed8;--ok:#16a34a;--bad:#dc2626;--bg:#f1f5f9;--card:#fff;--line:#e2e8f0}
+*{box-sizing:border-box}
+body{margin:0;font-family:"Microsoft JhengHei","Noto Sans TC",system-ui,sans-serif;background:var(--bg);color:#0f172a;font-size:18px;line-height:1.6}
+header{background:#0f172a;color:#fff;padding:14px 24px;font-size:22px;font-weight:700}
+nav{position:sticky;top:0;background:#fff;border-bottom:2px solid var(--line);padding:10px 16px;display:flex;gap:10px;flex-wrap:wrap;z-index:5}
+nav button{border:2px solid var(--pri);background:#fff;color:var(--pri);border-radius:999px;padding:8px 18px;font-size:18px;cursor:pointer}
+nav button.on{background:var(--pri);color:#fff}
+main{max-width:1100px;margin:0 auto;padding:20px}
+section{display:none}section.on{display:block}
+h2{margin:6px 0 12px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 22px;margin:14px 0;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+.formula{background:#eff6ff;border-left:6px solid var(--pri);padding:12px 16px;border-radius:8px;margin:10px 0}
+.ex{background:#fefce8;border-left:6px solid #eab308;padding:12px 16px;border-radius:8px;margin:10px 0}
+.ex .sol{display:none;margin-top:8px;padding-top:8px;border-top:1px dashed #ca8a04;white-space:pre-line}
+.ex.open .sol{display:block}
+.tip{background:#fdf2f8;border-left:6px solid #db2777;padding:10px 16px;border-radius:8px;margin:10px 0}
+input[type=text],input[type=number]{font-size:18px;padding:5px 8px;border:2px solid #94a3b8;border-radius:6px;width:150px}
+select{font-size:18px;padding:5px 8px;border:2px solid #94a3b8;border-radius:6px}
+.wide{width:100%}
+button.act{background:#fbbf24;border:none;border-radius:10px;padding:10px 22px;font-size:19px;cursor:pointer;font-weight:700}
+button.sm{background:#e2e8f0;border:none;border-radius:8px;padding:6px 14px;font-size:16px;cursor:pointer;margin-right:6px}
+button.tf{border:2px solid #64748b;background:#fff;border-radius:8px;padding:6px 18px;font-size:18px;cursor:pointer;margin-right:8px}
+.ok{border-color:var(--ok)!important;background:#dcfce7!important}
+.bad{border-color:var(--bad)!important;background:#fee2e2!important}
+.exp{display:none;margin-top:8px;padding:8px 12px;border-radius:8px;background:#f8fafc}
+.steps{display:none;margin-top:10px;padding:10px 14px;background:#f8fafc;border-radius:8px;white-space:pre-line}
+.opt{display:block;margin:4px 0 4px 10px;padding:3px 8px;border-radius:6px}
+.msg{margin-top:10px;font-weight:700}
+table{border-collapse:collapse;width:100%;background:#fff}
+td,th{border:1px solid #cbd5e1;padding:6px 10px;text-align:left}
+pre{background:#0f172a;color:#e2e8f0;padding:12px;border-radius:8px;overflow:auto;font-size:14px}
+.score{font-size:22px;font-weight:700;color:var(--pri)}
+</style>
+</head>
+<body>
+<header>單元 9-1　盈利與虧蝕、股息 — 互動教學</header>
+<nav>
+ <button class="on" onclick="show(1,this)">🔥 熱身題</button>
+ <button onclick="show(2,this)">📖 課題教學</button>
+ <button onclick="show(3,this)">✍️ 判斷填充</button>
+ <button onclick="show(4,this)">🧮 計算練習</button>
+ <button onclick="show(5,this)">🎫 出口票</button>
+ <button onclick="show(6,this)">🧑‍🏫 教師區 🔒</button>
+</nav>
+<main>
+
+<!-- ============ 1 熱身題 ============ -->
+<section id="p1" class="on">
+<h2>🔥 熱身題：對還是錯？</h2>
+<p>先憑直覺判斷，按「✔ 對」或「✘ 錯」後會立即看到解釋。</p>
+<div id="tfbox"></div>
+<div class="card"><span class="score" id="tfscore">已答 0 / 8</span></div>
+</section>
+
+<!-- ============ 2 課題教學 ============ -->
+<section id="p2">
+<h2>📖 課題教學</h2>
+
+<div class="card">
+<h3>一、盈利 (Profit)</h3>
+<p>把貨品賣出時，若 <b>售價 (Selling Price) 高於 成本價 (Cost Price)</b>，便有<b>盈利</b>。</p>
+<div class="formula">
+(a) 盈利 = 售價 − 成本價<br>
+(b) 盈利百分率 = <b>盈利 ÷ 成本價</b> × 100%<br>
+(c) 售價 = 成本價 × (1 + 盈利百分率)
+</div>
+<div class="tip">⚠️ 盈利百分率和虧蝕百分率的<b>基準都是成本價</b>，不是售價！</div>
+
+<div class="ex" onclick="this.classList.toggle('open')">
+<b>例 9.01</b>　成本價 $140，售價 $154，求盈利。（按一下顯示解答）
+<div class="sol">盈利 = $154 − $140 = <b>$14</b>
+盈利百分率 = 14 ÷ 140 × 100% = <b>10%</b></div></div>
+
+<div class="ex" onclick="this.classList.toggle('open')">
+<b>例 9.02</b>　成本價 $280，以盈利 55% 賣出，求售價。
+<div class="sol">售價 = $280 × (1 + 55%) = $280 × 1.55 = <b>$434</b></div></div>
+
+<div class="ex" onclick="this.classList.toggle('open')">
+<b>例 9.03</b>　售價 $648，盈利 35%，求成本價。
+<div class="sol">設成本價為 $y
+y × (1 + 35%) = 648
+y × 1.35 = 648
+y = 648 ÷ 1.35 = <b>480</b>　∴ 成本價是 $480</div></div>
+</div>
+
+<div class="card">
+<h3>二、虧蝕 (Loss)</h3>
+<p>若 <b>售價 低於 成本價</b>，便有<b>虧蝕</b>。</p>
+<div class="formula">
+(a) 虧蝕 = 成本價 − 售價<br>
+(b) 虧蝕百分率 = <b>虧蝕 ÷ 成本價</b> × 100%<br>
+(c) 售價 = 成本價 × (1 − 虧蝕百分率)
+</div>
+
+<div class="ex" onclick="this.classList.toggle('open')">
+<b>例 9.04</b>　成本價 $1,200，售價 $780，求虧蝕及虧蝕百分率。
+<div class="sol">虧蝕 = $1,200 − $780 = <b>$420</b>
+虧蝕百分率 = 420 ÷ 1200 × 100% = <b>35%</b></div></div>
+
+<div class="ex" onclick="this.classList.toggle('open')">
+<b>例 9.05</b>　成本價 $2,400，以虧蝕 45% 賣出，求售價。
+<div class="sol">售價 = $2,400 × (1 − 45%) = $2,400 × 0.55 = <b>$1,320</b></div></div>
+
+<div class="ex" onclick="this.classList.toggle('open')">
+<b>例 9.06</b>　成本價 $3,000 的貨品，甲以盈利 15% 賣出，乙以 $3,500 賣出，誰的盈利較多？
+<div class="sol">甲的售價 = $3,000 × 1.15 = $3,450
+$3,450 &lt; $3,500　∴ <b>乙</b>的盈利較多</div></div>
+
+<div class="ex" onclick="this.classList.toggle('open')">
+<b>例 9.08</b>　標價 $3,200 是成本價加 60%；若以成本價虧蝕 2% 賣出，求售價。
+<div class="sol">設成本價為 $c：c × 1.6 = 3,200 → c = <b>2,000</b>
+售價 = $2,000 × (1 − 2%) = $2,000 × 0.98 = <b>$1,960</b></div></div>
+</div>
+
+<div class="card">
+<h3>三、股息 (Dividend)</h3>
+<p>公司把部分<b>盈利</b>分派給<b>股東</b>，稱為<b>股息</b>。股票以「<b>一手 (one lot)</b>」為買賣單位，每手股數由公司決定（如 200 股、500 股、1,000 股）。</p>
+<div class="formula">
+(a) 持有股數 = 手數 × 每手股數<br>
+(b) 股息總額 = 每股股息 × 持有股數<br>
+(c) 股息率 (Dividend Rate) = <b>每股股息 ÷ 每股股價</b> × 100%
+</div>
+<div class="tip">💡 股息率的基準是<b>股價</b>：同樣每股派 $0.9，股價越高，股息率越<b>低</b>。</div>
+
+<div class="ex" onclick="this.classList.toggle('open')">
+<b>例 9.12</b>　某公司每股派息 $0.9，每手 200 股。<br>
+(a) 一手可收多少股息？ (b) 持有 4 手可收多少？ (c) 若股價為 $70，股息率是多少？
+<div class="sol">(a) $0.9 × 200 = <b>$180</b>
+(b) 4 × $180 = <b>$720</b>
+(c) 股息率 = 0.9 ÷ 70 × 100% ≈ <b>1.29%</b></div></div>
+
+<div class="ex" onclick="this.classList.toggle('open')">
+<b>例</b>　某股票每手 500 股，股價 $98，每股派息 $1.3。小明買入 4 手。<br>
+(a) 買入成本？ (b) 可收股息？ (c) 股息率？
+<div class="sol">(a) 持有股數 = 4 × 500 = 2,000 股；成本 = $98 × 2,000 = <b>$196,000</b>
+(b) 股息 = $1.3 × 2,000 = <b>$2,600</b>
+(c) 股息率 = 1.3 ÷ 98 × 100% ≈ <b>1.33%</b></div></div>
+</div>
+</section>
+
+<!-- ============ 3 判斷填充 ============ -->
+<section id="p3">
+<h2>✍️ 判斷填充</h2>
+<p>選擇或填寫正確答案，完成後按「檢查答案」。</p>
+<div class="card" id="fbbox">
+<p>(1) 盈利 = 售價 −
+ <select data-ans="成本價"><option value="">請選擇</option><option>成本價</option><option>售價</option><option>盈利</option></select></p>
+<p>(2) 盈利百分率 = 盈利 ÷
+ <select data-ans="成本價"><option value="">請選擇</option><option>成本價</option><option>售價</option></select> × 100%</p>
+<p>(3) 售價 = 成本價 × ( 1
+ <select data-ans="+"><option value="">?</option><option>+</option><option>−</option></select> 盈利百分率 )</p>
+<p>(4) 售價 = 成本價 × ( 1
+ <select data-ans="−"><option value="">?</option><option>+</option><option>−</option></select> 虧蝕百分率 )</p>
+<p>(5) 成本價 $500，售價 $600：盈利 = $<input type="text" data-ans="100">，盈利百分率 = <input type="text" data-ans="20">%</p>
+<p>(6) 成本價 $800，虧蝕 25%：售價 = $<input type="text" data-ans="600"></p>
+<p>(7) 成本價 $500，售價 $400：這是
+ <select data-ans="虧蝕"><option value="">請選擇</option><option>盈利</option><option>虧蝕</option></select>，百分率是 <input type="text" data-ans="20">%</p>
+<p>(8) 股息總額 = 每股股息 ×
+ <select data-ans="持有股數"><option value="">請選擇</option><option>持有股數</option><option>股價</option><option>手數</option></select></p>
+<p>(9) 股息率 = 每股股息 ÷
+ <select data-ans="每股股價"><option value="">請選擇</option><option>每股股價</option><option>每手股數</option><option>公司盈利</option></select> × 100%</p>
+<p>(10) 每股股息 $2，股價 $50：股息率 = <input type="text" data-ans="4">%；每手 1,000 股，持有 3 手可收股息 $<input type="text" data-ans="6000"></p>
+<button class="act" onclick="chkFB()">檢查答案</button>
+<div class="msg" id="fbmsg"></div>
+</div>
+</section>
+
+<!-- ============ 4 計算練習 ============ -->
+<section id="p4">
+<h2>🧮 計算練習</h2>
+<p>答案可保留至小數後 1 位（百分率保留 2 位）。每題可按「顯示步驟」。</p>
+<div id="calcbox"></div>
+</section>
+
+<!-- ============ 5 出口票 ============ -->
+<section id="p5">
+<h2>🎫 出口票</h2>
+<div id="p6"> <!-- 出口票容器（chkExit 只在此內搜尋） -->
+<div class="card">
+ 班別：<input type="text" id="et-class" placeholder="例：2A" style="width:110px">　
+ 姓名：<input type="text" id="et-name" placeholder="全名">
+</div>
+
+<div class="card"><b>(1)</b> 盈利百分率的計算基準是：
+ <label class="opt"><input type="radio" name="q1" value="A"> A　售價</label>
+ <label class="opt"><input type="radio" name="q1" value="B"> B　成本價</label>
+ <label class="opt"><input type="radio" name="q1" value="C"> C　盈利</label>
+ <label class="opt"><input type="radio" name="q1" value="D"> D　標價</label></div>
+
+<div class="card"><b>(2)</b> 股息率 = 每股股息 ÷ ______ × 100%
+ <label class="opt"><input type="radio" name="q2" value="A"> A　每股股價</label>
+ <label class="opt"><input type="radio" name="q2" value="B"> B　每手股數</label>
+ <label class="opt"><input type="radio" name="q2" value="C"> C　公司盈利</label>
+ <label class="opt"><input type="radio" name="q2" value="D"> D　持有股數</label></div>
+
+<div class="card"><b>(3)</b> 一件貨品成本價 $500，以 $400 賣出，這是：
+ <label class="opt"><input type="radio" name="q3" value="A"> A　盈利 $100</label>
+ <label class="opt"><input type="radio" name="q3" value="B"> B　虧蝕 20%</label>
+ <label class="opt"><input type="radio" name="q3" value="C"> C　盈利 20%</label>
+ <label class="opt"><input type="radio" name="q3" value="D"> D　虧蝕 25%</label></div>
+
+<div class="card"><b>(4)</b> 成本價 $280，以盈利 55% 賣出，售價 = $<input type="text" id="q4"></div>
+<div class="card"><b>(5)</b> 售價 $648，盈利 35%，成本價 = $<input type="text" id="q5"></div>
+<div class="card"><b>(6)</b> 每股股息 $0.9，每手 200 股，持有 4 手，股息 = $<input type="text" id="q6"></div>
+<div class="card"><b>(7)</b> 我今天最不明白的地方是：<br><input type="text" id="et-note" class="wide" style="margin-top:8px"></div>
+
+<div class="card">
+ <button class="act" id="exit-btn" onclick="chkExit()">✔ 提交</button>
+ <div class="msg" id="exit-msg"></div>
+</div>
+</div>
+</section>
+
+<!-- ============ 6 教師區 ============ -->
+<section id="p6t">
+<h2>🧑‍🏫 教師區</h2>
+<div class="card" id="tlogin">密碼：<input type="password" id="tpw"> <button class="sm" onclick="tLogin()">進入</button> <span id="tmsg" style="color:var(--bad)"></span></div>
+<div id="tarea" style="display:none">
+<div class="card"><h3>出口票答案</h3>
+<table><tr><th>題</th><th>答案</th><th>解釋</th></tr>
+<tr><td>1</td><td>B</td><td>盈利／虧蝕百分率均以成本價為基準</td></tr>
+<tr><td>2</td><td>A</td><td>股息率 = 每股股息 ÷ 每股股價 × 100%</td></tr>
+<tr><td>3</td><td>B</td><td>虧蝕 $100，100 ÷ 500 = 20%</td></tr>
+<tr><td>4</td><td>$434</td><td>280 × 1.55</td></tr>
+<tr><td>5</td><td>$480</td><td>648 ÷ 1.35</td></tr>
+<tr><td>6</td><td>$720</td><td>0.9 × 200 × 4</td></tr></table></div>
+<div class="card"><h3>Google Sheet 設定</h3>
+<p>1. 新開 Google Sheet → 擴充功能 → Apps Script，貼上以下程式碼並「部署 → 網頁應用程式」（執行身份：我；存取權：所有人）。<br>2. 把網址貼到本檔 <code>SHEET_URL</code>。資料會自動寫入名為「<code>9-1 盈利與虧蝕、股息</code>」的工作表。</p>
+<pre>function doPost(e){
+  const ss=SpreadsheetApp.getActiveSpreadsheet();
+  const d=JSON.parse(e.postData.contents);
+  let sh=ss.getSheetByName(d.lesson)||ss.insertSheet(d.lesson);
+  const keys=Object.keys(d).filter(k=>k!=='lesson');
+  if(sh.getLastRow()===0) sh.appendRow(['時間',...keys]);
+  sh.appendRow([new Date(),...keys.map(k=>d[k])]);
+  return ContentService.createTextOutput('ok');
+}</pre></div>
+</div>
+</section>
+</main>
+
+<script>
+/* ===== 設定 ===== */
+const LESSON_NAME='9-1 盈利與虧蝕、股息';
+const SHEET_URL='在此貼上 Apps Script 網頁應用程式網址';
+const TEACHER_PW='1234';
+
+/* ===== 分頁 ===== */
+const PAGES=['p1','p2','p3','p4','p5','p6t'];
+function show(n,btn){
+  PAGES.forEach((id,i)=>document.getElementById(id).classList.toggle('on',i===n-1));
+  document.querySelectorAll('nav button').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');window.scrollTo(0,0);
+}
+
+/* ===== 工具 ===== */
+const num=s=>parseFloat(String(s).replace(/[$,%\s]/g,''));
+function near(a,ans,tol){const v=num(a);return !isNaN(v)&&Math.abs(v-ans)<=tol;}
+function mark(el,ok){el.classList.remove('ok','bad');el.classList.add(ok?'ok':'bad');}
+function chkRadio(name,ans){
+  document.querySelectorAll(`input[name="${name}"]`).forEach(r=>{
+    const lab=r.closest('label');lab.classList.remove('ok','bad');
+    if(r.value===ans)lab.classList.add('ok');else if(r.checked)lab.classList.add('bad');
+  });
+}
+
+/* ===== 1 熱身題 ===== */
+const TF=[
+ {q:'售價高於成本價，便有盈利。',a:true,e:'正確。盈利 = 售價 − 成本價 > 0。'},
+ {q:'盈利百分率 = 盈利 ÷ 售價 × 100%。',a:false,e:'錯誤。盈利百分率以「成本價」為基準：盈利 ÷ 成本價 × 100%。'},
+ {q:'成本價 $200，售價 $250，盈利百分率是 25%。',a:true,e:'正確。盈利 $50，50 ÷ 200 = 25%。'},
+ {q:'成本價 $100 的貨品，先虧蝕 20% 定價，再加價 20% 賣出，售價剛好回到 $100。',a:false,e:'錯誤。$100 × 0.8 = $80，$80 × 1.2 = $96，仍虧蝕 $4。'},
+ {q:'股息是公司把部分盈利分派給股東。',a:true,e:'正確。股東按持有股數收取股息。'},
+ {q:'每股派息 $0.5，持有 1,000 股，可收股息 $500。',a:true,e:'正確。$0.5 × 1,000 = $500。'},
+ {q:'股息率 = 每股股息 ÷ 每股股價 × 100%。',a:true,e:'正確。股息率反映每 $1 股價可收多少股息。'},
+ {q:'每股股息不變時，股價越高，股息率越高。',a:false,e:'錯誤。分母（股價）變大，股息率反而越低。'}
+];
+let tfDone=0;
+document.getElementById('tfbox').innerHTML=TF.map((t,i)=>`
+<div class="card" id="tfc${i}"><b>(${i+1})</b> ${t.q}<br>
+<button class="tf" onclick="ansTF(${i},true,this)">✔ 對</button><button class="tf" onclick="ansTF(${i},false,this)">✘ 錯</button>
+<div class="exp" id="tfexp${i}"></div></div>`).join('');
+function ansTF(i,v,btn){
+  const c=document.getElementById('tfc'+i);
+  if(c.dataset.done)return;c.dataset.done=1;tfDone++;
+  const ok=v===TF[i].a;mark(btn,ok);
+  const ex=document.getElementById('tfexp'+i);
+  ex.style.display='block';ex.innerHTML=(ok?'✔ 答對！':'✘ 答錯了。')+' '+TF[i].e;
+  ex.style.background=ok?'#dcfce7':'#fee2e2';
+  document.getElementById('tfscore').textContent=`已答 ${tfDone} / ${TF.length}`;
+}
+
+/* ===== 3 判斷填充 ===== */
+function chkFB(){
+  const els=document.querySelectorAll('#fbbox [data-ans]');let s=0;
+  els.forEach(el=>{
+    const a=el.dataset.ans,v=(el.value||'').trim();
+    const ok=isNaN(num(a))?v===a:near(v,num(a),0.01);
+    mark(el,ok);if(ok)s++;
+  });
+  const m=document.getElementById('fbmsg');
+  m.textContent=`得分：${s} / ${els.length}`+(s===els.length?'　🎉 全對！':'　紅色的空格請再想想。');
+  m.style.color=s===els.length?'var(--ok)':'var(--bad)';
+}
+
+/* ===== 4 計算練習 ===== */
+const CALC=[
+ {q:'成本價 $170，售價 $272。',parts:[['盈利 = $',102,0.5],['盈利百分率 = ',60,0.1,'%']],
+  s:'盈利 = 272 − 170 = $102\n盈利百分率 = 102 ÷ 170 × 100% = 60%'},
+ {q:'成本價 $220，以盈利 8% 賣出。',parts:[['售價 = $',237.6,0.1]],s:'售價 = 220 × 1.08 = $237.6'},
+ {q:'售價 $198，盈利 10%。',parts:[['成本價 = $',180,0.5]],s:'成本價 = 198 ÷ 1.1 = $180'},
+ {q:'成本價 $960，售價 $576。',parts:[['虧蝕 = $',384,0.5],['虧蝕百分率 = ',40,0.1,'%']],
+  s:'虧蝕 = 960 − 576 = $384\n虧蝕百分率 = 384 ÷ 960 × 100% = 40%'},
+ {q:'成本價 $240，以虧蝕 20% 賣出。',parts:[['售價 = $',192,0.5]],s:'售價 = 240 × 0.8 = $192'},
+ {q:'售價 $840，虧蝕 16%。',parts:[['成本價 = $',1000,0.5]],s:'成本價 = 840 ÷ 0.84 = $1,000'},
+ {q:'成本價 $3,200，店主想獲得 65% 盈利。',parts:[['盈利 = $',2080,0.5],['售價 = $',5280,0.5]],
+  s:'盈利 = 3,200 × 65% = $2,080\n售價 = 3,200 + 2,080 = $5,280'},
+ {q:'成本價 $420，以盈利 40% 定標價；後來減價至 $201.6 賣出。',parts:[['標價 = $',588,0.5],['虧蝕百分率 = ',52,0.1,'%']],
+  s:'標價 = 420 × 1.4 = $588\n虧蝕 = 420 − 201.6 = $218.4\n虧蝕百分率 = 218.4 ÷ 420 × 100% = 52%'},
+ {q:'某公司每股派息 $0.9，每手 200 股。小芬持有 67 手。',parts:[['持有股數 = ',13400,0.5,'股'],['股息 = $',12060,0.5]],
+  s:'持有股數 = 67 × 200 = 13,400 股\n股息 = 0.9 × 13,400 = $12,060'},
+ {q:'每股股息 $0.9，股價 $70。',parts:[['股息率 ≈ ',1.29,0.02,'%']],s:'股息率 = 0.9 ÷ 70 × 100% ≈ 1.29%'},
+ {q:'某股票每手 500 股，股價 $98，每股派息 $1.3。小明買入 4 手。',
+  parts:[['買入成本 = $',196000,0.5],['股息 = $',2600,0.5],['股息率 ≈ ',1.33,0.02,'%']],
+  s:'持有股數 = 4 × 500 = 2,000 股\n成本 = 98 × 2,000 = $196,000\n股息 = 1.3 × 2,000 = $2,600\n股息率 = 1.3 ÷ 98 × 100% ≈ 1.33%'},
+ {q:'甲公司股價 $16.4，每股派息 $0.42；乙公司股價 $18.2，每股派息 $0.46。',
+  parts:[['甲股息率 ≈ ',2.56,0.02,'%'],['乙股息率 ≈ ',2.53,0.02,'%']],
+  s:'甲 = 0.42 ÷ 16.4 × 100% ≈ 2.56%\n乙 = 0.46 ÷ 18.2 × 100% ≈ 2.53%\n∴ 甲的股息率較高'}
+];
+document.getElementById('calcbox').innerHTML=CALC.map((c,i)=>`
+<div class="card" id="cc${i}"><b>(${i+1})</b> ${c.q}<br>
+${c.parts.map((p,k)=>`<span style="display:inline-block;margin:6px 18px 0 0">${p[0]}<input type="text" data-ans="${p[1]}" data-tol="${p[2]}">${p[3]||''}</span>`).join('')}
+<div style="margin-top:10px"><button class="sm" onclick="chkCalc(${i})">檢查</button><button class="sm" onclick="document.getElementById('st${i}').style.display='block'">顯示步驟</button><span id="cm${i}" class="msg"></span></div>
+<div class="steps" id="st${i}">${c.s}</div></div>`).join('');
+function chkCalc(i){
+  const ins=document.querySelectorAll(`#cc${i} input`);let s=0;
+  ins.forEach(el=>{const ok=near(el.value,+el.dataset.ans,+el.dataset.tol);mark(el,ok);if(ok)s++;});
+  const m=document.getElementById('cm'+i);m.textContent=s===ins.length?'✔ 全對！':`${s}/${ins.length} 正確`;
+  m.style.color=s===ins.length?'var(--ok)':'var(--bad)';
+}
+
+/* ===== 5 出口票 ===== */
+const MC_IDS=['q1','q2','q3'],MC_ANS=['B','A','B'];
+const NUM_IDS=['q4','q5','q6'],NUM_ANS=[[434,0.5],[480,0.5],[720,0.5]];
+function chkExit(){
+  try{
+    const P=document.getElementById('p6');
+    const g=id=>{const el=P.querySelector('#'+id);if(!el)throw new Error('找不到元素 #'+id);return el;};
+    const val=id=>(g(id).value||'').trim();
+    const btn=g('exit-btn'),msg=g('exit-msg');
+    const cls=val('et-class'),name=val('et-name');
+    if(!cls||!name){msg.textContent='請先填寫班別和姓名';msg.style.color='var(--bad)';return;}
+    const mc=MC_IDS.map(id=>{const r=P.querySelector(`input[name="${id}"]:checked`);return r?r.value:'';});
+    const nums=NUM_IDS.map(id=>val(id));
+    if(mc.some(a=>a==='')||nums.some(a=>a==='')){msg.textContent='請完成第 (1)–(6) 題';msg.style.color='var(--bad)';return;}
+    const okMC=mc.map((a,k)=>a===MC_ANS[k]);
+    const okNum=nums.map((a,k)=>near(a,NUM_ANS[k][0],NUM_ANS[k][1]));
+    MC_IDS.forEach((id,k)=>chkRadio(id,MC_ANS[k]));
+    NUM_IDS.forEach((id,k)=>mark(g(id),okNum[k]));
+    const score=[...okMC,...okNum].filter(Boolean).length;
+    const note=val('et-note');
+    btn.disabled=true;msg.textContent='傳送中…';msg.style.color='#64748b';
+    fetch(SHEET_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain'},
+      body:JSON.stringify({lesson:LESSON_NAME,'班別':cls,'姓名':name,
+        'Q1 盈利百分率基準':mc[0],'Q1正確':okMC[0]?'✔':'✘',
+        'Q2 股息率公式':mc[1],'Q2正確':okMC[1]?'✔':'✘',
+        'Q3 判斷盈虧':mc[2],'Q3正確':okMC[2]?'✔':'✘',
+        'Q4 售價':nums[0],'Q4正確':okNum[0]?'✔':'✘',
+        'Q5 成本價':nums[1],'Q5正確':okNum[1]?'✔':'✘',
+        'Q6 股息':nums[2],'Q6正確':okNum[2]?'✔':'✘',
+        '得分':score+'/6','不明白的地方':note})
+    }).then(()=>{msg.textContent=`✔ 已提交，謝謝！（${score}/6）`;msg.style.color='var(--ok)';})
+      .catch(()=>{msg.textContent='提交失敗，請再按一次';msg.style.color='var(--bad)';btn.disabled=false;});
+  }catch(e){alert('chkExit 錯誤：'+e.message);}
+}
+
+/* ===== 6 教師區 ===== */
+function tLogin(){
+  if(document.getElementById('tpw').value===TEACHER_PW){
+    document.getElementById('tlogin').style.display='none';document.getElementById('tarea').style.display='block';
+  }else document.getElementById('tmsg').textContent='密碌錯誤';
+}
+</script>
+</body>
+</html>
